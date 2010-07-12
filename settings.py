@@ -96,4 +96,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django_extensions',
     'south',
+    'my.djangoratings',
+    'my.lists',
 )

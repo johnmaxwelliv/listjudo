@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+<h1>Lists</h1>
+
+{% block body %}
+{% for object in object_list %}
+    <div><a href="/lists/{{ object.id }}/">{{ object.title }}</a></div>
+{% endfor %}
+{% endblock %}
