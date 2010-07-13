@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block stylesheets %}
+<link rel=stylesheet type="text/css" href="/site_media/jquery.ui.stars.min.css" />
+{% endblock %}
+
 <h1>{{ object.title }}</h1>
 
 {% block body %}
@@ -12,6 +16,7 @@
         <div>
             <form action="/rate/lists/entry/{{ entry.id }}/" method="post">
                 {% csrf_token %}
+                <div id="stars-wrapper">
                 <select id="form_2" name="score" style="width: 120px"> {# name was "selrate" #}
                     <option value="1">Very poor</option>
                     <option value="2" selected="selected">Not that bad</option>
@@ -20,6 +25,7 @@
                     <option value="5">Perfect</option>
                 </select>
                 <input type="submit" value="Rate!" />
+                </div>
             </form>
         </div>
         <div>Your vote: {{ vote }}</div>
@@ -29,5 +35,11 @@
     {% endfor %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/site_media/jquery.ui.stars.js" type="text/javascript"></script>
+<script type="text/javascript">
+$("#stars-wrapper").stars({
+    inputType: "select"
+});
+</script>
 {% endblock %}
 

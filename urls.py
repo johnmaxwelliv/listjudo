@@ -10,5 +10,7 @@ urlpatterns = patterns('',
     (r'^rate/', include('my.djangoratings.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
+    (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': '/home/johniv/my/sm/'}),
     (r'^$', lambda request: HttpResponseRedirect('/lists/')),
 )
