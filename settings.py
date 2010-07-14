@@ -98,4 +98,5 @@ INSTALLED_APPS = (
     'south',
     'my.djangoratings',
     'my.lists',
+    'my.uni-form',
 )
