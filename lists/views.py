@@ -14,15 +14,21 @@ class EntryForm(ModelForm):
 
 def list(request):
     return template(request, 'lists/list_list.html', {
-        'objects': List.objects.all(),
+        'lists': List.objects.all(),
         'request': request,
     })
 
 def detail(request, object_id):
-    object = List.objects.get(id=object_id)
-    empty_entry = Entry(list=object)
+    list = List.objects.get(id=object_id)
+    entries = list.entry_set.all()
+    entries = entries.extra(select={
+        'sophisticated_rating': '((100/%s*rating_score/(rating_votes+%s))+100)/2' % (Entry.rating.range, Entry.rating.weight)
+    })
+    entries = entries.order_by('-sophisticated_rating')
+    empty_entry = Entry(list=list)
     return template(request, 'lists/list_detail.html', {
-        'object': object,
+        'list': list,
+        'entries': entries,
         'request': request,
         'form': EntryForm(instance=empty_entry),
     })

@@ -5,7 +5,7 @@
 <link rel=stylesheet type="text/css" href="/site_media/jquery.ui.stars.css" />
 {% endblock %}
 
-<h1>{{ object.title }}</h1>
+<h1>{{ list.title }}</h1>
 
 {% block body %}
     {% load ratings %}
@@ -15,7 +15,7 @@
     {% else %}
     <p>There <b>isn't</b> an authenticated user.</p>
     {% endif %}
-    {% for entry in object.entry_set.all %}
+    {% for entry in entries %}
     <div>
         <h2>{{ entry.title }}</h2>
         <div>{{ entry.description }}</div>
@@ -38,7 +38,7 @@
     </div>
     {% endfor %}
     <div>
-    <form action="/lists/{{ object.id }}/add/" method="POST" class="uniForm">
+    <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm">
         {% csrf_token %}
         <fieldset class="inlineLabels">
         {{ form|as_uni_form }}
@@ -53,7 +53,7 @@
 <script src="/site_media/jquery.ui.stars.js" type="text/javascript"></script>
 <script src="http://github.com/malsup/form/raw/master/jquery.form.js?v2.43" type="text/javascript"></script>
 <script type="text/javascript">
-{% for entry in object.entry_set.all %}
+{% for entry in list.entry_set.all %}
 $("#stars-wrapper-{{ entry.id }}").stars({
     inputType: "select",
     cancelShow: false,

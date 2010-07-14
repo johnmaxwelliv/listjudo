@@ -3,7 +3,7 @@
 <h1>Lists</h1>
 
 {% block body %}
-{% for object in object_list %}
-    <div><a href="/lists/{{ object.id }}/">{{ object.title }}</a></div>
+{% for list in lists %}
+    <div><a href="/lists/{{ list.id }}/">{{ list.title }}</a></div>
 {% endfor %}
 {% endblock %}
