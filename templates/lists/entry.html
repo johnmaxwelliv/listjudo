@@ -1,0 +1,18 @@
+{% load ratings %}
+<h2>{{ entry.title }}</h2>
+<div>{{ entry.description }}</div>
+<div>
+    <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
+        {% csrf_token %}
+        <div id="stars-wrapper-{{ entry.id }}">
+        <select name="score" style="width: 120px">
+            {% generate_options entry.rating request %}
+        </select>
+        <noscript><input type="submit" value="Go!" /></noscript>
+        </div>
+    </form>
+</div>
+<div>
+        <div>votes: {{ entry.rating.votes }}</div>
+        <div>score: {{ entry.rating.score }}</div>
+</div>

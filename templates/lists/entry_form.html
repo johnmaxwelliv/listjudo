@@ -1,0 +1,10 @@
+{% load uni_form_tags %}
+<form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" id="entry-form">
+    {% csrf_token %}
+    <fieldset class="inlineLabels">
+    {{ form|as_uni_form }}
+    <div class="form_block">
+        <input type="submit" value="Add" id="add-entry">
+    </div>
+    </fieldset>
+</form>

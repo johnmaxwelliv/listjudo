@@ -1,2 +1,8 @@
 # ignore minimized .js and .css files
 *.min.*
+
+# ignore .js files compiled by coffeescript
+/sm/*.js
+
+# ignore .error files produced by wcoffee
+/sm/*.error

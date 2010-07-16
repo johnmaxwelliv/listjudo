@@ -8,50 +8,27 @@
 <h1>{{ list.title }}</h1>
 
 {% block body %}
-    {% load ratings %}
-    {% load uni_form_tags %}
+    {% load lists_tags %}
     {% if request.user.is_authenticated %}
     <p>There <b>is</b> an authenticated user.</p>
     {% else %}
     <p>There <b>isn't</b> an authenticated user.</p>
     {% endif %}
+    <div id="entries">
     {% for entry in entries %}
     <div>
-        <h2>{{ entry.title }}</h2>
-        <div>{{ entry.description }}</div>
-        <div>
-            <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
-                {% csrf_token %}
-                <div id="stars-wrapper-{{ entry.id }}">
-                <select name="score" style="width: 120px">
-                    {% generate_options entry.rating request %}
-                </select>
-                <noscript><input type="submit" value="Go!" /></noscript>
-                </div>
-            </form>
-        </div>
-        <div>
-        <div>Your vote: {{ vote }}</div>
-        <div>votes: {{ entry.rating.votes }}</div>
-        <div>score: {{ entry.rating.score }}</div>
-        </div>
+        {% entry_html entry %}
     </div>
     {% endfor %}
-    <div>
-    <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm">
-        {% csrf_token %}
-        <fieldset class="inlineLabels">
-        {{ form|as_uni_form }}
-        <div class="form_block">
-            <input type="submit" value="Add">
-        </div>
-        </fieldset>
-    </form>
     </div>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <div>
+    {% entry_form %}
+    </div>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script> -->
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/site_media/jquery.ui.stars.js" type="text/javascript"></script>
 <script src="http://github.com/malsup/form/raw/master/jquery.form.js?v2.43" type="text/javascript"></script>
+<script src="/site_media/list_detail.js"></script>
 <script type="text/javascript">
 {% for entry in list.entry_set.all %}
 $("#stars-wrapper-{{ entry.id }}").stars({

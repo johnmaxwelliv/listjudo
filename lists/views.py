@@ -3,6 +3,7 @@ from my.lists.models import *
 from django.forms import ModelForm
 from django.forms.widgets import HiddenInput
 from django.http import HttpResponse
+import json
 
 class EntryForm(ModelForm):
     class Meta:
@@ -36,7 +37,7 @@ def detail(request, object_id):
 def add_entry(request, object_id):
     form = EntryForm(request.POST)
     if form.is_valid():
-        form.save()
-        return HttpResponse("Entry saved.")
+        entry = form.save()
+        return HttpResponse(json.dumps({'entry_id': entry.id, 'html': entry.html(request)}))
     else:
-        return HttpResponse("Bad entry.")
+        return HttpResponse("<h1>Bad entry.</h1>")
