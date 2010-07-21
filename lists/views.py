@@ -16,7 +16,6 @@ class EntryForm(ModelForm):
 def list(request):
     return template(request, 'lists/list_list.html', {
         'lists': List.objects.all(),
-        'request': request,
     })
 
 def detail(request, object_id):
@@ -30,7 +29,6 @@ def detail(request, object_id):
     return template(request, 'lists/list_detail.html', {
         'list': list,
         'entries': entries,
-        'request': request,
         'form': EntryForm(instance=empty_entry),
     })
 
