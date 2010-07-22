@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 
 urlpatterns = patterns('',
     (r'^lists/', include('my.lists.urls')),
+    (r'^ajax_validate/', include('my.ajax_validate.urls')),
     (r'^rate/', include('my.djangoratings.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),

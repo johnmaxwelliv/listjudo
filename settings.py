@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'my.uni-form',
     'debug_toolbar',
     'djblets',
+    'ajax_validation',
 )
 
 
