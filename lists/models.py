@@ -1,7 +1,7 @@
 from django.db import models
 from djangoratings.fields import RatingField
 from my.lists.templatetags.lists_tags import EntryNode
-from django.template import Context
+from django.template import RequestContext
 import random
 
 class user_action(models.Model):
@@ -9,6 +9,9 @@ class user_action(models.Model):
     # http://docs.djangoproject.com/en/1.2/ref/request-response/#attributes
     # Later on, this class will probably also have a field for the id of the
     # proto_user that completed the action.
+    # POLISH
+    # As of 2010-7-22, ratings are not subclassed from user_action, but they
+    # probably should be.
     created = models.DateField(auto_now_add=True)
     modified = models.DateField(auto_now=True)
     referer = models.URLField(blank=True, null=True)
@@ -55,9 +58,8 @@ class Entry(UGC):
     title = models.CharField(max_length=200)
     description = models.TextField()
     list = models.ForeignKey(List)
-    rating = RatingField(range=5, weight=5, can_change_vote=True,
-        allow_anonymous=True)
+    rating = RatingField(range=5, can_change_vote=True, allow_anonymous=True)
     def __unicode__(self):
         return self.title
     def html(self, request):
-        return EntryNode(self).render(Context({'request': request}))
+        return EntryNode(self).render(RequestContext(request, {}))

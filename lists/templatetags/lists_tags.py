@@ -4,17 +4,21 @@ from django.template import loader
 register = template.Library()
 
 class EntryFormNode(template.Node):
+    def __init__(self):
+        self.template = loader.get_template("lists/entry_form.html")
     def render(self, context):
-        t = loader.get_template("lists/entry_form.html")
-        return t.render(context)
+        return self.template.render(context)
 
 class EntryNode(template.Node):
     def __init__(self, entry):
         self.entry = entry
+        self.template = loader.get_template("lists/entry.html")
     def render(self, context):
+        # POLISH
+        # Potential bug in the making here... what if the context object passed
+        # to render has an unexpected 'entry' field later on?
         context['entry'] = self.entry
-        t = loader.get_template("lists/entry.html")
-        return t.render(context)
+        return self.template.render(context)
 
 @register.tag
 def entry_form(parser, token):
