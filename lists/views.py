@@ -5,10 +5,21 @@ from django.forms.widgets import HiddenInput
 from django.http import HttpResponse
 import json
 
+analytics_fields = [
+    'created',
+    'modified',
+    'referer',
+    'user_agent',
+    'ip',
+    'absolute_uri',
+    'is_secure',
+    'is_ajax',
+]
+
 class EntryForm(ModelForm):
     class Meta:
         model = Entry
-        fields = ['title', 'description', 'list']
+        exclude = analytics_fields
         widgets = {
             'list': HiddenInput(),
         }
@@ -36,6 +47,7 @@ def add_entry(request, object_id):
     form = EntryForm(request.POST)
     if form.is_valid():
         entry = form.save()
+        entry.record_request(request)
         return HttpResponse(json.dumps({'entry_id': entry.id, 'html': entry.html(request)}))
     else:
         return HttpResponse("<h1>Bad entry.</h1>")
