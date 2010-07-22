@@ -33,8 +33,8 @@ class user_action(models.Model):
         self.is_ajax = request.is_ajax()
 
 class UGC(user_action):  # UGC is an acronym for "User Generated Content"
-    nickname = models.CharField(max_length=20)
-    email = models.EmailField()
+    nickname = models.CharField('your nickname', max_length=20)
+    email = models.EmailField("your email (won't be shared)")
 
 alphanumbers = '1234567890qwertyuiopasdfghjklzxcvbnm'
 def generate_secret_id(n):
@@ -55,7 +55,8 @@ class Entry(UGC):
     title = models.CharField(max_length=200)
     description = models.TextField()
     list = models.ForeignKey(List)
-    rating = RatingField(range=5, weight=5, can_change_vote=True, allow_anonymous=True)
+    rating = RatingField(range=5, weight=5, can_change_vote=True,
+        allow_anonymous=True)
     def __unicode__(self):
         return self.title
     def html(self, request):

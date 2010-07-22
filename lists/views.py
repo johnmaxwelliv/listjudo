@@ -5,21 +5,10 @@ from django.forms.widgets import HiddenInput
 from django.http import HttpResponse
 import json
 
-analytics_fields = [
-    'created',
-    'modified',
-    'referer',
-    'user_agent',
-    'ip',
-    'absolute_uri',
-    'is_secure',
-    'is_ajax',
-]
-
 class EntryForm(ModelForm):
     class Meta:
         model = Entry
-        exclude = analytics_fields
+        fields = ['title', 'description', 'nickname', 'email', 'list']
         widgets = {
             'list': HiddenInput(),
         }
