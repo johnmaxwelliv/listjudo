@@ -6,26 +6,36 @@ l: (output) ->
 $(document).ready(->
     $('#add-entry').click(->
         $('#add-entry-div').hide()
-        $('#entry-form-div').show('slow')
+        $('#entry-form-div').css('opacity', 0)
+        $('#entry-form-div').css('display', 'block')
+        $.scrollTo('#entry-form-div')
+        $('#entry-form-div').fadeIn(400, (->
+            # I'm putting this callback here because the fadeIn doesn't seem to work on Google Chrome.
+            $('#entry-form-div').css('opacity', 1)
+        ))
+        return false
     )
     options = {
         dataType: 'json'
         success: (data) ->
-            entry_id = data.entry_id
-            $('#entry-form-div').hide()
-            $("#entries").append('<div style="display:none" id="entry-' + entry_id + '">' + data.html + '</div>')
-            $('#stars-wrapper-' + entry_id).stars({
+            entry_pk = data.entry_id
+
+            $("#entries").append('<div style="display:none" id="entry-' + entry_pk + '">' + data.html + '</div>')
+            $('#stars-wrapper-' + entry_pk).stars({
                 inputType: "select",
                 cancelShow: false,
                 callback: (ui, type, value) ->
-                    $("#stars-form-" + entry_id).ajaxSubmit();
+                    $("#stars-form-" + entry_pk).ajaxSubmit()
             });
-            $('#entry-' + entry_id).show('slow')
+
+            entry = $('#entry-' + entry_pk)
+            $.scrollTo('#entry-' + entry_pk)
+            entry.show('slow')
+
+            $('#entry-form-div').hide()
+            $('#id_description').val('')
+            $('#id_title').val('')
             $('#add-entry-div').show()
-            l(data.form_html)
-            #('#entry-form-div').html(data.form_html)
-            l($('#entry-form-div').html())
-            l('done')
     }
     $("#entry-form").ajaxForm(options)
 )

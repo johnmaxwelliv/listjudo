@@ -95,19 +95,9 @@ def add_entry(request, object_id):
         entry = form.save()
         entry.record_request(request)
         entry.save()
-        form_template = loader.get_template('lists/entry_form.html')
-        b = blank_entry(entry.list, instance=entry)
-        print 'nickname', b.nickname
-        print 'email', b.email
-        form_html = form_template.render(RequestContext(request, {
-            'form': EntryForm(instance=b),
-            'list': entry.list,
-        }))
-        print form_html
         result = HttpResponse(json.dumps({
             'entry_id': entry.id,
             'html': entry.html(request),
-            'form_html': form_html,
         }))
         # POLISH
         # Calculate the "expires" argument programmatically, or we're screwed

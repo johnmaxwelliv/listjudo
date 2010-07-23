@@ -21,7 +21,7 @@
     </div>
     {% endfor %}
     </div>
-    <div id="add-entry-div"><a href="#" id="add-entry">Add an entry</a></div>
+    <div id="add-entry-div"><a href="#entry-form-div" id="add-entry">Add an entry</a></div>
     <div id="entry-form-div" style="display:none">
     {% entry_form %}
     </div>
@@ -40,6 +40,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/site_media/jquery.ui.stars.js" type="text/javascript"></script>
 <script src="http://github.com/malsup/form/raw/master/jquery.form.js?v2.43" type="text/javascript"></script>
+<script src="http://flesler-plugins.googlecode.com/files/jquery.scrollTo-1.4.2-min.js" type="text/javascript"></script>
 <script src="/site_media/list_detail.js" type="text/javascript"></script>
 <script type="text/javascript">
 {% for entry in list.entry_set.all %}
