@@ -4,7 +4,7 @@ from django.template import loader
 register = template.Library()
 
 class EntryFormNode(template.Node):
-    def __init__(self):
+    def __init__(self, form=None):
         self.template = loader.get_template("lists/entry_form.html")
     def render(self, context):
         return self.template.render(context)

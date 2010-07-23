@@ -7,6 +7,7 @@
 
 {% block body %}
     <h1>{{ list.title }}</h1>
+    <nofollow>{{ list.description|striptags|urlize|linebreaks }}</nofollow>
     {% load lists_tags %}
     {% if request.user.is_authenticated %}
     <p>There <b>is</b> an authenticated user.</p>
@@ -20,7 +21,8 @@
     </div>
     {% endfor %}
     </div>
-    <div>
+    <div id="add-entry-div"><a href="#" id="add-entry">Add an entry</a></div>
+    <div id="entry-form-div" style="display:none">
     {% entry_form %}
     </div>
     {% if admin_access %}

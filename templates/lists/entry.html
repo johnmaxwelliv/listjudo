@@ -1,6 +1,6 @@
 {% load ratings %}
 <h2>{{ entry.title }}</h2>
-<div>{{ entry.description }}</div>
+<nofollow><div>{{ entry.description|striptags|urlize|linebreaks }}</div></nofollow>
 <div>
     <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
         {% csrf_token %}

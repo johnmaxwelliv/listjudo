@@ -5,6 +5,7 @@ from django.forms.widgets import HiddenInput
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import json
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext, loader
 
 class EntryForm(ModelForm):
     class Meta:
@@ -28,23 +29,33 @@ def list(request):
         ),
     })
 
-def blank_entry(request, list):
-    kwargs = {'list': list}
-    for key in ('nickname', 'email'):
-        try:
-            kwargs[key] = request.COOKIES[key]
-        except AttributeError, KeyError:
-            pass
+def blank_entry(list, request=None, instance=None):
+    kwargs = retrieve_user_data(request, instance)
+    kwargs['list'] = list
     return Entry(**kwargs)
 
-def blank_list(request):
-    kwargs = {}
-    for key in ('nickname', 'email'):
-        try:
-            kwargs[key] = request.COOKIES[key]
-        except AttributeError, KeyError:
-            pass
+def blank_list(request=None, instance=None):
+    kwargs = retrieve_user_data(request, instance)
     return List(**kwargs)
+
+def retrieve_user_data(request=None, instance=None):
+    result = {}
+    keys = ('nickname', 'email')
+    if request:
+        for key in keys:
+            try:
+                result[key] = request.COOKIES[key]
+            except AttributeError, KeyError:
+                pass
+    elif instance:
+        for key in keys:
+            try:
+                result[key] = getattr(instance, key)
+            except AttributeError:
+                pass
+    else:
+        raise AssertionError("You must pass one of request or instance to retrieve_user_data.")
+    return result
 
 def detail(request, object_id, access_code=None):
     list = get_object_or_404(List, pk=object_id)
@@ -74,7 +85,7 @@ def detail(request, object_id, access_code=None):
     return template(request, 'lists/list_detail.html', {
         'list': list,
         'entries': entries,
-        'form': EntryForm(instance=blank_entry(request, list)),
+        'form': EntryForm(instance=blank_entry(list, request=request)),
         'admin_access': admin_access,
     })
 
@@ -84,8 +95,20 @@ def add_entry(request, object_id):
         entry = form.save()
         entry.record_request(request)
         entry.save()
-        result = HttpResponse(json.dumps({'entry_id': entry.id,
-            'html': entry.html(request)}))
+        form_template = loader.get_template('lists/entry_form.html')
+        b = blank_entry(entry.list, instance=entry)
+        print 'nickname', b.nickname
+        print 'email', b.email
+        form_html = form_template.render(RequestContext(request, {
+            'form': EntryForm(instance=b),
+            'list': entry.list,
+        }))
+        print form_html
+        result = HttpResponse(json.dumps({
+            'entry_id': entry.id,
+            'html': entry.html(request),
+            'form_html': form_html,
+        }))
         # POLISH
         # Calculate the "expires" argument programmatically, or we're screwed
         # when 2068 rolls around.
@@ -114,7 +137,7 @@ def create(request):
             return result
 
     return template(request, "lists/list_create.html", {
-        'form': ListForm(instance=blank_list(request)),
+        'form': ListForm(instance=blank_list(request=request)),
     })
 
 def publish(request, object_id, access_code):
