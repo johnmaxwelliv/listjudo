@@ -5,9 +5,8 @@
 <link rel=stylesheet type="text/css" href="/site_media/jquery.ui.stars.css" />
 {% endblock %}
 
-<h1>{{ list.title }}</h1>
-
 {% block body %}
+    <h1>{{ list.title }}</h1>
     {% load lists_tags %}
     {% if request.user.is_authenticated %}
     <p>There <b>is</b> an authenticated user.</p>
@@ -24,6 +23,17 @@
     <div>
     {% entry_form %}
     </div>
+    {% if admin_access %}
+    <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
+    {% csrf_token %}
+    <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
+    <fieldset class="inlineLabels">
+    <div class="form_block">
+        <input type="submit" value="publish" id="add-entry" />
+    </div>
+    </fieldset>
+    </form>
+    {% endif %}
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script> -->
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/site_media/jquery.ui.stars.js" type="text/javascript"></script>

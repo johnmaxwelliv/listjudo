@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
-<h1>Lists</h1>
-
 {% block body %}
+<h1><a href="/lists/create/">Create a List</a></h1>
+
+<h1>Lists</h1>
 {% for list in lists %}
     <div><a href="/lists/{{ list.id }}/">{{ list.title }}</a></div>
 {% endfor %}

@@ -12,14 +12,14 @@ class user_action(models.Model):
     # POLISH
     # As of 2010-7-22, ratings are not subclassed from user_action, but they
     # probably should be.
-    created = models.DateField(auto_now_add=True)
-    modified = models.DateField(auto_now=True)
-    referer = models.URLField(blank=True, null=True)
-    user_agent = models.CharField(max_length=200, blank=True, null=True)
-    ip = models.IPAddressField(blank=True, null=True)
-    absolute_uri = models.URLField(blank=True, null=True)
-    is_secure = models.NullBooleanField(blank=True)
-    is_ajax = models.NullBooleanField(blank=True)
+    created = models.DateField(auto_now_add=True, editable=False)
+    modified = models.DateField(auto_now=True, editable=False)
+    referer = models.URLField(blank=True, null=True, editable=False)
+    user_agent = models.CharField(max_length=200, blank=True, null=True, editable=False)
+    ip = models.IPAddressField(blank=True, null=True, editable=False)
+    absolute_uri = models.URLField(blank=True, null=True, editable=False)
+    is_secure = models.NullBooleanField(blank=True, editable=False)
+    is_ajax = models.NullBooleanField(blank=True, editable=False)
     def record_request(self, request):
         header = {
             'referer': 'HTTP_REFERER',
@@ -38,6 +38,7 @@ class user_action(models.Model):
 class UGC(user_action):  # UGC is an acronym for "User Generated Content"
     nickname = models.CharField('your nickname', max_length=20)
     email = models.EmailField("your email (won't be shared)")
+    censored = models.BooleanField(default=False)
 
 alphanumbers = '1234567890qwertyuiopasdfghjklzxcvbnm'
 def generate_secret_id(n):
@@ -45,14 +46,13 @@ def generate_secret_id(n):
 
 class List(UGC):
     title = models.CharField(max_length=200)
-    public = models.BooleanField(default=False)
-    secret_id = models.CharField(default='notasecret', max_length=10)
+    description = models.TextField(blank=True)
+    published = models.BooleanField(default=False)
+    access_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
+    admin_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     views = models.PositiveIntegerField(default=0)
     def __unicode__(self):
         return self.title
-    def __init__(self, *args, **kwargs):
-        self.secret_id = generate_secret_id(10)
-        return super(List, self).__init__(*args, **kwargs)
 
 class Entry(UGC):
     title = models.CharField(max_length=200)
