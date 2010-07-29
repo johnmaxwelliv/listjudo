@@ -114,10 +114,10 @@ def create(request):
     if request.method == 'POST':
         form = ListForm(request.POST)
         if form.is_valid():
+            # POLISH: Here and elswhere, do you really need to be saving twice?
             list = form.save()
             list.record_request(request)
             list.save()
-            # POLISH: Here and elswhere, do you really need to be saving twice?
             result = HttpResponseRedirect('/lists/%d/%s/?admin_code=%s' % \
                 (list.id, list.access_code, list.admin_code))
             result.set_cookie('nickname', value=list.nickname, max_age=157680000,
