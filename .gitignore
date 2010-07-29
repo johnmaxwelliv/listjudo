@@ -2,7 +2,7 @@
 *.min.*
 
 # ignore .js files compiled by coffeescript
-/sm/*.js
+/static/site_media/*.js
 
 # ignore .error files produced by wcoffee
-/sm/*.error
+/static/site_media/*.error

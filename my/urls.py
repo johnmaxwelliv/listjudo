@@ -12,6 +12,6 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': '/home/johniv/my/sm/'}),
+        {'document_root': '/home/johniv/Dropbox/li/static/site_media/'}),
     (r'^$', lambda request: HttpResponseRedirect('/lists/')),
 )
