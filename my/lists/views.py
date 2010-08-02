@@ -45,7 +45,7 @@ def retrieve_user_data(request=None, instance=None):
         for key in keys:
             try:
                 result[key] = request.COOKIES[key]
-            except AttributeError, KeyError:
+            except (AttributeError, KeyError):
                 pass
     elif instance:
         for key in keys:
@@ -115,6 +115,7 @@ def create(request):
         form = ListForm(request.POST)
         if form.is_valid():
             # POLISH: Here and elswhere, do you really need to be saving twice?
+            # POLISH: Optimize 'path' and 'domain' kwargs for minimum HTTP load
             list = form.save()
             list.record_request(request)
             list.save()
