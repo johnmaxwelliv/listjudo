@@ -11,10 +11,12 @@
     </div>
     </fieldset>
 </form>
+{% load jquery_validation %}
+{% include_validation %}
 <script src="/site_media/jquery-uni-form.js" type="text/javascript"></script>
 <script type="text/javascript">
         $(function () {
-            $('#list-form').validate('{% url entry_form_validate %}', {
+            $('#list-form').validate('{% url list_form_validate %}', {
                 callback: uniform_callback,
                 fields: ['title', 'description', 'nickname', 'email']
             });
