@@ -1,4 +1,5 @@
 {% load ratings %}
+{% load oembed_tags %}
 <h2>{{ entry.title }}</h2>
 <nofollow><div>{{ entry.description|striptags|urlize|linebreaks }}</div></nofollow>
 <div>
@@ -15,4 +16,5 @@
 <div>
         <div>votes: {{ entry.rating.votes }}</div>
         <div>score: {{ entry.rating.score }}</div>
+        <div>{{ entry.oembed|oembed }}</div>
 </div>

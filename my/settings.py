@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'my.uni-form',
     'debug_toolbar',
     'ajax_validation',
+    'oembed',
 )
 
 

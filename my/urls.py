@@ -3,6 +3,9 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
+import oembed
+oembed.autodiscover()
+
 from django.http import HttpResponseRedirect
 
 from my.settings import PROJECT_PATH, DEBUG

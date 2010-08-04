@@ -50,7 +50,7 @@ class List(UGC):
     published = models.BooleanField(default=False)
     access_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     admin_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
-    views = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0, editable=False)
     def __unicode__(self):
         return self.title
 
@@ -59,6 +59,7 @@ class Entry(UGC):
     description = models.TextField()
     list = models.ForeignKey(List)
     rating = RatingField(range=5, can_change_vote=True, allow_anonymous=True)
+    oembed = models.URLField(max_length=200, blank=True, null=True, help_text='flickr')
     def __unicode__(self):
         return self.title
     def html(self, request):

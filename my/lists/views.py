@@ -10,7 +10,7 @@ from django.template import RequestContext, loader
 class EntryForm(ModelForm):
     class Meta:
         model = Entry
-        fields = ['title', 'description', 'nickname', 'email', 'list']
+        fields = ['title', 'description', 'nickname', 'email', 'list', 'oembed']
         widgets = {
             'list': HiddenInput(),
         }
