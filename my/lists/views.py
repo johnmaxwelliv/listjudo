@@ -2,15 +2,24 @@ from django.views.generic.simple import direct_to_template as template
 from my.lists.models import *
 from django.forms import ModelForm
 from django.forms.widgets import HiddenInput
+from django.forms import fields
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import json
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
+from oembed.consumer import OEmbedConsumer
+from django.db.models import *
+from django.core.files import File
+import urllib2
+import os
+from my.settings import logger
+
+oembed_client = OEmbedConsumer()
 
 class EntryForm(ModelForm):
     class Meta:
         model = Entry
-        fields = ['title', 'description', 'nickname', 'email', 'list', 'oembed']
+        fields = ['title', 'description', 'nickname', 'email', 'list', 'embed_url']
         widgets = {
             'list': HiddenInput(),
         }
@@ -63,6 +72,8 @@ def detail(request, object_id, access_code=None):
         raise Http404
     if list.censored:
         raise Http404
+    list.views = F('views') + 1
+    list.save()
     entries = list.entry_set.filter(
         censored=False
     )
@@ -92,8 +103,23 @@ def detail(request, object_id, access_code=None):
 def add_entry(request, object_id):
     form = EntryForm(request.POST)
     if form.is_valid():
-        entry = form.save()
+        entry = form.save(commit=False)
         entry.record_request(request)
+        if entry.embed_url:
+            newtext = oembed_client.parse_text(entry.embed_url)
+            if newtext == entry.embed_url:
+                url = entry.embed_url
+                name = os.path.basename(url)
+                image = Image(source=url)
+                uf = urllib2.urlopen(url)
+                setattr(uf, 'size', int(uf.info().get('Content-Length')))
+                setattr(uf, 'name', name)
+                f = File(uf, name=name)
+                image.original_image.save(name, f)
+                image.name = name
+                image.save()
+                entry.image = image
+                entry.embed_url = None
         entry.save()
         result = HttpResponse(json.dumps({
             'entry_id': entry.id,
@@ -114,9 +140,8 @@ def create(request):
     if request.method == 'POST':
         form = ListForm(request.POST)
         if form.is_valid():
-            # POLISH: Here and elswhere, do you really need to be saving twice?
-            # POLISH: Optimize 'path' and 'domain' kwargs for minimum HTTP load
-            list = form.save()
+            # POLISH: Optimize 'path' and 'domain' kwargs of set_cookie for minimum HTTP load
+            list = form.save(commit=False)
             list.record_request(request)
             list.save()
             result = HttpResponseRedirect('/lists/%d/%s/?admin_code=%s' % \

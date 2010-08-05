@@ -82,6 +82,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'ajax_validation',
     'oembed',
+    'imagekit',
 )
 
 
@@ -104,3 +105,5 @@ import logging
 import log
 
 logger = log.set_up('/srv/%s/application.log' % PROJECT_ID, logging.DEBUG)
+
+CONSUMER_URLIZE_ALL = False

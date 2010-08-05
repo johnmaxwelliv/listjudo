@@ -3,6 +3,24 @@ from djangoratings.fields import RatingField
 from my.lists.templatetags.lists_tags import EntryNode
 from django.template import RequestContext
 import random
+from imagekit.models import ImageModel
+import urllib
+import my.settings
+import datetime
+from django.core.files.storage import default_storage as storage
+
+class Image(ImageModel):
+    source = models.URLField(editable=False)
+    name = models.CharField(max_length=100)
+    original_image = models.ImageField(upload_to='uploaded-images/%Y/%m/%d')
+    num_views = models.PositiveIntegerField(editable=False, default=0)
+
+    class IKOptions:
+        # This inner class is where we define the ImageKit options for the model
+        spec_module = 'lists.specs'
+        cache_dir = 'cached'
+        image_field = 'original_image'
+        save_count_as = 'num_views'
 
 class user_action(models.Model):
     # Reference is here:
@@ -59,7 +77,11 @@ class Entry(UGC):
     description = models.TextField()
     list = models.ForeignKey(List)
     rating = RatingField(range=5, can_change_vote=True, allow_anonymous=True)
-    oembed = models.URLField(max_length=200, blank=True, null=True, help_text='flickr')
+    embed_url = models.URLField(max_length=200, blank=True, null=True,
+        verbose_name='Image/Video URL',
+        help_text="Video URLs from Youtube and almost all other major video sites are supported.<br />If you'd like to use an image that's on your computer, you can upload it to <a href=\"http://imgur.com/\">imgur.com</a> and paste in its url.",
+    )
+    image = models.ForeignKey(Image, blank=True, null=True)
     def __unicode__(self):
         return self.title
     def html(self, request):

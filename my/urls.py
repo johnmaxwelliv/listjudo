@@ -21,6 +21,10 @@ urlpatterns = patterns('',
 
 if DEBUG:
     urlpatterns += patterns('',
+        (r'^site_media/uploaded-images/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': '/home/johniv/dl/uploaded-images/'}),
+        (r'^site_media/cached/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': '/home/johniv/dl/cached/'}),
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': PROJECT_PATH + 'static/site_media/'}),
     )

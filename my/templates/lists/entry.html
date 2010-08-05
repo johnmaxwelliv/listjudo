@@ -16,5 +16,10 @@
 <div>
         <div>votes: {{ entry.rating.votes }}</div>
         <div>score: {{ entry.rating.score }}</div>
-        <div>{{ entry.oembed|oembed }}</div>
+        {% if entry.embed_url %}
+            <div>{{ entry.embed_url|oembed }}</div>
+        {% endif %}
+        {% if entry.image %}
+            <div><p><img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" /></p></div>
+        {% endif %}
 </div>
