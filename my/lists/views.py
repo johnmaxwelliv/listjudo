@@ -75,6 +75,10 @@ def detail(request, object_id, access_code=None):
     })
     entries = entries.order_by('-sophisticated_rating')
 
+    comments = list.listcomment_set.filter(
+        censored=False,
+    )
+
     # Determine if the user is the list's adminstrator
     # As of 2010-8-6, the only adminstrator privilege is publishing the list
     try:
@@ -89,8 +93,13 @@ def detail(request, object_id, access_code=None):
     return template(request, 'lists/list_detail.html', {
         'list': list,
         'entries': entries,
-        'form': EntryForm(instance=empty_entry(list, request=request)),
+        'comments': comments,
+        'entry_form': EntryForm(instance=empty_entry(list, request=request)),
+        'comment_form': CommentForm(instance=empty_comment(list, request=request)),
         'admin_access': admin_access,
+        'show_comment_form': comments or not admin_access
+        # we don't show the comment form to the admin if there are no comments
+        # because then they might confuse it with the form for adding entries
     })
 
 def empty_list(request):
@@ -103,6 +112,12 @@ def empty_entry(list, request):
     kwargs = retrieve_user_data(request)
     kwargs['list'] = list
     return Entry(**kwargs)
+
+def empty_comment(list, request):
+    '''Generate a comment object preinitialized with user data and a list reference'''
+    kwargs = retrieve_user_data(request)
+    kwargs['list'] = list
+    return ListComment(**kwargs)
 
 def retrieve_user_data(request):
     result = {}
@@ -151,6 +166,27 @@ def add_entry(request, object_id):
     result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
         expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
     result.set_cookie('email', value=entry.email, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    return result
+
+def add_comment(request, object_id):
+    '''Add a comment to a list and return the new comment's html.  Called asynchronously.'''
+    form = CommentForm(request.POST)
+    # our ajax validation should have ensured that the form was valid
+    assert form.is_valid()
+    comment = form.save(commit=False)
+    # save miscelleneous request data for the curious adminstrator's sake
+    comment.record_request(request)
+    comment.save()
+    result = HttpResponse(json.dumps({
+        'html': comment.html(request),
+    }), mimetype='application/json')
+    # POLISH
+    # Calculate the "expires" argument programmatically, or we're screwed
+    # when 2068 rolls around.
+    result.set_cookie('nickname', value=comment.nickname, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    result.set_cookie('email', value=comment.email, max_age=157680000,
         expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
     return result
 

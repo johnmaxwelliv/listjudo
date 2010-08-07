@@ -14,3 +14,11 @@ class ListForm(ModelForm):
     class Meta:
         model = List
         fields = ['title', 'description', 'nickname', 'email']
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = ListComment
+        fields = ['body', 'nickname', 'email', 'list']
+        widgets = {
+            'list': HiddenInput(),
+        }

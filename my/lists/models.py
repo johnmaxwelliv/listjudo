@@ -2,7 +2,7 @@ from django.db import models
 from django.template import RequestContext
 
 from djangoratings.fields import RatingField
-from my.lists.templatetags.lists_tags import EntryNode
+from my.lists.templatetags.lists_tags import EntryNode, CommentNode
 from imagekit.models import ImageModel
 from my.settings import logger
 
@@ -93,3 +93,17 @@ class EntryImage(ImageModel):
         cache_dir = 'cached'
         image_field = 'original_image'
         save_count_as = 'num_views'
+
+class ListComment(UGC):
+    body = models.TextField()
+    list = models.ForeignKey(List)
+
+    def __unicode__(self):
+        if len(self.body) > 15:
+            return self.body[:15]
+        else:
+            return self.body
+
+    def html(self, request):
+        return CommentNode(self).render(RequestContext(request, {}))
+        # No particular need to pass RequestContext here

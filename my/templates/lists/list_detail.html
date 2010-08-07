@@ -12,6 +12,7 @@
 
 {% block content %}
     {% load lists_tags %}
+    {% load uni_form_tags %}
     <h1>{{ list.title }}</h1>
     <p>{{ list.description|striptags|urlize|linebreaks }}<p>
 
@@ -29,16 +30,38 @@
         {% entry_form %}
     </div>
 
+    <div id="comments">
+    {% for comment in comments %}
+        <div>
+            {% comment_html comment %}
+        </div>
+    {% endfor %}
+    </div>
+
     {% if admin_access %}
         <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
-        {% csrf_token %}
-        <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
-        <fieldset class="inlineLabels">
-            <div class="form_block">
-                <input type="submit" value="publish" />
-            </div>
-        </fieldset>
+            {% csrf_token %}
+            <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
+            <fieldset class="inlineLabels">
+                <div class="form_block">
+                    <input type="submit" value="publish" />
+                </div>
+            </fieldset>
         </form>
+    {% endif %}
+    {% if show_comment_form %}
+        <h2>Add a Comment</h2>
+        <div id="comment-form-div">
+            <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" id="comment-form">
+                {% csrf_token %}
+                <fieldset class="inlineLabels">
+                {{ comment_form|as_uni_form }}
+                <div class="form_block">
+                    <input type="submit" value="add your comment" id="add-comment">
+                </div>
+                </fieldset>
+            </form>
+        </div>
     {% endif %}
 {% endblock %}
 
@@ -69,6 +92,12 @@
             $('#entry-form').validate('{% url entry_form_validate %}', {
                 callback: uniform_callback,
                 fields: ['title', 'description', 'nickname', 'email', 'embed_url']
+            });
+        });
+        $(function () {
+            $('#comment-form').validate('{% url comment_form_validate %}', {
+                callback: uniform_callback,
+                fields: ['body', 'nickname', 'email']
             });
         });
     </script>

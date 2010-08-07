@@ -20,6 +20,17 @@ class EntryNode(template.Node):
         context['entry'] = self.entry
         return self.template.render(context)
 
+class CommentNode(template.Node):
+    def __init__(self, comment):
+        self.comment = comment
+        self.template = loader.get_template("lists/comment.html")
+    def render(self, context):
+        # POLISH
+        # Potential bug in the making here... what if the context object passed
+        # to render has an unexpected 'entry' field later on?
+        context['comment'] = self.comment
+        return self.template.render(context)
+
 @register.tag
 def entry_form(parser, token):
     return EntryFormNode()
@@ -27,3 +38,7 @@ def entry_form(parser, token):
 @register.simple_tag
 def entry_html(entry):
     return EntryNode(entry)
+
+@register.simple_tag
+def comment_html(comment):
+    return CommentNode(comment)

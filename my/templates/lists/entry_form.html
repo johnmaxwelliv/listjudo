@@ -2,7 +2,7 @@
 <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" id="entry-form">
     {% csrf_token %}
     <fieldset class="inlineLabels">
-    {{ form|as_uni_form }}
+    {{ entry_form|as_uni_form }}
     <div class="form_block">
         <input type="submit" value="add" id="add-entry">
     </div>
