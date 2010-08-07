@@ -1,142 +1,32 @@
 from django.views.generic.simple import direct_to_template as template
-from my.lists.models import *
-from django.forms import ModelForm
-from django.forms.widgets import HiddenInput
-from django.forms import fields
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-import json
-from django.shortcuts import get_object_or_404
-from django.template import RequestContext, loader
-from oembed.consumer import OEmbedConsumer
 from django.db.models import *
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 from django.core.files import File
-import urllib2
-import os
+
+from oembed.consumer import OEmbedConsumer
+
+from my.lists.models import *
+from my.lists.forms import *
 from my.settings import logger
+
+import json
+import os.path
+import urllib2
 
 oembed_client = OEmbedConsumer()
 
-class EntryForm(ModelForm):
-    class Meta:
-        model = Entry
-        fields = ['title', 'description', 'nickname', 'email', 'list', 'embed_url']
-        widgets = {
-            'list': HiddenInput(),
-        }
-
-class ListForm(ModelForm):
-    class Meta:
-        model = List
-        fields = ['title', 'description', 'nickname', 'email']
-
-def list(request):
+def index(request):
     return template(request, 'lists/list_list.html', {
         'lists': List.objects.filter(
-            published=True
+            published=True,
         ).filter(
-            censored=False
+            censored=False,
         ),
-    })
-
-def blank_entry(list, request=None, instance=None):
-    kwargs = retrieve_user_data(request, instance)
-    kwargs['list'] = list
-    return Entry(**kwargs)
-
-def blank_list(request=None, instance=None):
-    kwargs = retrieve_user_data(request, instance)
-    return List(**kwargs)
-
-def retrieve_user_data(request=None, instance=None):
-    result = {}
-    keys = ('nickname', 'email')
-    if request:
-        for key in keys:
-            try:
-                result[key] = request.COOKIES[key]
-            except (AttributeError, KeyError):
-                pass
-    elif instance:
-        for key in keys:
-            try:
-                result[key] = getattr(instance, key)
-            except AttributeError:
-                pass
-    else:
-        raise AssertionError("You must pass one of request or instance to retrieve_user_data.")
-    return result
-
-def detail(request, object_id, access_code=None):
-    list = get_object_or_404(List, pk=object_id)
-    if not list.published and access_code != list.access_code:
-        raise Http404
-    if list.censored:
-        raise Http404
-    list.views = F('views') + 1
-    list.save()
-    entries = list.entry_set.filter(
-        censored=False
-    )
-    entries = entries.extra(select={
-        'sophisticated_rating': \
-        '((100/%s*rating_score/(rating_votes+%s))+100)/2' % \
-        (Entry.rating.range, Entry.rating.weight)
-    })
-    entries = entries.order_by('-sophisticated_rating')
-    admin_code = None
-    if access_code == list.access_code:
-        try:
-            admin_code = request.GET['admin_code']
-        except (AttributeError, KeyError):
-            pass
-    if admin_code == list.admin_code:
-        admin_access = True
-    else:
-        admin_access = False
-    return template(request, 'lists/list_detail.html', {
-        'list': list,
-        'entries': entries,
-        'form': EntryForm(instance=blank_entry(list, request=request)),
-        'admin_access': admin_access,
-    })
-
-def add_entry(request, object_id):
-    form = EntryForm(request.POST)
-    if form.is_valid():
-        entry = form.save(commit=False)
-        entry.record_request(request)
-        if entry.embed_url:
-            newtext = oembed_client.parse_text(entry.embed_url)
-            if newtext == entry.embed_url:
-                url = entry.embed_url
-                name = os.path.basename(url)
-                image = Image(source=url)
-                uf = urllib2.urlopen(url)
-                setattr(uf, 'size', int(uf.info().get('Content-Length')))
-                setattr(uf, 'name', name)
-                f = File(uf, name=name)
-                image.original_image.save(name, f)
-                image.name = name
-                image.save()
-                entry.image = image
-                entry.embed_url = None
-        entry.save()
-        result = HttpResponse(json.dumps({
-            'entry_id': entry.id,
-            'html': entry.html(request),
-        }))
-        # POLISH
-        # Calculate the "expires" argument programmatically, or we're screwed
-        # when 2068 rolls around.
-        result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
-            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-        result.set_cookie('email', value=entry.email, max_age=157680000,
-            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-        return result
-    else:
-        return HttpResponse("<h1>Bad entry.</h1>")
+     })
 
 def create(request):
+    '''Create a list'''
     if request.method == 'POST':
         form = ListForm(request.POST)
         if form.is_valid():
@@ -146,27 +36,142 @@ def create(request):
             list.save()
             result = HttpResponseRedirect('/lists/%d/%s/?admin_code=%s' % \
                 (list.id, list.access_code, list.admin_code))
-            result.set_cookie('nickname', value=list.nickname, max_age=157680000,
-                expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-            result.set_cookie('email', value=list.email, max_age=157680000,
-                expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+            # The following cookies weren't being set properly.
+#            result.set_cookie('nickname', value=list.nickname, max_age=157680000,
+#                expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+#            result.set_cookie('email', value=list.email, max_age=157680000,
+#                expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
             return result
+    else:
+        form = None
+    
+    empty_list(request=request)
 
     return template(request, "lists/list_create.html", {
-        'form': ListForm(instance=blank_list(request=request)),
+        'form': ListForm(instance=(form or empty_list(request=request))),
     })
 
+def detail(request, object_id, access_code=None):
+    '''View a (possibly unpublished) list'''
+    list = get_object_or_404(List, pk=object_id)
+    if not list.published and access_code != list.access_code:
+        return HttpResponseForbidden()
+    if list.censored:
+        # This should probably be an HttpResponseGone
+        # but we'll leave it this way since this is a common access case
+        # and it'l be nice to be able to use our standard 404 page
+        raise Http404
+    list.views = F('views') + 1
+    list.save()
+
+    # Get uncensored entries and sort them by average rating
+    entries = list.entry_set.filter(
+        censored=False,
+    )
+    entries = entries.extra(select={
+        'sophisticated_rating': \
+        '((100/%s*rating_score/(rating_votes+%s))+100)/2' % \
+        (Entry.rating.range, Entry.rating.weight),
+    })
+    entries = entries.order_by('-sophisticated_rating')
+
+    # Determine if the user is the list's adminstrator
+    # As of 2010-8-6, the only adminstrator privilege is publishing the list
+    try:
+        admin_code = request.GET['admin_code']
+    except (AttributeError, KeyError):
+        admin_code = None
+    if admin_code == list.admin_code:
+        admin_access = True
+    else:
+        admin_access = False
+
+    return template(request, 'lists/list_detail.html', {
+        'list': list,
+        'entries': entries,
+        'form': EntryForm(instance=empty_entry(list, request=request)),
+        'admin_access': admin_access,
+    })
+
+def empty_list(request):
+    '''Generate a list object preinitialized with user data'''
+    kwargs = retrieve_user_data(request)
+    return List(**kwargs)
+
+def empty_entry(list, request):
+    '''Generate an entry object preinitialized with user data and a list reference'''
+    kwargs = retrieve_user_data(request)
+    kwargs['list'] = list
+    return Entry(**kwargs)
+
+def retrieve_user_data(request):
+    result = {}
+    keys = ('nickname', 'email')
+    for key in keys:
+        try:
+            result[key] = request.COOKIES[key]
+        except (AttributeError, KeyError):
+            pass
+    return result
+
+def add_entry(request, object_id):
+    '''Add an entry to a list and return the new entry's id and html.  Called asynchronously.'''
+    form = EntryForm(request.POST)
+    # our ajax validation should have ensured that the form was valid
+    assert form.is_valid()
+    entry = form.save(commit=False)
+    # save miscelleneous request data for the curious adminstrator's sake
+    entry.record_request(request)
+    if entry.embed_url:
+        html = oembed_client.parse_text(entry.embed_url)
+        if html == entry.embed_url:
+            # oembed_client couldn't find anything to embed, so we'll assume the user provided a direct image URL
+            url = entry.embed_url
+            name = os.path.basename(url)
+            image = EntryImage(source_url=url)
+            remote_file = urllib2.urlopen(url)
+            setattr(remote_file, 'size', int(remote_file.info().get('Content-Length')))
+            setattr(remote_file, 'name', name)
+            # I don't fully understand why or how the next few lines work.
+            # The above setattr statements are there because this following code squawks without them.
+            f = File(remote_file, name=name)
+            image.original_image.save(name, f)
+            image.alt = pre_extension(name)
+            image.save()
+            entry.image = image
+            entry.embed_url = None
+    entry.save()
+    result = HttpResponse(json.dumps({
+        'entry_id': entry.id,
+        'html': entry.html(request),
+    }), mimetype='application/json')
+    # POLISH
+    # Calculate the "expires" argument programmatically, or we're screwed
+    # when 2068 rolls around.
+    result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    result.set_cookie('email', value=entry.email, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    return result
+
+def pre_extension(name):
+    '''Extract the juicy part of an image's filename for use in its alt attribute'''
+    if '.' in name:
+        return '.'.join(name.split('.')[:-1])
+    else:
+        return name
+
 def publish(request, object_id, access_code):
+    '''Attempt to make the list with id object_id visible on the home page and other parts of the site'''
     list = get_object_or_404(List, pk=object_id)
     admin_code = None
     if access_code == list.access_code:
         try:
             admin_code = request.POST['admin_code']
         except (AttributeError, KeyError):
-            raise Http404
+            return HttpResponseForbidden()
     if admin_code != list.admin_code:
-        raise Http404
-    list = get_object_or_404(List, pk=object_id)
+        return HttpResponseForbidden()
     list.published = True
     list.save()
     return HttpResponseRedirect('/lists/%d/' % list.id)

@@ -1,3 +1,5 @@
+# Based on ImageKit docs at http://bitbucket.org/jdriscoll/django-imagekit/wiki/Home
+
 from imagekit.specs import ImageSpec
 from imagekit import processors
 
@@ -9,7 +11,7 @@ class ResizeThumb(processors.Resize):
 
 # now we define a display size resize processor
 class ResizeDisplay(processors.Resize):
-    width = 40
+    width = 600
 
 # now lets create an adjustment processor to enhance the image at small sizes
 class EnchanceThumb(processors.Adjustment):

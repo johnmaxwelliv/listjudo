@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from my.lists.views import *
+from my.lists.forms import *
 
 urlpatterns = patterns('ajax_validation.views',
     # (r'^SOME/URL/$', 'ajax_validation.views.validate', {'form_class': ContactForm}, 'contact_form_validate')

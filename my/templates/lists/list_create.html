@@ -1,25 +1,37 @@
 {% extends "base.html" %}
 
-{% block body %}
-{% load uni_form_tags %}
-<form action="/lists/create/" method="POST" class="uniForm" id="list-form">
-    {% csrf_token %}
-    <fieldset class="inlineLabels">
-    {{ form|as_uni_form }}
-    <div class="form_block">
-        <input type="submit" value="create" id="add-entry">
-    </div>
-    </fieldset>
-</form>
-{% load jquery_validation %}
-{% include_validation %}
-<script src="{{ MEDIA_URL }}jquery-uni-form.js" type="text/javascript"></script>
-<script type="text/javascript">
+{% block title %}Create a List - {{ block.super }}{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}uni_form/uni-form.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" />
+{% endblock %}
+
+{% block content %}
+    {% load uni_form_tags %}
+    <form action="/lists/create/" method="POST" class="uniForm" id="list-form">
+        {% csrf_token %}
+        <fieldset class="inlineLabels">
+            {{ form|as_uni_form }}
+            <div class="form_block">
+                <input type="submit" value="create" id="add-entry">
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {% load jquery_validation %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}jquery-uni-form.js"></script>
+    <script type="text/javascript">
         $(function () {
             $('#list-form').validate('{% url list_form_validate %}', {
                 callback: uniform_callback,
                 fields: ['title', 'description', 'nickname', 'email']
             });
         });
-</script>
+    </script>
 {% endblock %}
