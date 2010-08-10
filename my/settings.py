@@ -1,6 +1,6 @@
 # Django settings for my project.
 
-from localsettings import *
+from etc.settings import *
 
 TEMPLATE_DEBUG = DEBUG
 

@@ -44,7 +44,7 @@ def create(request):
             return result
     else:
         form = None
-    
+
     empty_list(request=request)
 
     return template(request, "lists/list_create.html", {
@@ -59,7 +59,7 @@ def detail(request, object_id, access_code=None):
     if list.censored:
         # This should probably be an HttpResponseGone
         # but we'll leave it this way since this is a common access case
-        # and it'l be nice to be able to use our standard 404 page
+        # and it'll be nice to be able to use our standard 404 page
         raise Http404
     list.views = F('views') + 1
     list.save()

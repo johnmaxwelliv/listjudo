@@ -6,3 +6,6 @@
 
 # ignore .error files produced by wcoffee
 /media/cs/*.error
+
+# ignore symlink to local settings
+/my/etc

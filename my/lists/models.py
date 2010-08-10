@@ -84,13 +84,13 @@ class EntryImage(ImageModel):
     # ImageKit docs here: http://bitbucket.org/jdriscoll/django-imagekit/wiki/Home
     source_url = models.URLField(editable=False)
     alt = models.CharField(max_length=100)
-    original_image = models.ImageField(upload_to='uploaded-images/%Y/%m/%d')
+    original_image = models.ImageField(upload_to='uploads/%Y/%m/%d')
     num_views = models.PositiveIntegerField(editable=False, default=0)
 
     class IKOptions:
         # This inner class is where we define the ImageKit options for the model
         spec_module = 'lists.entry_image_specs'
-        cache_dir = 'cached'
+        cache_dir = 'v1'
         image_field = 'original_image'
         save_count_as = 'num_views'
 
