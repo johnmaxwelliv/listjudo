@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
+{% load django_static %}
+
 {% block title %}Create a List - {{ block.super }}{% endblock %}
 
 {% block extra_head %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}versioned/lib/uni_form/uni-form.css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}versioned/lib/uni_form/default.uni-form.css" />
+    {% slimall %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_ROOT }}/versioned/lib/uni_form/uni-form.css" />
+    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
+    {% endslimall %}
 {% endblock %}
 
 {% block content %}
@@ -23,9 +27,11 @@
 {% block scripts %}
     {% load jquery_validation %}
     {{ block.super }}
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/uni_form/uni-form.jquery.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery-ajax-validation.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery-uni-form.js"></script>
+    {% slimall %}
+    <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
+    {% endslimall %}
     <script type="text/javascript">
         $(function () {
             $('#list-form').validate('{% url list_form_validate %}', {

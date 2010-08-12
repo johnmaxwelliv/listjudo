@@ -8,7 +8,7 @@ oembed.autodiscover()
 
 from django.http import HttpResponseRedirect
 
-from my.settings import PROJECT_PATH, DEBUG, MEDIA_ROOT
+from my.settings import DEBUG, MEDIA_ROOT
 
 urlpatterns = patterns('',
     (r'^lists/', include('my.lists.urls')),
@@ -23,4 +23,6 @@ if DEBUG:
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': MEDIA_ROOT}),
+        (r'^versioned/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': MEDIA_ROOT + 'versioned/'}),
     )

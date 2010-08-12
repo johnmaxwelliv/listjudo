@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
+{% load django_static %}
+
 {% block title %}{{ list.title }} - {{ block.super }}{% endblock %}
 
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
 {% block extra_head %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}versioned/lib/jquery.ui.stars.css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}versioned/lib/uni_form/uni-form.css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}versioned/lib/uni_form/default.uni-form.css" />
+    {% slimall %}
+    <link rel="stylesheet" type="text/css" href="/versioned/lib/jquery.ui.stars.css" />
+    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/uni-form.css" />
+    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
+    {% endslimall %}
 {% endblock %}
 
 {% block content %}
@@ -69,10 +73,15 @@
     {{ block.super }}
     {% load jquery_validation %}
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery.ui.stars.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery.form.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery.scrollTo-1.4.2.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/cs/list_detail.js"></script>
+    {% slimall %}
+    <script type="text/javascript" src="/versioned/lib/jquery.ui.stars.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery.form.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery.scrollTo-1.4.2.js"></script>
+    <script type="text/javascript" src="/versioned/cs/list_detail.js"></script>
+    <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
+    {% endslimall %}
     <script type="text/javascript">
         {% for entry in list.entry_set.all %}
             $("#stars-wrapper-{{ entry.id }}").stars({
@@ -83,11 +92,6 @@
                 }
             });
         {% endfor %}
-    </script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/uni_form/uni-form.jquery.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery-ajax-validation.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}versioned/lib/jquery-uni-form.js"></script>
-    <script type="text/javascript">
         $(function () {
             $('#entry-form').validate('{% url entry_form_validate %}', {
                 callback: uniform_callback,
