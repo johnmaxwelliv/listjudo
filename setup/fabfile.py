@@ -1,19 +1,14 @@
 from fabric.api import *
 from fabric.contrib.console import *
 from fabric.contrib.files import *
+from unipath import Path
 
+import datetime
 import fabric
 import os
-import time
 import random
 
-MY_USERNAME = 'johniv'
-
-# Refinement:
-# Modularize for non-Dropbox staging schemes.
-# Only use sudo when necessary?
-# Make it so johniv owns the production application?
-# Write a rollback function that switches to an older version of the app?
+me = 'john'
 
 def run(*args, **kwargs):
     return fabric.api.run(*args, pty=True, **kwargs)
@@ -22,13 +17,17 @@ def sudo(*args, **kwargs):
     return fabric.api.run(*args, pty=True, **kwargs)
 
 def h():
+    print('Installation:')
     print('linode_prep')
-    print('system_setup as root')
-    print('user_setup as ' + MY_USERNAME)
-    print('apache_setup as root')
-    print('deploy as root')
+    print('root@remote system_setup')
+    print('%s@remote user_setup' % me)
+    print('root@remote project_setup:li,textbookery.com,listfy.com')
+    print('root@localhost initialize:li-dev,/home/john/Dropbox/li,/srv/li-dev,sqlite')
+    print('After installation:')
+    print('root@remote,root@localhost rf:li')
+    print('root@remote stage:li')
 
-def linode_prep():
+def linode_setup():
     messages = (
         "Did you choose Fremont for your Linode's datacenter?",
         "Did you deploy 32-bit Ubuntu 10.04 to your Linode?",
@@ -37,7 +36,7 @@ def linode_prep():
         "Did you record your Linode's IP address ('eth0') in :c and :accounts?",
         "Did you log in to your Linode via the AJAX console, run 'ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key.pub', and record the output in :c and :accounts?",
         "Did you attempt ssh in to your linode and make sure you were given the right RSA key fingerprint?",
-        "Did you ssh in to localhost with your internet off and confirm the key fingerprint?",
+        "If localhost is not a known host, did you ssh in to localhost with your internet off and confirm the key fingerprint?",
     )
     for message in messages:
         if not confirm(message):
@@ -77,8 +76,7 @@ def system_setup():
     sudo('pip install ipython virtualenv')
     etc('Install various packages with pip')
 
-    sudo('mkdir -p /srv/py-envs/')
-    sudo('virtualenv --no-site-packages /srv/py-envs/base')
+    sudo('virtualenv --no-site-packages /srv/base-py-env')
 
     with settings(warn_only=True):
         sudo('update-alternatives --set pager /bin/less')
@@ -87,10 +85,17 @@ def system_setup():
         sudo('git config --system diff.renames copy')
     etc('Change various preferences')
 
-    sudo("adduser --shell=/usr/bin/zsh --gecos='John Maxwell,,,' --disabled-login " + MY_USERNAME)
-    sudo("adduser johniv 'sudo'")
-    etc('Add user ' + MY_USERNAME)
-    print("Log in as root and run \npasswd " + MY_USERNAME + "\n to set " + MY_USERNAME + "'s password, then run user_setup with " + MY_USERNAME + " as the user")
+    with settings(warn_only=True):
+        sudo("adduser --shell=/usr/bin/zsh --gecos='%s,,,' --disabled-login %s" % (me, me))
+        sudo("adduser " + me + " sudo")
+        etc('Add user ' + me)
+    
+    sudo("wget 'http://closure-compiler.googlecode.com/files/compiler-latest.zip'")
+    sudo('unzip compiler-latest.zip -d compiler-latest')
+    sudo('mv compiler-latest/compiler.jar /usr/local/bin/closure-compiler.jar')
+    sudo('chmod a+r /usr/local/bin/closure-compiler.jar')
+    sudo('rm -r compiler-latest')
+    print("Log in as root and run \npasswd " + me + "\n to set " + me + "'s password, then run user_setup with " + me + " as the user")
 
 def etckeeper_setup():
     if not exists('/etc/.git'):
@@ -151,97 +156,168 @@ def user_setup():
         print("When you first log in, run")
         print("~/tpe/dropbox.py start")
         print("chmod +x ~/Dropbox/bin/*")
-        print("~/Dropbox/bin/db-symlinks")
+        print("~/Dropbox/bin/db-symlinks.py")
         print("Then log out.")
+        print("Then run")
+        print("~/tpe/ssh_keygen.sh")
 
-def files(name, sqlite=True):
-    sudo('mkdir -p /srv/%s' % name)
-    sudo('virtualenv --no-site-packages /srv/%s/venv' % name)
-    for kind in ('request', 'error', 'application'):
-        sudo('touch /srv/%s/%s.log' % (name, kind))
-    sudo('chown -R %s:%s /srv/%s' % (MY_USERNAME, MY_USERNAME, name))
-    sudo('chmod -R a+w /srv/%s/*.log' % name)
-    if sqlite:
-        sudo('mkdir -p /srv/%s/db' % name)
-        sudo('touch /srv/%s/db/db.sqlite3' % name)
-        sudo('chmod -R a+w /srv/%s/db' % name)
+public_media = ['uploads', 'v1']
 
-def apache_setup(project, devdir, devdomain, proddir, proddomain, error_email='xylowolf@gmail.com'):
-    def setup(name, thisdir, thisdomain, sqlite=True, preinstall=True):
-        files(name, i_own=i_own)
-        if preinstall:
-            sudo('pip install -E /srv/%s/venv -r %s/setup/requirements.txt' % (name, thisdir))
-        sudo('chown -R %s:%s %s' % (MY_USERNAME, MY_USERNAME, thisdir))
-        with settings(warn_only=True):
-            sudo("adduser --shell=/usr/bin/zsh --gecos=',,,' --disabled-login %s" % name)
-        with settings(warn_only=True):
-            if confirm("Autogenerate httpd.conf?"):
-                upload_template('%s/setup/httpd.conf' % devdir, '/tmp/%s.conf' % name, context = {
-                    'domain': thisdomain,
-                    'project_dir': thisdir,
-                    'project': name,
+def project_setup(name, dev_domain=None, stage_domain=None, error_email='xylowolf@gmail.com'):
+    dev_name = '%s-dev' % name
+    stage_name = '%s-stage' % name
+    dev_repo = '/home/john/Dropbox/%s' % name
+    stage_repo = '/srv/%s-stage/%s' % (name, name)
+    dev_install = '/srv/%s-dev' % name
+    stage_install = '/srv/%s-stage' % name
+    initialize(dev_name, dev_repo, dev_install, 'sqlite3')
+    push(dev_repo, dev_name, dev_repo, dev_install)
+    initialize(stage_name, stage_repo, stage_install, 'postgres')
+    push(dev_repo, stage_name, stage_repo, stage_install)
+    for d in public_media:
+        sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+        sudo('chmod a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+        sudo('mkdir -p %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
+        sudo('chmod a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
+    sudo('a2enmod rewrite')
+    with settings(warn_only=True):
+        if confirm('Autogenerate httpd.conf files based on /home/john/Dropbox/%s/setup/httpd.conf on your local filesystem?' % name):
+            def upload_conf(fullname, repo, install, domain, error_email, versioned_alias):
+                upload_template('/home/john/Dropbox/%s/setup/httpd.conf' % name, '/tmp/%s.conf' % fullname, context = {
+                    'fullname': fullname,
+                    'repo': repo,
+                    'install': install,
+                    'domain': domain,
                     'error_email': error_email,
+                    'versioned_alias': versioned_alias,
                 })
                 sudo('chmod a+r /tmp/*.conf')
-                sudo('cat /tmp/%s.conf >> /etc/apache2/httpd.conf' % name)
-    try:
-        prodname = project + '-prod'
-        devname = project + '-dev'
-        setup(prodname, proddir, proddomain, sqlite=True, preinstall=False)
-        setup(devname, devdir, devdomain, sqlite=True, preinstall=True)
-        with settings(warn_only=True):
-            sudo('chmod a+w %s/db/.' % devdir)
-            sudo('chmod a+w %s/db/*' % devdir)
-        sudo('aptitude install -y apache2 apache2-dev libapache2-mod-wsgi')
-        etc('Install apache and related packages')
-        sudo('mkdir -p %s/my' % proddir)
-        sudo('mkdir -p %s/apache' % proddir)
+                sudo('cat /tmp/%s.conf >> /etc/apache2/httpd.conf' % fullname)
+            upload_conf(dev_name, dev_repo, dev_install, dev_domain, error_email, 'Alias /versioned/ %s/media/versioned/' % dev_install)
+            upload_conf(stage_name, stage_repo, stage_install, stage_domain, error_email, '')
+            etc('Upload naive httpd.conf files')
+    print('# fix apache configuration with')
+    print('se /etc/apache2/httpd.conf')
+    print('# after changing etc run')
+    print('sudo etckeeper commit')
+    print('# to run management commands')
+    print('source %s; cd %s' % (Path(dev_install).child('bin', 'activate'), Path(dev_repo).child('my')))
+    print('source %s; cd %s' % (Path(stage_install).child('bin', 'activate'), Path(stage_repo).child('my')))
+    print('# to gracefully restart the server')
+    print('sudo /etc/init.d/apache2 graceful')
 
-        sudo('a2enmod rewrite wsgi')
-        etc('Enable apache module(s)')
-    except:
-        print("An error occurred!")
-    finally:
-        print("Fix apache configuration with\nsudo vim /etc/apache2/httpd.conf")
-        print("Be sure to run\nsudo etckeeper commit\n after system configuration changes.")
-        print("Fix production config with\nsudo vim %s/my/localsettings.py %s/apache/django.wsgi\n:n for next file" % (proddir, proddir))
-        print("Fix database with\nsource /srv/%s/venv/bin/activate\n%s/my/\nmanage.py syncdb" % (prodname, proddir))
-        print("and maybe\nsudo chmod a+w /srv/%s/db /srv/%s/db/*" % (prodname, prodname))
-        print("Once that's all done, run \nsudo /etc/init.d/apache2 graceful")
+def stage(name):
+    ensure_relative_symlinks('/home/john/Dropbox/%s' % name)
+    if confirm('Did you test on other browsers?') and confirm('Did you git commit?') and confirm('Is DJANGO_STATIC True?') and confirm('Is DEBUG False?'):
+        push('/home/john/Dropbox/%s' % name, '%s-stage' % name, '/srv/%s-stage/%s' % (name, name), '/srv/%s-stage' % name)
+        for d in public_media:
+            sudo('mkdir -p %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
+            sudo('chmod a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
 
-def deploy(project, devdir, proddir):
-    devname = project + '-dev'
-    prodname = project + '-prod'
-    ensure_relative_symlinks(devdir)
-    if confirm("Do you have a clean working directory?"):
-        sudo('cp -r %s %s/../%s' % (proddir, proddir, project + '-' + str(int(time.time()))))
-        sudo('rsync -ahvEP %s/* %s --exclude-from=%s/setup/localfiles.txt' % (devdir, proddir, devdir))
-        sudo('pip install -E /srv/%s/venv -r %s/setup/requirements.txt' % (prodname, proddir))
+def rf(name):
+    ensure_relative_symlinks('/home/john/Dropbox/%s' % name)
+    push('/home/john/Dropbox/%s' % name, '%s-dev' % name, '/home/john/Dropbox/%s' % name, '/srv/%s-dev' % name)
+    for d in public_media:
+        sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+        sudo('chmod a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+
+def initialize(name, repo, install, database):
+    '''
+    Initialize an installation.
+    
+    name -- the codename of the installation
+    repo -- the path to the repository associated with this installation
+    install -- the path to the root of this installation
+    database -- a string representing the database backend for this installation
+    
+    '''
+    with settings(warn_only=True):
+        sudo("adduser --gecos=',,,' --disabled-login %s" % name)
+    repo, install = [Path(path) for path in (repo, install)]
+    sudo('virtualenv --no-site-packages %s' % install)
+    sudo('mkdir -p %s' % install.child('media', 'public', 'build'))
+    with settings(warn_only=True):
+        sudo('ln -s %s %s' % (install.child('lib', 'python2.6', 'site-packages', 'django', 'contrib', 'admin', 'media'), install.child('media', 'public', 'admin')))
+        sudo('ln -s %s %s' % (repo.child('media'), install.child('media', 'versioned')))
+    for kind in ('application', 'error', 'request'):
+        sudo('touch %s' % install.child(kind + '.log'))
+    sudo('chmod a+w %s' % install.child('*.log'))
+    if database.startswith('sqlite'):
+        sudo('mkdir -p %s' % install.child('db'))
+        sudo('touch %s' % install.child('db', 'db.sqlite3'))
+        sudo('chmod -R a+w %s' % install.child('db'))
+    elif database.startswith('postgres'):
+        sudo('aptitude install -y postgresql')
+        print('# commands to initialize postgresql')
+        print('sudo -u postgres psql postgres')
+        print('sudo -u postgres createuser -D -A -P %s' % name)
+        print('sudo -u postgres createdb -O %s %s' % (name, name))
+        print('se /etc/postgresql/8.4/main/pg_hba.conf')
+        print('# change this line')
+        print('localhost   all   all   ident')
+        print('# to this')
+        print('localhost   all   all   md5')
+        print('sudo /etc/init.d/postgresql-8.4 restart')
+        confirm("Did you get that?")
+    else:
+        raise AssertionError('invalid database string')
+    with settings(warn_only=True):
+        sudo('chown -R %s:%s %s %s' % (me, me, repo, install))
+
+def push(source, name, dest, install):
+    '''
+    Push changes from one installation to another--or, if source and dest are the same, refresh an installation.
+    
+    source -- the path to the repository that is being pushed
+    name -- the codename of the installation receiving the push
+    dest -- the path to the repository receiving the push
+    install -- the path to the root of the installation receiving the push
+    
+    '''
+    def change_etc(etc, print_only=False):
+        commands = [
+            'touch %s' % dest.child('etcs', etc, 'apache', 'django.wsgi'),
+            'mv %s /home/%s/tb' % (dest.child('my', 'etc'), me),
+            'ln -s %s %s' % (dest.child('etcs', etc), dest.child('my', 'etc')),
+        ]
         with settings(warn_only=True):
-            sudo('chmod -R a+w %s/db' % proddir)
-        if confirm("Do you need to make changes to localsettings.py or django.wsgi or run migrations or syncdb?"):
-            print("Stopping server...")
-            sudo('apache2ctl -k graceful-stop')
-            print("The production manage.py is at")
-            print("%s/my" % proddir)
-            print("Source syntax reminder:")
-            print('source ../venv/bin/activate')
-            print("Migration syntax reminder:")
-            print("python manage.py migrate [appname]")
-            print("When you've run all the migrations, execute")
-            print("sudo /etc/init.d/apache2 start")
-        else:
-            sudo('touch %s/apache/django.wsgi' % proddir)
+            if print_only:
+                print '; '.join(commands)
+            else:
+                for command in commands:
+                    sudo(command)
+
+    source, dest, install = [Path(path) for path in (source, dest, install)]
+    change_etc('maint')
+    if source.norm() != dest.norm():
+        sudo('mkdir -p %s' % install.child('old-repos'))
+        sudo('mkdir -p %s' % dest)
+        sudo('cp -r %s %s' % (dest, install.child('old-repos', datetime.datetime.now().isoformat())))
+        sudo('rsync -ahvEP %s %s' % (source.child('*'), dest))
+    sudo('aptitude install -y `python -c \'with open("%s") as f: print " ".join([line.rstrip("\\n") for line in f.readlines()])\'`' % dest.child('setup', 'apt-requirements.txt'))
+    sudo('pip install -E %s -r %s' % (install, dest.child('setup', 'pypi-requirements.txt')))
+    sudo('chmod a+x %s' % dest.child('my', 'manage.py'))
+    sudo('chown -R %s:%s %s %s %s' % (me, me, source, dest, install))
+    if confirm('Do you need to do any database migrations?'):
+        print('# source the virtualenv and manage the installation with')
+        print('source %s; cd %s' % (install.child('bin', 'activate'), dest.child('my')))
+        print('# migration syntax is')
+        print('manage.py migrate')
+        print("# (make sure you haven't created any destructive migrations")
+        print("# when you've run all the migrations, execute")
+        change_etc(name, print_only=True)
+        confirm("Did you get that?")
+    else:
+        change_etc(name)
 
 def ensure_relative_symlinks(directory):
-    '''Will only work on local machine due to use of os module.'''
+    # Will only work on local machine due to use of os module.
     for (dirpath, dirnames, filenames) in os.walk(directory):
         for filename in filenames + dirnames:
-            target = ''
             try:
                 target = os.readlink(os.path.join(dirpath, filename))
             except OSError:
-                pass
+                target = None
             if target:
-                if target.startswith(os.path.sep):
+                if target.startswith(os.path.sep) and 'etcs' not in target:
                     raise AssertionError("%s points to %s (an absolute path)" % (filename, target))

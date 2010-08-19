@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load django_static %}
+{% load ratings %}
 
 {% block title %}{{ list.title }} - {{ block.super }}{% endblock %}
 
@@ -22,9 +23,7 @@
 
     <div id="entries">
     {% for entry in entries %}
-        <div>
-            {% entry_html entry %}
-        </div>
+        {% entry_html entry %}
     {% endfor %}
     </div>
 

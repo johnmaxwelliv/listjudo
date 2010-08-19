@@ -1,4 +1,13 @@
+apache2
+apache2-dev
 build-essential
-python-dev
+libapache2-mod-wsgi
 libxml2-dev
 libxslt-dev
+memcached
+postgresql
+python-dev
+libjpeg
+libjpeg-dev
+libfreetype6
+libfreetype6-dev

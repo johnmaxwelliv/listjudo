@@ -1,5 +1,6 @@
 from django.db import models
-from django.template import RequestContext
+from django.template import Context, RequestContext, loader
+from django.core.cache import cache
 
 from djangoratings.fields import RatingField
 from my.lists.templatetags.lists_tags import EntryNode, CommentNode
@@ -7,6 +8,7 @@ from imagekit.models import ImageModel
 from my.settings import logger
 
 import random
+import oembed
 
 class UserAction(models.Model):
     # Reference is here:
@@ -77,14 +79,13 @@ class Entry(UGC):
 
     def html(self, request):
         return EntryNode(self).render(RequestContext(request, {}))
-        # We need RequestContext so we can provide the csrf_token for the entry's rating form
 
 class EntryImage(ImageModel):
     '''An uploaded image associated with an entry'''
     # ImageKit docs here: http://bitbucket.org/jdriscoll/django-imagekit/wiki/Home
     source_url = models.URLField(editable=False)
     alt = models.CharField(max_length=100)
-    original_image = models.ImageField(upload_to='public/uploads/%Y/%m/%d')
+    original_image = models.ImageField(upload_to='public/uploads/%Y/%m/%d/%H/%M/%S')
     num_views = models.PositiveIntegerField(editable=False, default=0)
 
     class IKOptions:

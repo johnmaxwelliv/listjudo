@@ -1,25 +1,30 @@
 {% load ratings %}
+{% load cache %}
 {% load oembed_tags %}
-<h2>{{ entry.title }}</h2>
-<div>{{ entry.description|striptags|urlize|linebreaks }}</div>
+{% cache cache_period entry_html_1 entry.id %}
 <div>
-    <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
-        {% csrf_token %}
-        <div id="stars-wrapper-{{ entry.id }}">
-        <select name="score" style="width: 120px">
-            {% generate_options entry.rating request %}
-        </select>
-        <noscript><input type="submit" value="Go!" /></noscript>
-        </div>
-    </form>
+    <h2>{{ entry.title }}</h2>
+    <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
+    <div>
+        <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
+            <div id="stars-wrapper-{{ entry.id }}">
+            <select name="score" style="width: 120px">
+{% endcache %}
+                {% generate_options entry.rating request %}
+{% cache cache_period entry_html_2 entry.id %}
+            </select>
+            </div>
+        </form>
+    </div>    <div>
+            <div>votes: {{ entry.rating.votes }}</div>
+            <div>score: {{ entry.rating.score }}</div>
+            {% if entry.embed_url %}
+                <div>{{ entry.embed_url|oembed }}</div>
+                {# <div>{{ entry.embed_url|oembed:"600x600" }}</div> #}
+            {% endif %}
+            {% if entry.image %}
+                <div><p><img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" /></p></div>
+            {% endif %}
+    </div>
 </div>
-<div>
-        <div>votes: {{ entry.rating.votes }}</div>
-        <div>score: {{ entry.rating.score }}</div>
-        {% if entry.embed_url %}
-            <div>{{ entry.embed_url|oembed }}</div>
-        {% endif %}
-        {% if entry.image %}
-            <div><p><img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" /></p></div>
-        {% endif %}
-</div>
+{% endcache %}

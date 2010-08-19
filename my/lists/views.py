@@ -144,9 +144,14 @@ def add_entry(request, object_id):
             url = entry.embed_url
             name = os.path.basename(url)
             image = EntryImage(source_url=url)
-            remote_file = urllib2.urlopen(url)
-            setattr(remote_file, 'size', int(remote_file.info().get('Content-Length')))
-            setattr(remote_file, 'name', name)
+            image_req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.8) Gecko/20100723 Ubuntu/10.04 (lucid) Firefox/3.6.8', 'Referer': os.path.dirname(url)})
+            setattr(image_req, 'timeout', 10)
+            handler = urllib2.HTTPHandler()
+            remote_file = handler.http_open(image_req)
+            if not hasattr(remote_file, 'size'):
+                setattr(remote_file, 'size', int(remote_file.info().get('Content-Length')))
+            if not hasattr(remote_file, 'name'):
+                setattr(remote_file, 'name', name)
             # I don't fully understand why or how the next few lines work.
             # The above setattr statements are there because this following code squawks without them.
             f = File(remote_file, name=name)
