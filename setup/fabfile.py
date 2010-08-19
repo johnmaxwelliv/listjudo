@@ -215,11 +215,13 @@ def stage(name):
             sudo('chmod a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
 
 def rf(name):
+    sudo("killall -SIGSTOP '/home/john/.dropbox-dist/dropbox'")
     ensure_relative_symlinks('/home/john/Dropbox/%s' % name)
     push('/home/john/Dropbox/%s' % name, '%s-dev' % name, '/home/john/Dropbox/%s' % name, '/srv/%s-dev' % name)
     for d in public_media:
         sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
         sudo('chmod a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+    sudo("killall -SIGCONT '/home/john/.dropbox-dist/dropbox'")
 
 def initialize(name, repo, install, database):
     '''
@@ -275,17 +277,20 @@ def push(source, name, dest, install):
     
     '''
     def change_etc(etc, print_only=False):
+        '''Change the etc in the destination directory'''
+        sudo('mkdir -p /root/tb')
+        sudo('mkdir -p /root/.trashinfo')
+        sudo('chmod a+x /home/%s/bin/*' % me)
         commands = [
             'touch %s' % dest.child('etcs', etc, 'apache', 'django.wsgi'),
-            'mv %s /home/%s/tb' % (dest.child('my', 'etc'), me),
+            '/home/%s/bin/t -f %s' % (me, dest.child('my', 'etc')),
             'ln -s %s %s' % (dest.child('etcs', etc), dest.child('my', 'etc')),
         ]
-        with settings(warn_only=True):
-            if print_only:
-                print '; '.join(commands)
-            else:
-                for command in commands:
-                    sudo(command)
+        if print_only:
+            print '; '.join(commands)
+        else:
+            for command in commands:
+                sudo(command)
 
     source, dest, install = [Path(path) for path in (source, dest, install)]
     change_etc('maint')
