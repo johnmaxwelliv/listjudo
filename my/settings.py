@@ -24,8 +24,15 @@ DJANGO_STATIC_SAVE_PREFIX = MEDIA_ROOT + 'public/build'
 DJANGO_STATIC_NAME_PREFIX = '/public/build'
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('John Maxwell', 'jmiv.error@gmail.com'),
 )
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'admin@campuseagle.com'
+EMAIL_HOST_PASSWORD = 'flamezoo491'
+EMAIL_USE_TLS = True
+EMAIL_SUBJECT_PREFIX = '[Error] '
 
 MANAGERS = ADMINS
 
@@ -115,7 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
 )
 
-INTERNAL_IPS = ('127.0.0.1', '24.130.12.146')
+INTERNAL_IPS = ('127.0.0.1', '24.130.12.146', '24.130.13.211')
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': True,

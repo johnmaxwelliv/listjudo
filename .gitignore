@@ -9,3 +9,6 @@
 
 # ignore symlink to local settings
 /my/etc
+
+# ignore dropbox metadata
+.dropbox

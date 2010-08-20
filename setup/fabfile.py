@@ -208,11 +208,13 @@ def project_setup(name, dev_domain=None, stage_domain=None, error_email='xylowol
 
 def stage(name):
     ensure_relative_symlinks('/home/john/Dropbox/%s' % name)
-    if confirm('Did you test on other browsers?') and confirm('Did you git commit?') and confirm('Is DJANGO_STATIC True?') and confirm('Is DEBUG False?'):
+    if True or (confirm('Is DJANGO_STATIC True?') and confirm('Is DEBUG False?') and confirm('Did you test on other browsers?') and confirm('Did you git commit?')):
         push('/home/john/Dropbox/%s' % name, '%s-stage' % name, '/srv/%s-stage/%s' % (name, name), '/srv/%s-stage' % name)
         for d in public_media:
             sudo('mkdir -p %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
-            sudo('chmod a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
+            sudo('chmod -R a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', d))
+        sudo('mkdir -p %s' % Path('/srv/%s-stage' % name).child('media', 'public', 'build'))
+        sudo('chmod -R a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', 'build'))
 
 def rf(name):
     sudo("killall -SIGSTOP '/home/john/.dropbox-dist/dropbox'")
@@ -220,7 +222,9 @@ def rf(name):
     push('/home/john/Dropbox/%s' % name, '%s-dev' % name, '/home/john/Dropbox/%s' % name, '/srv/%s-dev' % name)
     for d in public_media:
         sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
-        sudo('chmod a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+        sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
+    sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
+    sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
     sudo("killall -SIGCONT '/home/john/.dropbox-dist/dropbox'")
 
 def initialize(name, repo, install, database):
@@ -302,7 +306,7 @@ def push(source, name, dest, install):
     sudo('aptitude install -y `python -c \'with open("%s") as f: print " ".join([line.rstrip("\\n") for line in f.readlines()])\'`' % dest.child('setup', 'apt-requirements.txt'))
     sudo('pip install -E %s -r %s' % (install, dest.child('setup', 'pypi-requirements.txt')))
     sudo('chmod a+x %s' % dest.child('my', 'manage.py'))
-    sudo('chown -R %s:%s %s %s %s' % (me, me, source, dest, install))
+    sudo('chgrp -R %s %s %s %s' % (me, source, dest, install))
     if confirm('Do you need to do any database migrations?'):
         print('# source the virtualenv and manage the installation with')
         print('source %s; cd %s' % (install.child('bin', 'activate'), dest.child('my')))

@@ -68,7 +68,7 @@ class Entry(UGC):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     list = models.ForeignKey(List)
-    rating = RatingField(range=5, can_change_vote=True, allow_anonymous=True)
+    rating = RatingField(range=5, weight=5, can_change_vote=True, allow_anonymous=True)
     embed_url = models.URLField('Image/Video URL', verify_exists=True, blank=True, null=True,
         help_text="Video URLs from Youtube and almost all other major video sites are supported.<br />Image URLs should be direct, as in http://www.example.com/photo.jpg<br />If you'd like to use an image that's on your computer, you can upload it to <a href=\"http://imgur.com/\">imgur.com</a> and paste in its \"direct link\".",
     )
