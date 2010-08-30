@@ -35,24 +35,38 @@
         {% entry_form %}
     </div>
 
-    <div id="comments">
-    {% for comment in comments %}
-        <div>
+    {% if comments %}
+        <h2>Comments</h2>
+        <div id="comments">
+        {% for comment in comments %}
             {% comment_html comment %}
+        {% endfor %}
         </div>
-    {% endfor %}
-    </div>
+    {% endif %}
 
     {% if admin_access %}
+        {% if not list.published %}
+        <hr />
+        <div>
+        <p><b>Ready to share your list with the world?</b>
         <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
             {% csrf_token %}
             <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
             <fieldset class="inlineLabels">
                 <div class="form_block">
-                    <input type="submit" value="publish" />
+                    <input type="submit" value="Publish It!" />
                 </div>
             </fieldset>
         </form>
+        </p>
+        <p><b>Just want to share your list with a few friends?</b>  Give them this URL:</p>
+        <p>
+            <form>
+                <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
+            </form>
+        </p>
+        </div>
+        {% endif %}
     {% endif %}
     {% if show_comment_form %}
         <h2>Add a Comment</h2>
@@ -62,7 +76,7 @@
                 <fieldset class="inlineLabels">
                 {{ comment_form|as_uni_form }}
                 <div class="form_block">
-                    <input type="submit" value="add your comment" id="add-comment">
+                    <input type="submit" value="add your comment" id="add-comment" />
                 </div>
                 </fieldset>
             </form>

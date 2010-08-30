@@ -5,7 +5,7 @@
 
 <h1>Lists</h1>
 {% for list in lists %}
-    <div><a href="/lists/{{ list.id }}/">{{ list.title }}</a></div>
+    <div><a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a></div>
 {% endfor %}
 {% endblock %}
 

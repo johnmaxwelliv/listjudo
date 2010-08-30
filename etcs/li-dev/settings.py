@@ -1,6 +1,6 @@
 # Django localsettings for my project in development.
 
-CACHE_BACKEND = 'locmem://'
+CACHE_BACKEND = 'dummy://' # 'dummy://' or 'locmem://'
 
 INSTALL_ROOT = '/srv/li-dev/'
 

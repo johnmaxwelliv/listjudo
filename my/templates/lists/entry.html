@@ -2,29 +2,30 @@
 {% load cache %}
 {% load oembed_tags %}
 {% cache cache_period entry_html_1 entry.id %}
-<div>
-    <h2>{{ entry.title }}</h2>
-    <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
+<div class="entry">
+    <h3>{{ entry.title }}</h3>
     <div>
-        <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
-            <div id="stars-wrapper-{{ entry.id }}">
-            <select name="score" style="width: 120px">
-{% endcache %}
-                {% generate_options entry.rating request %}
-{% cache cache_period entry_html_2 entry.id %}
-            </select>
-            </div>
-        </form>
-    </div>    <div>
-            <div>votes: {{ entry.rating.votes }}</div>
-            <div>score: {{ entry.rating.score }}</div>
             {% if entry.embed_url %}
-                <div>{{ entry.embed_url|oembed }}</div>
-                {# <div>{{ entry.embed_url|oembed:"600x600" }}</div> #}
+                {{ entry.embed_url|oembed:"600x600" }}
             {% endif %}
             {% if entry.image %}
-                <div><p><img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" /></p></div>
+                <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />
             {% endif %}
     </div>
+    <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
+    <table>
+        <th>
+            <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
+                <div id="stars-wrapper-{{ entry.id }}">
+                <select name="score" style="width: 120px">
+{% endcache %}
+                    {% generate_options entry.rating request %}
+{% cache cache_period entry_html_2 entry.id %}
+                </select>
+                </div>
+            </form>
+        </th>
+    </table>
+    <div><small>Added by {{ entry.nickname }} on {{ entry.modified }}.</small></div>
 </div>
 {% endcache %}

@@ -1,2 +1,4 @@
-<div>{{ comment.body|striptags|urlize|linebreaks }}</div>
-<div>By: {{ comment.nickname }}</div>
+<div class="comment">
+    <div>{{ comment.body|striptags|urlize|linebreaks }}</div>
+    <p><small>Left by <b>{{ comment.nickname }}</b> on {{ comment.modified }}.</small></p>
+</div>
