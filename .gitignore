@@ -12,3 +12,12 @@
 
 # ignore dropbox metadata
 .dropbox
+
+# ignore symlinks
+/my/ajax_validation
+/my/djangoratings
+/my/django_static
+/my/oembed
+/my/uni_form
+/my/uni-form
+/media/lib/uni_form
