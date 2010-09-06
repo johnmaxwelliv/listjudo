@@ -3,7 +3,7 @@
 {% load django_static %}
 {% load ratings %}
 
-{% block title %}{{ list.title }} - {{ block.super }}{% endblock %}
+{% block title %}&nbsp;|&nbsp;{{ list.title }}{% endblock %}
 
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
@@ -18,8 +18,9 @@
 {% block content %}
     {% load lists_tags %}
     {% load uni_form_tags %}
-    <h1>{{ list.title }}</h1>
+    <h1>{{ list.title|striptags }}</h1>
     <p>{{ list.description|striptags|urlize|linebreaks }}<p>
+    <p><small>Created on {{ list.created }}.</small></p>
 
     <div id="entries">
     {% if entries %}

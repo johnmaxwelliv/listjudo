@@ -1,14 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!doctype html>
+<html lang="en">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>{% block title %}listfy.com{% endblock %}</title>
-	<meta name="description" content="{% block description %}A community-driven list-building website.{% endblock %}" />
+	<meta charset="utf-8" />
+    <meta name="description" content="{% block description %}A community-driven list-building website.{% endblock %}" />
+    <title>Listify!{% block title %}{% endblock %}</title>
 	{% block extra_head %}
 	{% endblock %}
+
+    {# fixes HTML5 in IE #}
+    <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 
 <body>
@@ -19,6 +20,8 @@
     {% endblock %}
     {% block scripts %}
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        {# fixes .png transparency in IE 6 #}
+    	<!--[if lt IE 7]><script defer type="text/javascript" src="http://ahmadsalehi.info/scripts/correct_png.js"></script><![endif]-->
     {% endblock %}
 {% endblock %}
 </body>
