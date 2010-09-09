@@ -21,3 +21,9 @@
 /my/uni_form
 /my/uni-form
 /media/lib/uni_form
+
+# ignore sass cache
+/media/.sass-cache
+
+# ignore compiled css files
+/media/stylesheets

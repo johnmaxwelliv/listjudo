@@ -6,24 +6,70 @@
     <meta name="description" content="{% block description %}A community-driven list-building website.{% endblock %}" />
     <title>Listify!{% block title %}{% endblock %}</title>
 	{% block extra_head %}
-	{% endblock %}
+	{% endblock extra_head %}
+
+	<link rel="stylesheet" href="../../media/stylesheets/screen.css" type="text/css" media="screen">
 
     {# fixes HTML5 in IE #}
     <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 
 <body>
+
+<div id="wrapper">
+
+<!--[if IE]>
+    <noscript><div>
+        <p>You are using Internet Explorer and have disabled JavaScript, making your browser unable to view HTML5. You are the bane of every web designer's existence. If you with to properly view this site, please either <a href="http://kb.iu.edu/data/ahqx.html">enable JavaScript</a> or upgrade to a browser that <i>isn't</i> used by the CIA as a torture device against designers. Free, standards-compliant browswers include <a href="http://www.mozilla.com/firefox/">Firefox</a>, <a href="www.apple.com/safari/">Safari</a>, and <a href="www.google.com/chrome ">Google Chrome</a>. They are gods to the maggot that is Internet Explorer.</p>
+    </div></noscript>
+<![endif]-->
+
 {% block body %}
-    {% block menu %}
-    {% endblock %}
+
+    {% block header %}
+        <header>
+        <a href="http://textbookery.com">
+            Website logo here. Pretty. Your Mom.
+        </a>
+        <nav>
+            <ul>
+                <li><a href="http://textbookery.com">Home</a></li>
+                <li><a href="">All Lists</a></li>
+                <li><a href="/lists/create">Create a List</a></li>
+                <li><a href="">Blah</a></li>
+            </ul>
+        </nav>
+        </header>
+    {% endblock header %}
+    
     {% block content %}
-    {% endblock %}
+    
+    	{# featured is only on the homepage. override with empty block on other pages #}
+        {% block featured %}
+        {% endblock featured %}
+        
+        {% block sidebar %}
+        {% endblock sidebar %}
+        
+        {# excerpts only on the homepage (probably). override with empty block on other pages #}
+        {% block excerpt %}
+        {% endblock excerpt %}
+        
+        {% block article %}
+        {% endblock article %}
+        
+        <p>Frargh. Note: we need to make two chile templates of base, one of which is used for the homepage and the other of which is used for everything else.</p>
+        
+    {% endblock content %}
+    
     {% block scripts %}
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         {# fixes .png transparency in IE 6 #}
     	<!--[if lt IE 7]><script defer type="text/javascript" src="http://ahmadsalehi.info/scripts/correct_png.js"></script><![endif]-->
-    {% endblock %}
-{% endblock %}
+    {% endblock scripts %}
+{% endblock body %}
+
+</div><!--#wrapper-->
 </body>
 
 </html>
