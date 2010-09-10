@@ -64,6 +64,7 @@ def system_setup():
     packages = (
         'ack-grep',
         'less',
+        'mercurial',
         'python-setuptools',
         'vim-nox', 
         'wget',
@@ -285,6 +286,9 @@ def push(source, name, dest, install):
         sudo('mkdir -p /root/tb')
         sudo('mkdir -p /root/.trashinfo')
         sudo('chmod a+x /home/%s/bin/*' % me)
+        sudo('mkdir -p %s' % dest.child('etcs', etc, 'apache'))
+        sudo('mkdir -p %s' % dest.child('etcs', etc))
+        sudo('mkdir -p %s' % dest.child('my'))
         commands = [
             'touch %s' % dest.child('etcs', etc, 'apache', 'django.wsgi'),
             '/home/%s/bin/t -f %s' % (me, dest.child('my', 'etc')),
@@ -305,6 +309,8 @@ def push(source, name, dest, install):
         sudo('rsync -ahvEP %s %s' % (source.child('*'), dest))
     sudo('aptitude install -y `python -c \'with open("%s") as f: print " ".join([line.rstrip("\\n") for line in f.readlines()])\'`' % dest.child('setup', 'apt-requirements.txt'))
     sudo('pip install -E %s -r %s' % (install, dest.child('setup', 'pypi-requirements.txt')))
+    sudo('mkdir -p %s' % dest.child('my'))
+    sudo('touch %s' % dest.child('my', 'manage.py'))
     sudo('chmod a+x %s' % dest.child('my', 'manage.py'))
     sudo('chgrp -R %s %s %s %s' % (me, source, dest, install))
     if confirm('Do you need to do any database migrations?'):
