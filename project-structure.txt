@@ -16,6 +16,6 @@ my/templates/lists/entry_form.html: html template for an entry form
 The following templates are used to generate pages:
 my/templates/lists/list_create.html: generates initial list creation page
 my/templates/lists/list_detail.html: generates list info page (which gets used a lot)
-my/templates/lists/list_list.html: generates home page
+my/templates/lists/list_home.html: generates home page
 
 setup: files related to project installation

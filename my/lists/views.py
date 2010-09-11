@@ -17,7 +17,7 @@ import urllib2
 oembed_client = OEmbedConsumer()
 
 def index(request):
-    return template(request, 'lists/list_list.html', {
+    return template(request, 'lists/list_home.html', {
         'lists': List.objects.filter(
             published=True,
         ).filter(
