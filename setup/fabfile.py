@@ -8,7 +8,7 @@ import fabric
 import os
 import random
 
-me = 'john'
+me = os.getenv('USER')
 
 def run(*args, **kwargs):
     return fabric.api.run(*args, pty=True, **kwargs)
@@ -218,15 +218,17 @@ def stage(name):
         sudo('chmod -R a+w %s' % Path('/srv/%s-stage' % name).child('media', 'public', 'build'))
 
 def rf(name):
-    sudo("killall -SIGSTOP '/home/john/.dropbox-dist/dropbox'")
-    ensure_relative_symlinks('/home/john/Dropbox/%s' % name)
-    push('/home/john/Dropbox/%s' % name, '%s-dev' % name, '/home/john/Dropbox/%s' % name, '/srv/%s-dev' % name)
+    with settings(warn_only=True):
+        sudo("killall -SIGSTOP '/home/%s/.dropbox-dist/dropbox'" % me)
+    ensure_relative_symlinks('/home/%s/Dropbox/%s' % (me, name))
+    push('/home/%s/Dropbox/%s' % (me, name), '%s-dev' % name, '/home/%s/Dropbox/%s' % (me, name), '/srv/%s-dev' % name)
     for d in public_media:
         sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
         sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
     sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
     sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
-    sudo("killall -SIGCONT '/home/john/.dropbox-dist/dropbox'")
+    with settings(warn_only=True):
+        sudo("killall -SIGCONT '/home/%s/.dropbox-dist/dropbox'" % me)
 
 def initialize(name, repo, install, database):
     '''

@@ -7,8 +7,8 @@
     <title>Listfy!{% block title %}{% endblock %}</title>
 	{% block extra_head %}
 	{% endblock extra_head %}
-
-	<link rel="stylesheet" href="../../media/stylesheets/screen.css" type="text/css" media="screen">
+	
+	<link rel="stylesheet" href="http://textbookery.com/media/versioned/screen.css" type="text/css" media="screen">
 
     {# fixes HTML5 in IE #}
     <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -33,33 +33,28 @@
         </a>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="">All Lists</a></li>
-                <li><a href="/lists/create">Create a List</a></li>
-                <li><a href="">Blah</a></li>
+                <li id="home"><a href="/">Home</a></li>
+                <li id="all"><a href="">All Lists</a></li>
+                <li id="create"><a href="/lists/create">Create a List</a></li>
+                <li id="blah"><a href="">Blah</a></li>
             </ul>
         </nav>
         </header>
     {% endblock header %}
     
     {% block content %}
-    
-    	{# featured is only on the homepage. override with empty block on other pages #}
-        {% block featured %}
-        {% endblock featured %}
-        
+    	<div id="content">
+    	
         {% block sidebar %}
+        	<aside>
+        		<p>Facebook connect thing</p>
+        		<p>Most popular</p>
+        		<p>Categories</p>
+        		<p>Other stuff...blah</p>
+        	</aside>
         {% endblock sidebar %}
         
-        {# excerpts only on the homepage (probably). override with empty block on other pages #}
-        {% block excerpt %}
-        {% endblock excerpt %}
-        
-        {% block article %}
-        {% endblock article %}
-        
-        <p>Frargh. Note: we need to make two chile templates of base, one of which is used for the homepage and the other of which is used for everything else.</p>
-        
+        </div><!--#content-->
     {% endblock content %}
     
     {% block scripts %}

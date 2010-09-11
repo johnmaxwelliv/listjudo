@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1><a href="/lists/create/">Create a List</a></h1>
 
-<h1>Lists</h1>
-{% for list in lists %}
-    <div><a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a></div>
-{% endfor %}
+	{% block featured %}
+		<div id="featured">
+        	
+		</div><!--#featured-->
+	{% endblock featured %}
+        
+	{% for list in lists %}
+    	<div class="excerpt clear">
+    		<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+   		</div>
+	{% endfor %}
+	
 {% endblock %}
 
 {% block scripts %}

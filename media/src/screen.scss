@@ -1,8 +1,45 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
-
 @import "reset";
 
+/* MIXINS */
+@mixin layoutBorder { border: solid 1px #000; }
+
+/* GENERAL LAYOUT */
+aside, .excerpt, header, #featured, nav, nav li, #wrapper { @include layoutBorder; } /* temporary, for seeing purposes only */
+
+aside {
+	float: right;
+	width: 300px;
+}
+
+header { height: 130px; }
+
+nav {
+	float: right;
+	/* vertical align to bottom? look up, I hate doing this manually */
+	
+	ul { list-style-type: none; }	
+	
+	li {
+		float: left;
+		height: 50px;
+		margin-left: 15px;
+		width: 100px;
+	}
+}
+/* GENERAL LAYOUT (CUSTOM) */
+.clear { clear: both; }
+
+.excerpt {
+	float: left;
+	height: 250px;
+	margin: 45px 45px 0 0;
+	width: 300px;
+}
+#featured {
+	float: left;
+	height: 300px;
+	width: 550px;
+}
 #wrapper {
 	margin: auto;
 	width: 960px;
