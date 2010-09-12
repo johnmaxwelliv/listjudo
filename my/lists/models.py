@@ -60,6 +60,7 @@ class List(UGC):
     access_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     admin_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     views = models.PositiveIntegerField(default=0, editable=False)
+    image = models.ForeignKey('EntryImage', blank=True, null=True)
 
     def __unicode__(self):
         return self.title

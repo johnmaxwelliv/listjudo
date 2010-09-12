@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block content %}
-
 	{% block featured %}
 		<div id="featured">
         	
 		</div><!--#featured-->
 	{% endblock featured %}
         
-	{% for list in lists %}
-    	<div class="excerpt clear">
-    		<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
-   		</div>
-	{% endfor %}
+	{% block excerpt %}
+		{% for list in lists %}
+    		<div class="excerpt clear">
+    			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+   			</div>
+   		{% empty %}
+   			<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
+		{% endfor %}
+	{% endblock excerpt %}
 	
-{% endblock %}
-
 {% block scripts %}
 {% endblock %}
