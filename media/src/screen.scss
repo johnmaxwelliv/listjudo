@@ -9,17 +9,30 @@
 @mixin layoutBorder { border: solid 1px #000; }
 
 /* VARIABLES */
-$headerH: 130px;
-$navH: 50px;
+
+	/* COLORS */
+	$cream: #f1e6d5;
+	$offWhite: #fcfdfb;
+	
+	/* HEIGHTS */
+	$headerH: 130px;
+	$navH: 50px;
+
+	/* MARGINS */
+	$contentLeft: 50px;
+	$contentTop: 80px;
 
 /* GENERAL LAYOUT */
-aside, .excerpt, header, #featured, footer, nav, nav li, #wrapper { @include layoutBorder; } /* temporary, for seeing purposes only */
+aside, .excerpt, header, #featured, footer, nav, nav li { @include layoutBorder; } /* temporary, for seeing purposes only */
 
 aside {
 	clear: right;
 	float: right;
+	margin: $contentTop 25px 0 0;
 	width: 300px;
 }
+
+body {background: $cream url('../images/bg_texture.png') repeat fixed; }
 
 header { height: $headerH; }
 
@@ -43,6 +56,11 @@ nav {
 /* GENERAL LAYOUT (CUSTOM) */
 .clear { clear: both; }
 
+#content { 
+	background: $offWhite url('../images/content_texture.jpg') repeat-y;
+	width: 100%;
+}
+
 .excerpt {
 	clear: left;
 	float: left;
@@ -53,9 +71,13 @@ nav {
 	.excerpt.even {
 		clear: right;
 	}
+	.excerpt.odd {
+		margin-left: $contentLeft;
+	}
 #featured {
 	float: left;
 	height: 300px;
+	margin: $contentTop 0 0 $contentLeft;
 	width: 550px;
 }
 #wrapper {
