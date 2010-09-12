@@ -1,10 +1,19 @@
+/* IMPORTS */
 @import "reset";
+@import "compass/layout.scss";
+
+/* INCLUDES */
+@include sticky-footer(50px, "#content", "#stickyFooterHelper", "footer"); /* height, content, div in content, footer */
 
 /* MIXINS */
 @mixin layoutBorder { border: solid 1px #000; }
 
+/* VARIABLES */
+$headerH: 130px;
+$navH: 50px;
+
 /* GENERAL LAYOUT */
-aside, .excerpt, header, #featured, nav, nav li, #wrapper { @include layoutBorder; } /* temporary, for seeing purposes only */
+aside, .excerpt, header, #featured, footer, nav, nav li, #wrapper { @include layoutBorder; } /* temporary, for seeing purposes only */
 
 aside {
 	clear: right;
@@ -12,17 +21,21 @@ aside {
 	width: 300px;
 }
 
-header { height: 130px; }
+header { height: $headerH; }
 
+footer {
+	width: 960px;
+}
 nav {
 	float: right;
-	/* vertical align to bottom? look up, I hate doing this manually */
+	position: relative;
+		top: $headerH - $navH;
 	
 	ul { list-style-type: none; }	
 	
 	li {
 		float: left;
-		height: 50px;
+		height: $navH;
 		margin-left: 15px;
 		width: 100px;
 	}
@@ -31,11 +44,15 @@ nav {
 .clear { clear: both; }
 
 .excerpt {
+	clear: left;
 	float: left;
-	height: 250px;
+	height: 300px;
 	margin: 45px 45px 0 0;
-	width: 300px;
+	width: 250px;
 }
+	.excerpt.even {
+		clear: right;
+	}
 #featured {
 	float: left;
 	height: 300px;

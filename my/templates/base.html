@@ -62,9 +62,17 @@
 		{# in list_home only #}
     	{% block excerpt %}
     	{% endblock excerpt %}
-    	        
+
+			<div id="stickyFooterHelper"></div>
+			
         </div><!--#content-->
     {% endblock content %}
+    
+    {% block footer %}
+    	<footer>
+    		<p>Footer!</p>
+    	</footer>
+    {% endblock footer %}
     
     {% block scripts %}
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
