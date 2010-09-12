@@ -7,7 +7,7 @@
 	{% endblock featured %}
         
 	{% block excerpt %}
-		{% for list in lists %}
+		{% for list in lists.object_list %}
     		<div class="excerpt clear {% if forloop.counter|divisibleby:2 %} even {% else %} odd {% endif %} ">
     			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
    			</div>

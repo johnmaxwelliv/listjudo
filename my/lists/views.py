@@ -3,6 +3,7 @@ from django.db.models import *
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.files import File
+from django.core.paginator import Paginator
 
 from oembed.consumer import OEmbedConsumer
 
@@ -18,11 +19,11 @@ oembed_client = OEmbedConsumer()
 
 def index(request):
     return template(request, 'lists/list_home.html', {
-        'lists': List.objects.filter(
+        'lists': Paginator(List.objects.filter(
             published=True,
         ).filter(
             censored=False,
-        ),
+        ), 4).page(1),
      })
 
 def create(request):
