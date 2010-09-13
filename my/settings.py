@@ -134,5 +134,3 @@ import log
 logger = log.set_up(INSTALL_ROOT + 'application.log', logging.DEBUG)
 
 CONSUMER_URLIZE_ALL = False
-
-OEMBED_THUMBNAIL_SIZE = (100, 100)

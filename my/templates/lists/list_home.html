@@ -10,6 +10,9 @@
 		{% for list in lists.object_list %}
     		<div class="excerpt clear {% if forloop.counter|divisibleby:2 %} even {% else %} odd {% endif %} ">
     			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+                {% if list.image %}
+                    <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
+                {% endif %}
    			</div>
    		{% empty %}
    			<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>

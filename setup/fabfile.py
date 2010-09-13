@@ -315,14 +315,20 @@ def push(source, name, dest, install):
     sudo('touch %s' % dest.child('my', 'manage.py'))
     sudo('chmod a+x %s' % dest.child('my', 'manage.py'))
     sudo('chgrp -R %s %s %s %s' % (me, source, dest, install))
-    if confirm('Do you need to do any database migrations?'):
+    if confirm('Do you need to do any database migrations or flush the image cache?'):
         print('# source the virtualenv and manage the installation with')
         print('source %s; cd %s' % (install.child('bin', 'activate'), dest.child('my')))
+        print("# if you're working on the development domain, BE SURE TO RUN")
+        change_etc(name, print_only=True)
+        print("# (if you're working on the real domain, don't just yet)")
         print('# migration syntax is')
         print('manage.py migrate')
         print("# (make sure you haven't created any destructive migrations")
-        print("# when you've run all the migrations, execute")
+        print("# do image cache flushing with")
+        print('manage.py ikflush lists')
+        print("# if you were working on the real domain, you can now run")
         change_etc(name, print_only=True)
+        print("# (do this first if you're doing a refresh on the dev domain)")
         confirm("Did you get that?")
     else:
         change_etc(name)

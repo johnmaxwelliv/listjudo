@@ -1,14 +1,20 @@
 from django.db import models
 from django.template import Context, RequestContext, loader
 from django.core.cache import cache
+from django.core.files import File
 
 from djangoratings.fields import RatingField
 from my.lists.templatetags.lists_tags import EntryNode, CommentNode
 from imagekit.models import ImageModel
 from my.settings import logger
+from oembed.consumer import OEmbedConsumer
 
 import random
 import oembed
+import os.path
+import urllib2
+
+oembed_client = OEmbedConsumer()
 
 class UserAction(models.Model):
     # Reference is here:
@@ -78,6 +84,48 @@ class Entry(UGC):
     def __unicode__(self):
         return self.title
 
+    def prepare_embeds(self):
+        if self.embed_url:
+            resources = oembed_client.extract(self.embed_url)
+            if resources:
+                r = resources[0]
+                if 'thumbnail_url' in r:
+                    self.attach_image(r['thumbnail_url'])
+            else:
+                self.attach_image(self.embed_url)
+                self.embed_url = None  # used as a signal that there is no oembed
+    def attach_image(self, url):
+        def pre_extension(name):
+            '''Extract the juicy part of an image's filename for use in its alt attribute'''
+            if '.' in name:
+                return '.'.join(name.split('.')[:-1])
+            else:
+                return name
+        '''The attached image might be an image associated with the entry or a thumbnail for a video associated with the entry.'''
+        name = os.path.basename(url)
+        image = EntryImage(source_url=url)
+        image_req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.8) Gecko/20100723 Ubuntu/10.04 (lucid) Firefox/3.6.8', 'Referer': os.path.dirname(url)})
+        setattr(image_req, 'timeout', 10)
+        handler = urllib2.HTTPHandler()
+        remote_file = handler.http_open(image_req)
+        if not hasattr(remote_file, 'size'):
+            setattr(remote_file, 'size', int(remote_file.info().get('Content-Length')))
+        if not hasattr(remote_file, 'name'):
+            setattr(remote_file, 'name', name)
+        # I don't fully understand why or how the next few lines work.
+        # The above setattr statements are there because this following code squawks without them.
+        f = File(remote_file, name=name)
+        image.original_image.save(name, f)
+        image.alt = pre_extension(name)
+        image.save()
+        self.image = image
+        if not self.list.image:
+            self.list.image = image
+            self.list.save()
+    def embeds_oembed(self):
+        return bool(self.embed_url)
+    def embeds_image(self):
+        return bool(self.image and not self.embed_url)
     def html(self, request):
         return EntryNode(self).render(RequestContext(request, {}))
 

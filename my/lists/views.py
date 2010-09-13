@@ -2,20 +2,13 @@ from django.views.generic.simple import direct_to_template as template
 from django.db.models import *
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-from django.core.files import File
 from django.core.paginator import Paginator
-
-from oembed.consumer import OEmbedConsumer
 
 from my.lists.models import *
 from my.lists.forms import *
 from my.settings import logger
 
 import json
-import os.path
-import urllib2
-
-oembed_client = OEmbedConsumer()
 
 def index(request):
     return template(request, 'lists/list_home.html', {
@@ -132,48 +125,29 @@ def retrieve_user_data(request):
 
 def add_entry(request, object_id):
     '''Add an entry to a list and return the new entry's id and html.  Called asynchronously.'''
-    form = EntryForm(request.POST)
-    # our ajax validation should have ensured that the form was valid
-    assert form.is_valid()
-    entry = form.save(commit=False)
-    # save miscelleneous request data for the curious adminstrator's sake
-    entry.record_request(request)
-    if entry.embed_url:
-        html = oembed_client.parse_text(entry.embed_url)
-        if html == entry.embed_url:
-            # oembed_client couldn't find anything to embed, so we'll assume the user provided a direct image URL
-            url = entry.embed_url
-            name = os.path.basename(url)
-            image = EntryImage(source_url=url)
-            image_req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.8) Gecko/20100723 Ubuntu/10.04 (lucid) Firefox/3.6.8', 'Referer': os.path.dirname(url)})
-            setattr(image_req, 'timeout', 10)
-            handler = urllib2.HTTPHandler()
-            remote_file = handler.http_open(image_req)
-            if not hasattr(remote_file, 'size'):
-                setattr(remote_file, 'size', int(remote_file.info().get('Content-Length')))
-            if not hasattr(remote_file, 'name'):
-                setattr(remote_file, 'name', name)
-            # I don't fully understand why or how the next few lines work.
-            # The above setattr statements are there because this following code squawks without them.
-            f = File(remote_file, name=name)
-            image.original_image.save(name, f)
-            image.alt = pre_extension(name)
-            image.save()
-            entry.image = image
-            entry.embed_url = None
-    entry.save()
-    result = HttpResponse(json.dumps({
-        'entry_id': entry.id,
-        'html': entry.html(request),
-    }), mimetype='application/json')
-    # POLISH
-    # Calculate the "expires" argument programmatically, or we're screwed
-    # when 2068 rolls around.
-    result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
-        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-    result.set_cookie('email', value=entry.email, max_age=157680000,
-        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-    return result
+    try:
+        form = EntryForm(request.POST)
+        # our ajax validation should have ensured that the form was valid
+        assert form.is_valid()
+        entry = form.save(commit=False)
+        # save miscelleneous request data for the curious adminstrator's sake
+        entry.record_request(request)
+        entry.prepare_embeds()
+        entry.save()
+        result = HttpResponse(json.dumps({
+            'entry_id': entry.id,
+            'html': entry.html(request),
+        }), mimetype='application/json')
+        # POLISH
+        # Calculate the "expires" argument programmatically, or we're screwed
+        # when 2068 rolls around.
+        result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
+            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+        result.set_cookie('email', value=entry.email, max_age=157680000,
+            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+        return result
+    except:
+        import traceback; logger.debug(traceback.format_exc())
 
 def add_comment(request, object_id):
     '''Add a comment to a list and return the new comment's html.  Called asynchronously.'''
@@ -195,13 +169,6 @@ def add_comment(request, object_id):
     result.set_cookie('email', value=comment.email, max_age=157680000,
         expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
     return result
-
-def pre_extension(name):
-    '''Extract the juicy part of an image's filename for use in its alt attribute'''
-    if '.' in name:
-        return '.'.join(name.split('.')[:-1])
-    else:
-        return name
 
 def publish(request, object_id, access_code):
     '''Attempt to make the list with id object_id visible on the home page and other parts of the site'''
