@@ -221,14 +221,15 @@ def rf(name):
     with settings(warn_only=True):
         sudo("killall -SIGSTOP '/home/%s/.dropbox-dist/dropbox'" % me)
     ensure_relative_symlinks('/home/%s/Dropbox/%s' % (me, name))
-    push('/home/%s/Dropbox/%s' % (me, name), '%s-dev' % name, '/home/%s/Dropbox/%s' % (me, name), '/srv/%s-dev' % name)
+    done = push('/home/%s/Dropbox/%s' % (me, name), '%s-dev' % name, '/home/%s/Dropbox/%s' % (me, name), '/srv/%s-dev' % name)
     for d in public_media:
         sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
         sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', d))
     sudo('mkdir -p %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
     sudo('chmod -R a+w %s' % Path('/srv/%s-dev' % name).child('media', 'public', 'build'))
-    with settings(warn_only=True):
-        sudo("killall -SIGCONT '/home/%s/.dropbox-dist/dropbox'" % me)
+    if done:
+        with settings(warn_only=True):
+            sudo("killall -SIGCONT '/home/%s/.dropbox-dist/dropbox'" % me)
 
 def initialize(name, repo, install, database):
     '''
@@ -318,20 +319,20 @@ def push(source, name, dest, install):
     if confirm('Do you need to do any database migrations or flush the image cache?'):
         print('# source the virtualenv and manage the installation with')
         print('source %s; cd %s' % (install.child('bin', 'activate'), dest.child('my')))
-        print("# if you're working on the development domain, BE SURE TO RUN")
+        print("# run this")
         change_etc(name, print_only=True)
-        print("# (if you're working on the real domain, don't just yet)")
         print('# migration syntax is')
         print('manage.py migrate')
         print("# (make sure you haven't created any destructive migrations")
         print("# do image cache flushing with")
         print('manage.py ikflush lists')
-        print("# if you were working on the real domain, you can now run")
-        change_etc(name, print_only=True)
-        print("# (do this first if you're doing a refresh on the dev domain)")
+        print("# restart Dropbox")
+        print("killall -SIGCONT '/home/%s/.dropbox-dist/dropbox'" % me)
         confirm("Did you get that?")
+        return False
     else:
         change_etc(name)
+        return True
 
 def ensure_relative_symlinks(directory):
     # Will only work on local machine due to use of os module.
