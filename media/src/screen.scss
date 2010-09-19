@@ -64,7 +64,7 @@ nav {
 	
 	li {
 		float: left;
-		font: 29px/20px 'Reenie Beanie', sans-serif;
+		font: 29px/18px 'Reenie Beanie', sans-serif;
 		height: $postH;
 		margin-left: 15px;
 		text-align: center;
@@ -74,7 +74,7 @@ nav {
 	a {
 		color: #000;
 		display: block;
-		margin-top: 5px;
+		margin-top: 9px;
 		text-decoration: none;
 		&:visited { color: #000; }
 		&:active { color: #fff; }

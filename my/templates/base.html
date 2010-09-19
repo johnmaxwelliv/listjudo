@@ -34,7 +34,7 @@
         </a>
         <nav>
             <ul>
-                <li id="home"><a href="/">Home</a></li>
+                <li id="home"><a href="http://textbookery.com/lists">Home</a></li>
                 <li id="all"><a href="">All Lists</a></li>
                 <li id="create"><a href="/lists/create">Create a List</a></li>
                 <li id="blah"><a href="">Blah</a></li>
@@ -82,8 +82,9 @@
     
     {% block scripts %}
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/versioned/jquery_styles.js"></script>
         {# fixes .png transparency in IE 6 #}
-    	<!--[if lt IE 7]><script defer type="text/javascript" src="versioned/lib/correct_png.js"></script><![endif]-->
+    	<!--[if lt IE 7]><script defer type="text/javascript" src="/versioned/lib/correct_png.js"></script><![endif]-->
     {% endblock scripts %}
 {% endblock body %}
 
