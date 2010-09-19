@@ -4,9 +4,15 @@
 
 /* INCLUDES */
 @include sticky-footer(50px, "#content", "#stickyFooterHelper", "footer"); /* height, content, div in content, footer */
+@import "compass/css3/gradient";
 
 /* MIXINS */
 @mixin layoutBorder { border: solid 1px #000; }
+
+@mixin postGradient($top, $middle, $bottom) {
+		background: #{$middle};
+		@include linear-gradient(color-stops(#{$top}, #{$middle}, #{$bottom})); 
+}
 
 /* VARIABLES */
 
@@ -17,13 +23,22 @@
 	/* HEIGHTS */
 	$headerH: 130px;
 	$navH: 50px;
+	$postH: 100px;
 
 	/* MARGINS */
 	$contentLeft: 50px;
 	$contentTop: 80px;
 
+/* FONTS */
+@font-face {
+  font-family: 'Reenie Beanie';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Reenie Beanie'), url('http://themes.googleusercontent.com/font?kit=ljpKc6CdXusL1cnGUSamX4jjx0o0jr6fNXxPgYh_a8Q') format('truetype');
+}
+
 /* GENERAL LAYOUT */
-aside, .excerpt, header, #featured, footer, nav, nav li { @include layoutBorder; } /* temporary, for seeing purposes only */
+aside, .excerpt, #featured, footer { @include layoutBorder; } /* temporary, for seeing purposes only */
 
 aside {
 	clear: right;
@@ -42,22 +57,40 @@ footer {
 nav {
 	float: right;
 	position: relative;
+		right: 5px;
 		top: $headerH - $navH;
 	
 	ul { list-style-type: none; }	
 	
 	li {
 		float: left;
-		height: $navH;
+		font: 29px/20px 'Reenie Beanie', sans-serif;
+		height: $postH;
 		margin-left: 15px;
+		text-align: center;
 		width: 100px;
 	}
+	
+	a {
+		color: #000;
+		display: block;
+		margin-top: 5px;
+		text-decoration: none;
+		&:visited { color: #000; }
+		&:active { color: #fff; }
+	}
+	
+	#home { @include postGradient (#ff8f48, #ff6b00, #e55816); }
+	#all { @include postGradient (#ff7458, #ff0007, #e1001c); }
+	#create { @include postGradient (#ffcc00, #ffab00, #ffab00); }
+	#blah { @include postGradient (#cce9a2, #a2da73, #60bf33); }
 }
 /* GENERAL LAYOUT (CUSTOM) */
 .clear { clear: both; }
 
 #content { 
 	background: $offWhite url('../images/content_texture.jpg') repeat-y;
+	position: relative;
 	width: 100%;
 }
 
@@ -74,13 +107,55 @@ nav {
 	.excerpt.odd {
 		margin-left: $contentLeft;
 	}
+	
 #featured {
 	float: left;
 	height: 300px;
 	margin: $contentTop 0 0 $contentLeft;
 	width: 550px;
 }
+
 #wrapper {
 	margin: auto;
 	width: 960px;
+}
+/* IMAGE/TEXTURE LAYOUT */
+#blueLines {
+	background: url('../images/blue_lines.png') repeat;
+	height: 95%;
+	position: absolute;
+		top: 25px;
+	width: 100%;
+}
+	
+#redLines {
+	background: url('../images/red_lines.png') repeat-y;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+	
+#paperTexture {
+	background: url('../images/paper_texture.png') repeat;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+	
+#spiral {
+	background: url('../images/spiral.png') repeat-y;
+	height: 94%;
+	position: absolute;
+		left: -16px;
+		top: 25px;
+	width: 50px;
+}
+
+#stain {
+	background: url('../images/stains.png');
+	height: 183px;
+	position: absolute;
+		left: 0px;
+		top: 0px;
+	width: 353px;
 }

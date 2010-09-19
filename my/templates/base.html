@@ -25,6 +25,7 @@
 <![endif]-->
 
 {% block body %}
+<div id="stain"></div>
 
     {% block header %}
         <header>
@@ -44,6 +45,11 @@
     
     {% block content %}
     	<div id="content">
+    		<!--BG images for notebook-->
+    		<div id="spiral"></div>
+    		<div id="redLines"></div>
+    		<div id="blueLines"></div>
+    		<div id="paperTexture"></div>
     	
 		{% block sidebar %}
         	<aside>
@@ -77,7 +83,7 @@
     {% block scripts %}
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         {# fixes .png transparency in IE 6 #}
-    	<!--[if lt IE 7]><script defer type="text/javascript" src="http://ahmadsalehi.info/scripts/correct_png.js"></script><![endif]-->
+    	<!--[if lt IE 7]><script defer type="text/javascript" src="versioned/lib/correct_png.js"></script><![endif]-->
     {% endblock scripts %}
 {% endblock body %}
 
