@@ -67,6 +67,7 @@ nav {
 		font: 29px/18px 'Reenie Beanie', sans-serif;
 		height: $postH;
 		margin-left: 15px;
+		position: relative;
 		text-align: center;
 		width: 100px;
 	}
@@ -74,10 +75,17 @@ nav {
 	a {
 		color: #000;
 		display: block;
-		margin-top: 9px;
+		height: $postH - 8px;
+		padding-top: 8px;
 		text-decoration: none;
 		&:visited { color: #000; }
 		&:active { color: #fff; }
+		width: 100%;
+	}
+	
+	.selected { 
+		position: absolute;
+		z-index: 300; 
 	}
 	
 	#home { @include postGradient (#ff8f48, #ff6b00, #e55816); }
