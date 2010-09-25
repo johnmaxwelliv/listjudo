@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'oembed',
     'imagekit',
     'django_static',
+    'django.contrib.webdesign',
 )
 
 

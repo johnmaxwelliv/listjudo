@@ -1,6 +1,7 @@
 {% load ratings %}
 {% load cache %}
 {% load oembed_tags %}
+{% load webdesign %}
 {% cache cache_period entry_html_1 entry.id %}
 <div class="entry">
     <h3>{{ entry.title }}</h3>
@@ -13,7 +14,8 @@
                 <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />
             {% endif %}
     </div>
-    <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
+    {# <div>{{ entry.description|striptags|urlize|linebreaks }}</div> #}
+    <div>{% lorem %}</div>
     <table>
         <th>
             <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
