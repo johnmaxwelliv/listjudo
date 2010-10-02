@@ -63,6 +63,7 @@ class List(UGC):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     published = models.BooleanField(default=False)
+    featured = models.BooleanField(default=False)
     access_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     admin_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
     views = models.PositiveIntegerField(default=0, editable=False)
