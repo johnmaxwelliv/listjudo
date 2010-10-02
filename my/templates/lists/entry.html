@@ -14,8 +14,7 @@
                 <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />
             {% endif %}
     </div>
-    {# <div>{{ entry.description|striptags|urlize|linebreaks }}</div> #}
-    <div>{% lorem %}</div>
+    <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
     <table>
         <th>
             <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
