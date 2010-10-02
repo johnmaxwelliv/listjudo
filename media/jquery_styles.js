@@ -27,13 +27,4 @@ $('nav li').hover(
 	}
 );
 
-/*$('nav li').hover(
-	function () {
-		$(this).stop(true, true).animate({top: '-=50px'});
-	},
-	function () {
-		$(this).stop(true, true).animate({top: '+=50px'});
-	}
-);*/
-
 });

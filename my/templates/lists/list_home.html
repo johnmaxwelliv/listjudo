@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 	{% block featured %}
+		<h1 class="featured">Featured Posts</h1>
 		<div id="featured">
-        	
+        	{% for list in lists.object_list %}
+                {% if list.image %}
+                    <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
+                {% endif %}
+				<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+				
+   			{% empty %}
+   				<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
+			{% endfor %}
 		</div><!--#featured-->
 	{% endblock featured %}
         

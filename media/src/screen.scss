@@ -17,7 +17,9 @@
 /* VARIABLES */
 
 	/* COLORS */
+	$beige: #ed877b;
 	$cream: #f1e6d5;
+	$darkRed: #95272D;
 	$offWhite: #fcfdfb;
 	
 	/* HEIGHTS */
@@ -38,7 +40,7 @@
 }
 
 /* GENERAL LAYOUT */
-aside, .excerpt, #featured, footer { @include layoutBorder; } /* temporary, for seeing purposes only */
+aside, footer { @include layoutBorder; } /* temporary, for seeing purposes only */
 
 aside {
 	clear: right;
@@ -50,6 +52,10 @@ aside {
 body {background: $cream url('../images/bg_texture.png') repeat fixed; }
 
 header { height: $headerH; }
+
+h1 {
+	font: 40px "Reenie Beanie", Helvetica, sans-serif;
+}
 
 footer {
 	width: 960px;
@@ -97,7 +103,6 @@ nav {
 .clear { clear: both; }
 
 #content { 
-	background: $offWhite url('../images/content_texture.jpg') repeat-y;
 	position: relative;
 	width: 100%;
 }
@@ -117,11 +122,19 @@ nav {
 	}
 	
 #featured {
+	background: url('../images/border.png') no-repeat;
 	float: left;
-	height: 300px;
+	height: 280px;
 	margin: $contentTop 0 0 $contentLeft;
-	width: 550px;
+	padding: 10px;
+	width: 530px;
+	z-index: 3;
 }
+	h1.featured {
+		margin-left: 35px;
+		position: relative;
+			top: 80px;
+	}
 
 #wrapper {
 	margin: auto;
@@ -134,13 +147,15 @@ nav {
 	position: absolute;
 		top: 25px;
 	width: 100%;
+	z-index: -1;
 }
-	
-#redLines {
-	background: url('../images/red_lines.png') repeat-y;
+
+#gradient {
+	background: $offWhite url('../images/content_texture.jpg') repeat-y;
 	height: 100%;
 	position: absolute;
 	width: 100%;
+	z-index: -2;
 }
 	
 #paperTexture {
@@ -148,8 +163,16 @@ nav {
 	height: 100%;
 	position: absolute;
 	width: 100%;
+	z-index: -1;
 }
 	
+#redLines {
+	background: url('../images/red_lines.png') repeat-y;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	z-index: -1;
+}	
 #spiral {
 	background: url('../images/spiral.png') repeat-y;
 	height: 94%;
