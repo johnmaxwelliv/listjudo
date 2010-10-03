@@ -3,20 +3,44 @@
 	{% block featured %}
 		<h1 class="featured">Featured Posts</h1>
 		<div id="featured">
-        	{% for list in lists.object_list %}
-                {% if list.image %}
-                    <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
-                {% endif %}
-				<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+			<div id="slidesContainer">
+
+			<div class="slide">
+        	{% for list in featured_lists.object_list %}
+			
+                
+				<a class="list" href="/lists/{{ list.id }}/">
+					<b>{{ list.title }}</b> by {{ list.nickname }}
+					{% if list.image %}
+                    	<img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
+                	{% endif %}
+				</a>
+				
+				<a class="entry" href="/lists/{{ list.id }}/#{{ entry.name|slugify }}">
+					Entry 1
+				</a>
+				<a class="entry">
+					Entry 2
+				</a>
+				<a class="entry">
+					Entry 3
+				</a>
+				<a class="entry">
+					Entry 4
+				</a>
+        		
 				
    			{% empty %}
    				<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
 			{% endfor %}
+			</div><!--.slide-->
+			
+			</div><!--#slidesContainer-->
 		</div><!--#featured-->
 	{% endblock featured %}
         
 	{% block excerpt %}
-		{% for list in lists.object_list %}
+		{% for list in all_lists.object_list %}
     		<div class="excerpt clear {% if forloop.counter|divisibleby:2 %} even {% else %} odd {% endif %} ">
     			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
                 {% if list.image %}

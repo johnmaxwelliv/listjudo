@@ -10,13 +10,26 @@ from my.settings import logger
 
 import json
 
-def index(request):
-    return template(request, 'lists/list_home.html', {
-        'lists': Paginator(List.objects.filter(
+def all_lists():
+    return List.objects.filter(
             published=True,
         ).filter(
             censored=False,
-        ), 4).page(1),
+        )
+
+def featured_lists():
+    return List.objects.filter(
+            published=True,
+        ).filter(
+            censored=False,
+        ).filter(
+            featured=True,
+        )
+
+def index(request):
+    return template(request, 'lists/list_home.html', {
+        'all_lists': Paginator(all_lists(), 4).page(1),
+        'featured_lists': Paginator(featured_lists(), 4).page(1),
      })
 
 def create(request):

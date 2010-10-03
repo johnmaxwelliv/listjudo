@@ -26,10 +26,15 @@
 	$headerH: 130px;
 	$navH: 50px;
 	$postH: 100px;
+	$featuredH: 280px;
 
 	/* MARGINS */
 	$contentLeft: 50px;
 	$contentTop: 80px;
+
+	/* WIDTHS */
+	$featuredW: 530px;
+
 
 /* FONTS */
 @font-face {
@@ -42,6 +47,11 @@
 /* GENERAL LAYOUT */
 aside, footer { @include layoutBorder; } /* temporary, for seeing purposes only */
 
+article {
+	float: left;
+	margin: $contentTop 0 0 $contentLeft;
+	width: 530px;
+}
 aside {
 	clear: right;
 	float: right;
@@ -124,11 +134,39 @@ nav {
 #featured {
 	background: url('../images/border.png') no-repeat;
 	float: left;
-	height: 280px;
+	height: $featuredH;
 	margin: $contentTop 0 0 $contentLeft;
 	padding: 10px;
-	width: 530px;
+	width: $featuredW;
 	z-index: 3;
+	
+	a {
+		text-decoration: none;
+	}
+	
+	
+	$border: 1px;
+	$listH: $featuredH - 2*10;
+	$listW: 180px;
+		$entryW: $featuredW - $listW;
+	$padding: 10px;	
+	
+	.list {
+		background: #fff;
+		float: left;
+		height: 260px;
+		padding: $padding;
+		width: $listW;
+	}
+	
+	.entry {
+		background: #ccc;
+		border: #666 $border solid;
+		float: left;
+		height: ($featuredH + 2*10)/4 - 2*$padding;
+		padding: $padding;
+		width: $listW - $padding - 2*$border;
+	}
 }
 	h1.featured {
 		margin-left: 35px;
@@ -189,4 +227,5 @@ nav {
 		left: 0px;
 		top: 0px;
 	width: 353px;
+	z-index: -2;
 }
