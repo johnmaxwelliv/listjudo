@@ -37,14 +37,13 @@
                 <li><a id="home" href="/lists">Home</a></li>
                 <li><a id="all" href="">All Lists</a></li>
                 <li><a id="create" href="/lists/create">Create a List</a></li>
-                <li><a id="blah" href="">Blah</a></li>
+                <li><a id="blah" href="">FIX THE NAV.</a></li>
             </ul>
         </nav>
         </header>
     {% endblock header %}
     
-    {% block content %}
-    	<div id="content">
+	<div id="content">
     		<!--BG images for notebook-->
     		<div id="spiral"></div>
     		<div id="redLines"></div>
@@ -60,7 +59,8 @@
         		<p>Other stuff...blah</p>
         	</aside>
         {% endblock sidebar %}
-
+        
+    {% block content %}
 
     	{# in list_home only #}
     	{% block featured %}
@@ -72,8 +72,9 @@
 
 			<div id="stickyFooterHelper" class="clear"></div>
 			
-        </div><!--#content-->
     {% endblock content %}
+	</div><!--#content-->
+
     
     {% block footer %}
     	<footer>

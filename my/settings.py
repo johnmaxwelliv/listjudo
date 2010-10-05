@@ -1,6 +1,6 @@
 # Django settings for my project.
 
-from etc.settings import *
+from etc import *
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"

@@ -18,18 +18,23 @@
 {% block content %}
     {% load lists_tags %}
     {% load uni_form_tags %}
-    <h1>{{ list.title|striptags }}</h1>
-    <p>{{ list.description|striptags|urlize|linebreaks }}<p>
-    <p><small>Created on {{ list.created }}.</small></p>
+    <article>
+    
+	    <h1>{{ list.title|striptags }}</h1>
+    	<p>{{ list.description|striptags|urlize|linebreaks }}<p>
+    	<p><small>Created on {{ list.created }}.</small></p>
 
-    <div id="entries">
-    {% if entries %}
-        {% for entry in entries %}
-            {% entry_html entry %}
-        {% endfor %}
-    {% endif %}
-    </div>
-
+		<div id="entries">
+    	{% if entries %}
+        	{% for entry in entries %}
+        		<a name="{{ entry.title|slugify }}"></a>
+         	   {% entry_html entry %}
+        	{% endfor %}
+    	{% endif %}
+   	 	</div><!--#entries-->
+	</article>
+	<div class="clear"></div>
+	
     <div id="add-entry-div"><a href="#entry-form-div" id="add-entry">Add an entry</a></div>
 
     <div id="entry-form-div" style="display:none">
@@ -83,7 +88,7 @@
             </form>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
     {{ block.super }}

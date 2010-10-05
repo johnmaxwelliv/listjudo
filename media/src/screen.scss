@@ -148,13 +148,14 @@ nav {
 	$border: 1px;
 	$listH: $featuredH - 2*10;
 	$listW: 180px;
-		$entryW: $featuredW - $listW;
 	$padding: 10px;	
+	
+	$entryW: $featuredW - ($listW + 2*$padding) - 2*$padding - 2*$border;
 	
 	.list {
 		background: #fff;
 		float: left;
-		height: 260px;
+		height: $listH;
 		padding: $padding;
 		width: $listW;
 	}
@@ -163,9 +164,9 @@ nav {
 		background: #ccc;
 		border: #666 $border solid;
 		float: left;
-		height: ($featuredH + 2*10)/4 - 2*$padding;
+		height: $featuredH/4 - 2*$padding;
 		padding: $padding;
-		width: $listW - $padding - 2*$border;
+		width: $entryW;
 	}
 }
 	h1.featured {
