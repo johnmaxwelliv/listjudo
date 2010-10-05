@@ -16,20 +16,12 @@
                 	{% endif %}
 				</a>
 				
-				<a class="entry" href="/lists/{{ list.id }}/#{{ entry.name|slugify }}">
-					Entry 1
-				</a>
-				<a class="entry">
-					Entry 2
-				</a>
-				<a class="entry">
-					Entry 3
-				</a>
-				<a class="entry">
-					Entry 4
-				</a>
-        		
-				
+                {% for entry in list.teaser_entries %}
+                    <a class="entry" href="/lists/{{ list.id }}/#{{ entry.name|slugify }}">
+                        {{ entry.title }}
+                    </a>
+                {% endfor %}
+
    			{% empty %}
    				<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
 			{% endfor %}

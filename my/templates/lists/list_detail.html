@@ -24,14 +24,14 @@
     	<p>{{ list.description|striptags|urlize|linebreaks }}<p>
     	<p><small>Created on {{ list.created }}.</small></p>
 
-		<div id="entries">
+		<div class="entries">
     	{% if entries %}
         	{% for entry in entries %}
         		<a name="{{ entry.title|slugify }}"></a>
          	   {% entry_html entry %}
         	{% endfor %}
     	{% endif %}
-   	 	</div><!--#entries-->
+   	 	</div><!--.entries-->
 	</article>
 	<div class="clear"></div>
 	

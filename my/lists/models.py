@@ -71,6 +71,8 @@ class List(UGC):
 
     def __unicode__(self):
         return self.title
+    def teaser_entries(self):
+        return self.entry_set.all()[:4]
 
 class Entry(UGC):
     title = models.CharField(max_length=200)
