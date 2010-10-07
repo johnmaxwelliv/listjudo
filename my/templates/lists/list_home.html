@@ -3,11 +3,10 @@
 	{% block featured %}
 		<h1 class="featured">Featured Posts</h1>
 		<div id="featured">
-			<div id="slidesContainer">
+			<div id="slider"><ul>
 
-			<div class="slide">
         	{% for list in featured_lists.object_list %}
-			
+			<li>
                 
 				<a class="list" href="/lists/{{ list.id }}/">
 					<b>{{ list.title }}</b> by {{ list.nickname }}
@@ -17,17 +16,15 @@
 				</a>
 				
                 {% for entry in list.teaser_entries %}
-                    <a class="entry" href="/lists/{{ list.id }}/#{{ entry.name|slugify }}">
+                    <a class="entry" href="/lists/{{ list.id }}/#{{ entry.title|slugify }}">
                         {{ entry.title }}
                     </a>
                 {% endfor %}
 
-   			{% empty %}
-   				<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
+   			</li>
 			{% endfor %}
-			</div><!--.slide-->
 			
-			</div><!--#slidesContainer-->
+			</ul></div><!--#slider-->
 		</div><!--#featured-->
 	{% endblock featured %}
         
@@ -43,4 +40,9 @@
    			<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
 		{% endfor %}
 	{% endblock excerpt %}
+	
+	{% block scripts %}
+	    {{ block.super }}
+		<script type="text/javascript" src="/versioned/lib/easySlider1.7.js"></script>
+	{% endblock scripts %}
 	

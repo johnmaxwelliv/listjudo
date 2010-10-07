@@ -5,6 +5,10 @@ if (typeof jQuery == 'undefined') {
 	document.write(unescape("%3Cscript src='http://code.jquery.com/jquery-1.4.2.min.js' type='text/javascript'%3E%3C/script%3E"));
 }
 
+$(document).ready(function(){
+	$('#slider').easySlider();
+});
+
 /*
 //NAV: HIGHLIGHT CURRENT PAGE'S TAB
 var path = location.pathname.substring(1);

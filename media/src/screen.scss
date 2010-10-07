@@ -137,6 +137,7 @@ nav {
 	height: $featuredH;
 	margin: $contentTop 0 0 $contentLeft;
 	padding: 10px;
+	position: relative;
 	width: $featuredW;
 	z-index: 3;
 	
@@ -168,12 +169,50 @@ nav {
 		padding: $padding;
 		width: $entryW;
 	}
-}
-	h1.featured {
-		margin-left: 35px;
-		position: relative;
-			top: 80px;
+	/* SLIDER */
+	$btnH: 50px;
+	$btnW: 46px;
+	
+	#slider ul {
+		list-style-type: none;
+		
+		li {
+			height: $featuredH;
+			overflow: hidden;
+			width: $featuredW;
+		}	
 	}
+	#prevBtn, #nextBtn {
+		display: block;
+		height: $btnH;
+		position: absolute;
+			top: $featuredH/2 - $btnH/2;
+		width: $btnW;
+		z-index: -1;
+		
+		a {
+			display: block;
+			height: 100%;
+			text-indent: -1000px;
+			width: 100%;
+			&:hover { background-position: 0 -50px; }
+		}
+	}
+		#prevBtn {
+			left: -$btnW/2;
+			a {	background: url('../images/l_control.png') no-repeat 0 0; }
+		}
+		#nextBtn {
+			right: -$btnW/2;
+			a { background: url('../images/r_control.png') no-repeat 0 0; }
+		} 
+}
+
+h1.featured {
+	margin-left: 35px;
+	position: relative;
+		top: 80px;
+}
 
 #wrapper {
 	margin: auto;
