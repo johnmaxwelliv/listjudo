@@ -9,10 +9,16 @@
 			<li>
                 
 				<a class="list" href="/lists/{{ list.id }}/">
-					<b>{{ list.title }}</b> by {{ list.nickname }}
+					<h4>{{ list.title|striptags }}</h4> 
+						<br />	
+					<h6>created by </h6>
+					<h5>{{ list.nickname|striptags }}</h5>
+					<h6> on </h6>
+					<h5>{{ list.created|date:"SHORT_DATE_FORMAT" }}</h5>
 					{% if list.image %}
                     	<img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
                 	{% endif %}
+                	<p>{{ list.description|striptags|urlize|truncatewords:35 }}</p>
 				</a>
 				
                 {% for entry in list.teaser_entries %}

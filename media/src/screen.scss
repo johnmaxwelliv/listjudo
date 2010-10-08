@@ -13,6 +13,14 @@
 		background: #{$middle};
 		@include linear-gradient(color-stops(#{$top}, #{$middle}, #{$bottom})); 
 }
+@mixin rgba($r, $g, $b, $a) {
+	background: rgb($r, $g, $b); /* fallback colour */
+	background: rgba($r, $g, $b, $a);
+}
+	/* FONT STACKS */
+	@mixin fontHelvetica ($style, $weight, $size) { font: $style $weight $size Helvetica, "Helvetica-Neue", Arial, sans-serif; }
+
+	@mixin fontReenieBeanie ($style, $weight, $size) { font: $style $weight $size "Reenie Beanie", Helvetica, sans-serif; }
 
 /* VARIABLES */
 
@@ -58,17 +66,33 @@ aside {
 	margin: $contentTop 25px 0 0;
 	width: 300px;
 }
-
 body {background: $cream url('../images/bg_texture.png') repeat fixed; }
-
-header { height: $headerH; }
-
-h1 {
-	font: 40px "Reenie Beanie", Helvetica, sans-serif;
-}
 
 footer {
 	width: 960px;
+}
+header { height: $headerH; }
+
+h1 { @include fontReenieBeanie(normal, normal, 40px);}
+
+h4, h5, h6 { display: inline; }
+
+h4 { /* Excerpt title */
+	color: #000;
+	@include fontHelvetica(normal, bold, 16px);
+} 
+h5 { /* author, date */
+	color: #000;
+	@include fontHelvetica(normal, normal, 12px);
+}
+h6 { /* minors in byline */
+	color: #666;
+	@include fontHelvetica(normal, normal, 12px);
+}
+p {
+	@include fontHelvetica(normal, normal, 14px);
+	color: #000;
+	text-align: justify;
 }
 nav {
 	float: right;
@@ -79,8 +103,8 @@ nav {
 	ul { list-style-type: none; }	
 	
 	li {
+		@include fontReenieBeanie(normal, normal, 29px/18px);
 		float: left;
-		font: 29px/18px 'Reenie Beanie', Helvetica, sans-serif;
 		height: $postH;
 		margin-left: 15px;
 		position: relative;
@@ -159,10 +183,19 @@ nav {
 		height: $listH;
 		padding: $padding;
 		width: $listW;
+		
+		img {
+			border: 1px solid #ccc;
+			float: left;
+			margin: 5px 5px 5px 0;
+		}
+		p {
+			margin-top: 5px;
+		}
 	}
 	
 	.entry {
-		background: #ccc;
+		@include rgba (255, 255, 255, 0.5);
 		border: #666 $border solid;
 		float: left;
 		height: $featuredH/4 - 2*$padding;
