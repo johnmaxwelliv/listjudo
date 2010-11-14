@@ -103,9 +103,10 @@ nav {
 	ul { list-style-type: none; }	
 	
 	li {
-		@include fontReenieBeanie(normal, normal, 29px/18px);
+		@include fontReenieBeanie(normal, normal, 29px);
 		float: left;
 		height: $postH;
+		line-height: 80%;
 		margin-left: 15px;
 		position: relative;
 		text-align: center;
