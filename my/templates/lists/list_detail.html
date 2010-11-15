@@ -15,7 +15,7 @@
     {% endslimall %}
 {% endblock %}
 
-{% block content %}
+{% block body %}
     {% load lists_tags %}
     {% load uni_form_tags %}
     <article>
@@ -24,14 +24,13 @@
     	<p>{{ list.description|striptags|urlize|linebreaks }}<p>
     	<p><small>Created on {{ list.created }}.</small></p>
 
-		<div class="entries">
+		<div id="entries">
     	{% if entries %}
         	{% for entry in entries %}
-        		<a name="{{ entry.title|slugify }}"></a>
          	   {% entry_html entry %}
         	{% endfor %}
     	{% endif %}
-   	 	</div><!--.entries-->
+   	 	</div>
 	</article>
 	<div class="clear"></div>
 	
@@ -74,6 +73,7 @@
         </div>
         {% endif %}
     {% endif %}
+
     {% if show_comment_form %}
         <h2>Add a Comment</h2>
         <div id="comment-form-div">
@@ -88,10 +88,8 @@
             </form>
         </div>
     {% endif %}
-{% endblock content %}
 
-{% block scripts %}
-    {{ block.super }}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     {% load jquery_validation %}
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
     {% slimall %}

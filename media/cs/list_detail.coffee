@@ -4,6 +4,7 @@ l: (output) ->
     console.log(output)
 
 $(document).ready(->
+    $("#entries").append('<p>foo</p>')
     $('#add-entry').click(->
         # The user clicked the link to add an entry to the list, now show them the entry form.
         $('#add-entry-div').hide()
@@ -34,8 +35,8 @@ $(document).ready(->
 
             # Show the user the entry they added
             entry = $('#entry-' + entry_pk)
-            $.scrollTo('#entry-' + entry_pk)
             entry.show('slow')
+            $.scrollTo('#entry-' + entry_pk)
 
             # Reset the add entry link and the entry form to the way they were.
             $('#entry-form-div').hide()

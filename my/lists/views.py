@@ -141,7 +141,8 @@ def add_entry(request, object_id):
     try:
         form = EntryForm(request.POST)
         # our ajax validation should have ensured that the form was valid
-        assert form.is_valid()
+        if not form.is_valid():
+            return HttpResponse('invalid form')
         entry = form.save(commit=False)
         # save miscelleneous request data for the curious adminstrator's sake
         entry.record_request(request)

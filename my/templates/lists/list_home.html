@@ -1,54 +1,16 @@
 {% extends "base.html" %}
 
-	{% block featured %}
-		<h1 class="featured">Featured Posts</h1>
-		<div id="featured">
-			<div id="slider"><ul>
-
-        	{% for list in featured_lists.object_list %}
-			<li>
-                
-				<a class="list" href="/lists/{{ list.id }}/">
-					<h4>{{ list.title|striptags }}</h4> 
-						<br />	
-					<h6>created by </h6>
-					<h5>{{ list.nickname|striptags }}</h5>
-					<h6> on </h6>
-					<h5>{{ list.created|date:"SHORT_DATE_FORMAT" }}</h5>
-					{% if list.image %}
-                    	<img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
-                	{% endif %}
-                	<p>{{ list.description|striptags|urlize|truncatewords:35 }}</p>
-				</a>
-				
-                {% for entry in list.teaser_entries %}
-                    <a class="entry" href="/lists/{{ list.id }}/#{{ entry.title|slugify }}">
-                        {{ entry.title }}
-                    </a>
-                {% endfor %}
-
-   			</li>
-			{% endfor %}
-			
-			</ul></div><!--#slider-->
-		</div><!--#featured-->
-	{% endblock featured %}
-        
-	{% block excerpt %}
+{% block body %}
+	<ul>
 		{% for list in all_lists.object_list %}
-    		<div class="excerpt clear {% if forloop.counter|divisibleby:2 %} even {% else %} odd {% endif %} ">
+    		<li>
     			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
                 {% if list.image %}
                     <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
                 {% endif %}
-   			</div>
+   			</li>
    		{% empty %}
    			<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
 		{% endfor %}
-	{% endblock excerpt %}
-	
-	{% block scripts %}
-	    {{ block.super }}
-		<script type="text/javascript" src="/versioned/lib/easySlider1.7.js"></script>
-	{% endblock scripts %}
-	
+	</ul>
+{% endblock %}
