@@ -1,4 +1,4 @@
-from my.lists.models import *
+from lists.models import *
 from django.contrib import admin
 
 admin.site.register(List)

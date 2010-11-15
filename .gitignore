@@ -7,20 +7,11 @@
 # ignore .error files produced by wcoffee
 /media/cs/*.error
 
-# ignore symlink to local settings
-/my/etc
-
 # ignore dropbox metadata
 .dropbox
 
-# ignore symlinks
-/my/ajax_validation
-/my/djangoratings
-/my/django_static
-/my/oembed
-/my/uni_form
-/my/uni-form
-/media/lib/uni_form
+# ignore site code configuration file
+/setup/site.txt
 
 # ignore sass cache
 /media/.sass-cache

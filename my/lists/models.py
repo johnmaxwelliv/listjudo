@@ -4,9 +4,8 @@ from django.core.cache import cache
 from django.core.files import File
 
 from djangoratings.fields import RatingField
-from my.lists.templatetags.lists_tags import EntryNode, CommentNode
+from lists.templatetags.lists_tags import EntryNode, CommentNode
 from imagekit.models import ImageModel
-from my.settings import logger
 from oembed.consumer import OEmbedConsumer
 
 import random

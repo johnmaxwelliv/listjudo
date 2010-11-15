@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
-from my.lists.models import List
+from lists.models import List
 
-urlpatterns = patterns('my.lists.views',
+urlpatterns = patterns('lists.views',
     (r'^$', 'index'),
     (r'^(?P<object_id>\d+)/$', 'detail', {}, 'published_access'),
     (r'^(?P<object_id>\d+)/add/$', 'add_entry'),

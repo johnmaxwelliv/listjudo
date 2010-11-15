@@ -4,9 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpRespons
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 
-from my.lists.models import *
-from my.lists.forms import *
-from my.settings import logger
+from lists.models import *
+from lists.forms import *
 
 import json
 
@@ -138,30 +137,27 @@ def retrieve_user_data(request):
 
 def add_entry(request, object_id):
     '''Add an entry to a list and return the new entry's id and html.  Called asynchronously.'''
-    try:
-        form = EntryForm(request.POST)
-        # our ajax validation should have ensured that the form was valid
-        if not form.is_valid():
-            return HttpResponse('invalid form')
-        entry = form.save(commit=False)
-        # save miscelleneous request data for the curious adminstrator's sake
-        entry.record_request(request)
-        entry.prepare_embeds()
-        entry.save()
-        result = HttpResponse(json.dumps({
-            'entry_id': entry.id,
-            'html': entry.html(request),
-        }), mimetype='application/json')
-        # POLISH
-        # Calculate the "expires" argument programmatically, or we're screwed
-        # when 2068 rolls around.
-        result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
-            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-        result.set_cookie('email', value=entry.email, max_age=157680000,
-            expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-        return result
-    except:
-        import traceback; logger.debug(traceback.format_exc())
+    form = EntryForm(request.POST)
+    # our ajax validation should have ensured that the form was valid
+    if not form.is_valid():
+        return HttpResponse('invalid form')
+    entry = form.save(commit=False)
+    # save miscelleneous request data for the curious adminstrator's sake
+    entry.record_request(request)
+    entry.prepare_embeds()
+    entry.save()
+    result = HttpResponse(json.dumps({
+        'entry_id': entry.id,
+        'html': entry.html(request),
+    }), mimetype='application/json')
+    # POLISH
+    # Calculate the "expires" argument programmatically, or we're screwed
+    # when 2068 rolls around.
+    result.set_cookie('nickname', value=entry.nickname, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    result.set_cookie('email', value=entry.email, max_age=157680000,
+        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    return result
 
 def add_comment(request, object_id):
     '''Add a comment to a list and return the new comment's html.  Called asynchronously.'''

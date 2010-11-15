@@ -1,17 +1,10 @@
-# Django localsettings for my project in development.
-
-CACHE_BACKEND = 'dummy://' # 'dummy://' or 'locmem://'
-
-INSTALL_ROOT = '/srv/li-dev/'
-
-REPO_ROOT = '/home/john/Dropbox/li/'
-
-FULLNAME = 'li-dev'
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
         'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': INSTALL_ROOT + 'db/db.sqlite3',                      # Or path to database file if using sqlite3.
+        'NAME': SITE_ROOT.child('db').child('db.sqlite3'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.

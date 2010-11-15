@@ -8,12 +8,12 @@ oembed.autodiscover()
 
 from django.http import HttpResponseRedirect
 
-from my.settings import DEBUG, MEDIA_ROOT
+from settings import DEBUG, MEDIA_ROOT
 
 urlpatterns = patterns('',
-    (r'^lists/', include('my.lists.urls')),
-    (r'^ajax_validate/', include('my.ajax_validate.urls')),
-    (r'^rate/', include('my.djangoratings.urls')),
+    (r'^lists/', include('lists.urls')),
+    (r'^ajax_validate/', include('ajax_validate.urls')),
+    (r'^rate/', include('djangoratings.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
     (r'^$', lambda request: HttpResponseRedirect('/lists/')),
@@ -21,6 +21,8 @@ urlpatterns = patterns('',
 
 if DEBUG:
     urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': MEDIA_ROOT, 'show_indexes': True}),
+        (r'^versioned/(?P<path>.*)$', 'django.views.static.serve', {'document_root': MEDIA_ROOT.child('versioned'), 'show_indexes': True}),
         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': MEDIA_ROOT}),
         (r'^versioned/(?P<path>.*)$', 'django.views.static.serve',

@@ -1,31 +1,15 @@
-# Django settings for my project.
+import site
 
-from etc import *
+from unipath import Path
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = INSTALL_ROOT + 'media/'
+REPO_ROOT = Path(__file__).parent
+with open(REPO_ROOT.child('setup').child('site.txt'), 'r') as f:
+    SITE_CODE = f.read().rstrip('\n')
+SITE_ROOT = Path('/srv').child(SITE_CODE)
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
-
-DEBUG = True
-
-TEMPLATE_DEBUG = DEBUG
-
-DJANGO_STATIC = False
-
-DJANGO_STATIC_MEDIA_URL = "/media"
-
-DJANGO_STATIC_SAVE_PREFIX = MEDIA_ROOT + 'public/build'
-
-DJANGO_STATIC_NAME_PREFIX = '/public/build'
-
-ADMINS = (
-    ('John Maxwell', 'jmiv.error@gmail.com'),
-)
+site.addsitedir(REPO_ROOT)
+site.addsitedir(REPO_ROOT.child('my'))
+site.addsitedir(REPO_ROOT.child('lib'))
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -33,6 +17,10 @@ EMAIL_HOST_USER = 'admin@campuseagle.com'
 EMAIL_HOST_PASSWORD = 'flamezoo491'
 EMAIL_USE_TLS = True
 EMAIL_SUBJECT_PREFIX = '! '
+
+ADMINS = (
+    ('John Maxwell', 'jmiv.error@gmail.com'),
+)
 
 MANAGERS = ADMINS
 
@@ -59,13 +47,27 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
+# Absolute path to the directory that holds media.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = SITE_ROOT.child('media')
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/media/'
+
+DJANGO_STATIC = False
+DJANGO_STATIC_MEDIA_URL = '/media'
+DJANGO_STATIC_SAVE_PREFIX = MEDIA_ROOT.child('public').child('build')
+DJANGO_STATIC_NAME_PREFIX = '/public/build'
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/public/admin/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'b^p0p3n!o12bc#sm@@o7z4mtr*$3hqs&qvk%kwb@#+yb7v96$g'
+SECRET_KEY = '*n+f1*pji*)2qh@%&1k))&7mp14qx&*l&$onr$&_za!)(mx6-b'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -83,13 +85,13 @@ MIDDLEWARE_CLASSES = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-ROOT_URLCONF = 'my.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    REPO_ROOT + 'my/templates',
+    '/home/john/li/templates/',
 )
 
 INSTALLED_APPS = (
@@ -101,18 +103,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django_extensions',
-    'south',
-    'my.djangoratings',
-    'my.lists',
-    'my.uni-form',
     'debug_toolbar',
+    'south',
+    'djangoratings',
+    'lists',
+    'uni-form',
     'ajax_validation',
     'oembed',
     'imagekit',
     'django_static',
     'django.contrib.webdesign',
 )
-
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -129,9 +130,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': True,
 }
 
-import logging
-import log
-
-logger = log.set_up(INSTALL_ROOT + 'application.log', logging.DEBUG)
-
 CONSUMER_URLIZE_ALL = False
+
+site_settings = REPO_ROOT.child('setup').child(SITE_CODE).child('settings.py')
+execfile(site_settings)

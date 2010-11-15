@@ -1,12 +1,12 @@
 To change the dimensions with which images and videos are displayed
 
-1. Edit the width and height parameters under ResizeDisplay in li/my/lists/entry_image_specs.py
-2. Edit the line under {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #} in li/my/templates/lists/entry.html
-3. Source the project's virtualenv (e.g. source /srv/li-dev/bin/activate) and run python li/my/manage.py ikflush lists
+1. Edit the width and height parameters under ResizeDisplay in my/lists/entry_image_specs.py
+2. Edit the line under {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #} in templates/lists/entry.html
+3. Source the project's virtualenv and run python manage.py ikflush lists
 4. Remember to repeat step 3 when the app is deployed.
 
 To change the dimensions with which list thumbnails are displayed
 
-1. Edit the width and height parameters under ResizeThumb in li/my/lists/entry_image_specs.py
-2. Source the project's virtualenv (e.g. source /srv/li-dev/bin/activate) and run python li/my/manage.py ikflush lists
+1. Edit the width and height parameters under ResizeThumb in my/lists/entry_image_specs.py
+2. Source the project's virtualenv and run python manage.py ikflush lists
 3. Remember to repeat step 2 when the app is deployed.

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.forms.widgets import HiddenInput
-from my.lists.models import *
+from lists.models import *
 
 class EntryForm(ModelForm):
     class Meta:
