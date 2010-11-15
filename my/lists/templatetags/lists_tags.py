@@ -3,25 +3,21 @@ from django.template import loader
 
 register = template.Library()
 
-class EntryFormNode(template.Node):
-    def __init__(self, form=None):
-        self.template = loader.get_template("lists/entry_form.html")
-    def render(self, context):
-        return self.template.render(context)
-
 class EntryNode(template.Node):
-    def __init__(self, entry):
+    def __init__(self, entry, hidden=False):
         self.entry = entry
         self.template = loader.get_template("lists/entry.html")
         self.cache_period = 2592000  # 30 days in seconds, for cache backend
         # Note that memcached works differently if you give it more than 30 days' worth of seconds, see
         # http://code.google.com/p/memcached/wiki/FAQ#What_are_the_limits_on_setting_expire_time?_%28why_is_there_a_30_d
+        self.hidden = hidden
     def render(self, context):
         # POLISH
         # Potential bug in the making here... what if the context object passed
         # to render has an unexpected 'entry' field later on?
         context['entry'] = self.entry
         context['cache_period'] = self.cache_period
+        context['hidden'] = self.hidden
         return self.template.render(context)
 
 class CommentNode(template.Node):
@@ -34,10 +30,6 @@ class CommentNode(template.Node):
         # to render has an unexpected 'entry' field later on?
         context['comment'] = self.comment
         return self.template.render(context)
-
-@register.tag
-def entry_form(parser, token):
-    return EntryFormNode()
 
 @register.simple_tag
 def entry_html(entry):

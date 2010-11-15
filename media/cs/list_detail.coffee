@@ -4,28 +4,24 @@ l: (output) ->
     console.log(output)
 
 $(document).ready(->
-    $("#entries").append('<p>foo</p>')
+    # ENTRIES
+
     $('#add-entry').click(->
         # The user clicked the link to add an entry to the list, now show them the entry form.
         $('#add-entry-div').hide()
-        $('#entry-form-div').css('opacity', 0)
-        $('#entry-form-div').css('display', 'block')
         $.scrollTo('#entry-form-div')
-        $('#entry-form-div').fadeIn(400, (->
-            # I'm putting this callback here because the fadeIn doesn't seem to work on Google Chrome.
-            $('#entry-form-div').css('opacity', 1)
-        ))
-        return false
+        $('#entry-form-div').show('fast')
     )
 
     # These options are related to the asynchronous submission of the entry form.
     options = {
         dataType: 'json'
         success: (data) ->
-            entry_pk = data.entry_id
+            entry_pk = data.id
 
             # Add the new entry to the DOM
-            $("#entries").append('<div style="display:none" id="entry-' + entry_pk + '">' + data.html + '</div>')
+            $("#entries").append(data.html)
+            entry = $('#entry-' + entry_pk)
             $('#entry-' + entry_pk + '-stars-wrapper').stars({
                 inputType: "select",
                 cancelShow: false,
@@ -34,7 +30,6 @@ $(document).ready(->
             });
 
             # Show the user the entry they added
-            entry = $('#entry-' + entry_pk)
             entry.show('slow')
             $.scrollTo('#entry-' + entry_pk)
 
@@ -46,6 +41,17 @@ $(document).ready(->
             $('#add-entry-div').show()
     }
     $("#entry-form").ajaxForm(options)
+
+
+
+    # COMMENTS
+
+    $('#add-comment').click(->
+        # The user clicked the link to add an entry to the list, now show them the entry form.
+        $('#add-comment-div').hide()
+        $.scrollTo('#comment-form-div')
+        $('#comment-form-div').show('fast')
+    )
 
     # These options are related to the asynchronous submission of the comment form.
     options = {

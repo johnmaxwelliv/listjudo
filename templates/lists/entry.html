@@ -2,8 +2,8 @@
 {% load cache %}
 {% load oembed_tags %}
 {% load webdesign %}
-{% cache cache_period entry_html_1 entry.id %}
-<div id="entry-{{ entry.id }}" class="entry">
+{% cache cache_period entry_html_1 entry.id hidden %}
+<div id="entry-{{ entry.id }}" class="entry" {% if hidden %}style="display:none"{% endif %}>
     <h3>{{ entry.title }}</h3>
     <div>
             {% if entry.embeds_oembed %}

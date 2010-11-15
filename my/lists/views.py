@@ -1,3 +1,4 @@
+from annoying.decorators import JsonResponse
 from django.views.generic.simple import direct_to_template as template
 from django.db.models import *
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
@@ -6,8 +7,6 @@ from django.core.paginator import Paginator
 
 from lists.models import *
 from lists.forms import *
-
-import json
 
 def all_lists():
     return List.objects.filter(
@@ -139,17 +138,16 @@ def add_entry(request, object_id):
     '''Add an entry to a list and return the new entry's id and html.  Called asynchronously.'''
     form = EntryForm(request.POST)
     # our ajax validation should have ensured that the form was valid
-    if not form.is_valid():
-        return HttpResponse('invalid form')
+    assert form.is_valid()
     entry = form.save(commit=False)
     # save miscelleneous request data for the curious adminstrator's sake
     entry.record_request(request)
     entry.prepare_embeds()
     entry.save()
-    result = HttpResponse(json.dumps({
-        'entry_id': entry.id,
-        'html': entry.html(request),
-    }), mimetype='application/json')
+    result = JsonResponse({
+        'id': entry.id,
+        'html': entry.html(request, hidden=True),
+    })
     # POLISH
     # Calculate the "expires" argument programmatically, or we're screwed
     # when 2068 rolls around.
@@ -168,9 +166,10 @@ def add_comment(request, object_id):
     # save miscelleneous request data for the curious adminstrator's sake
     comment.record_request(request)
     comment.save()
-    result = HttpResponse(json.dumps({
+    result = JsonResponse({
+        'id': comment.id,
         'html': comment.html(request),
-    }), mimetype='application/json')
+    })
     # POLISH
     # Calculate the "expires" argument programmatically, or we're screwed
     # when 2068 rolls around.

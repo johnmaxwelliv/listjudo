@@ -8,11 +8,10 @@
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
 {% block extra_head %}
-    {% slimall %}
+    {{ block.super }}
     <link rel="stylesheet" type="text/css" href="/versioned/lib/jquery.ui.stars.css" />
     <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/uni-form.css" />
     <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
-    {% endslimall %}
 {% endblock %}
 
 {% block body %}
@@ -34,20 +33,41 @@
 	</article>
 	<div class="clear"></div>
 	
-    <div id="add-entry-div"><a href="#entry-form-div" id="add-entry">Add an entry</a></div>
-
+    <div id="add-entry-div">
+        <a href="#entry-form-div" id="add-entry">Add an entry</a>
+    </div>
     <div id="entry-form-div" style="display:none">
-        {% entry_form %}
+        <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" id="entry-form">
+            {% csrf_token %}
+            <fieldset class="inlineLabels">
+            {{ entry_form|as_uni_form }}
+            <div class="form_block">
+                <input type="submit" value="add" id="add-entry">
+            </div>
+            </fieldset>
+        </form>
     </div>
 
-    {% if comments %}
-        <h2>Comments</h2>
-    {% endif %}
-        <div id="comments">
-        {% for comment in comments %}
-            {% comment_html comment %}
-        {% endfor %}
-        </div>
+    <h2>Comments</h2>
+    <div id="comments">
+    {% for comment in comments %}
+        {% comment_html comment %}
+    {% endfor %}
+    </div>
+    <div id="add-comment-div">
+        <a href="#comment-form-div" id="add-comment">Add a comment</a>
+    </div>
+    <div id="comment-form-div" style="display:none">
+        <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" id="comment-form">
+            {% csrf_token %}
+            <fieldset class="inlineLabels">
+            {{ comment_form|as_uni_form }}
+            <div class="form_block">
+                <input type="submit" value="add your comment" id="add-comment" />
+            </div>
+            </fieldset>
+        </form>
+    </div>
 
     {% if admin_access %}
         {% if not list.published %}
@@ -72,21 +92,6 @@
         </p>
         </div>
         {% endif %}
-    {% endif %}
-
-    {% if show_comment_form %}
-        <h2>Add a Comment</h2>
-        <div id="comment-form-div">
-            <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" id="comment-form">
-                {% csrf_token %}
-                <fieldset class="inlineLabels">
-                {{ comment_form|as_uni_form }}
-                <div class="form_block">
-                    <input type="submit" value="add your comment" id="add-comment" />
-                </div>
-                </fieldset>
-            </form>
-        </div>
     {% endif %}
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
