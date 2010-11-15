@@ -26,11 +26,11 @@ $(document).ready(->
 
             # Add the new entry to the DOM
             $("#entries").append('<div style="display:none" id="entry-' + entry_pk + '">' + data.html + '</div>')
-            $('#stars-wrapper-' + entry_pk).stars({
+            $('#entry-' + entry_pk + '-stars-wrapper').stars({
                 inputType: "select",
                 cancelShow: false,
                 callback: (ui, type, value) ->
-                    $("#stars-form-" + entry_pk).ajaxSubmit()
+                    $('#entry-' + entry_pk + '-stars-form').ajaxSubmit()
             });
 
             # Show the user the entry they added
@@ -47,24 +47,15 @@ $(document).ready(->
     }
     $("#entry-form").ajaxForm(options)
 
-    new_comment_number: 1
-
     # These options are related to the asynchronous submission of the comment form.
     options = {
         dataType: 'json'
         success: (data) ->
             # Add the new comment to the DOM
-            $("#comments").append('<div style="display:none" id="new-comment-' + new_comment_number + '">' + data.html + '</div>')
-
-            # Show the user the comment they added
-            comment = $('#new-comment-' + new_comment_number)
-            $.scrollTo('#new-comment-' + new_comment_number)
-            comment.show('slow')
+            $("#comments").append(data.html)
 
             # Reset the comment form
             $('#id_body').val('')
-
-            new_comment_number += 1
     }
     $("#comment-form").ajaxForm(options)
 )

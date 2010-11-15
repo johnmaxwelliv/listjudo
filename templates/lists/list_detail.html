@@ -103,11 +103,11 @@
     {% endslimall %}
     <script type="text/javascript">
         {% for entry in list.entry_set.all %}
-            $("#stars-wrapper-{{ entry.id }}").stars({
+            $("#entry-{{ entry.id }}-stars-wrapper").stars({
                 inputType: "select",
                 cancelShow: false,
                 callback: function (ui, type, value) {
-                    $("#stars-form-{{ entry.id }}").ajaxSubmit();
+                    $("#entry-{{ entry.id }}-stars-form").ajaxSubmit();
                 }
             });
         {% endfor %}

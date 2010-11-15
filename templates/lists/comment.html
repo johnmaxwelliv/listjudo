@@ -1,4 +1,4 @@
-<div class="comment">
+<div id="comment-{{ comment.id }}" class="comment">
     <div>{{ comment.body|striptags|urlize|linebreaks }}</div>
     <p><small>Left by <b>{{ comment.nickname }}</b> on {{ comment.modified }}.</small></p>
 </div>

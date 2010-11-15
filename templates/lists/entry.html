@@ -3,7 +3,7 @@
 {% load oembed_tags %}
 {% load webdesign %}
 {% cache cache_period entry_html_1 entry.id %}
-<div class="entry">
+<div id="entry-{{ entry.id }}" class="entry">
     <h3>{{ entry.title }}</h3>
     <div>
             {% if entry.embeds_oembed %}
@@ -17,8 +17,8 @@
     <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
     <table>
         <th>
-            <form action="/rate/lists/entry/{{ entry.id }}/" id="stars-form-{{ entry.id }}" method="post">
-                <div id="stars-wrapper-{{ entry.id }}">
+            <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
+                <div id="entry-{{ entry.id }}-stars-wrapper">
                 <select name="score" style="width: 120px">
 {% endcache %}
                     {% generate_options entry.rating request %}
