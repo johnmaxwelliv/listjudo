@@ -37,9 +37,11 @@ def rf():
 
 def _init(site_code, repo_root, site_root, remote, database, conf=None):
     _run("virtualenv --no-site-packages %s", site_root)
+    _run("chmod +x %s", repo_root.child('manage.py'))
     if database == 'sqlite3':
         _run("mkdir -p %s", site_root.child('db'))
-        _run("chmod a+w %s", site_root.child('db'))
+        _run("touch %s", site_root.child('db').child('db.sqlite3'))
+        _run("chmod -R a+w %s", site_root.child('db'))
     if remote:
         with settings(warn_only=True):
             _run("adduser --gecos=',,,' --disabled-login %s", site_code)
@@ -48,11 +50,12 @@ def _init(site_code, repo_root, site_root, remote, database, conf=None):
             _run("chmod a+w %s", site_root.child(kind + '.log'))
         tmpconf = _Path('/tmp').child('tmp.httpd.%f.conf' % time.time())
         fabric.contrib.files.upload_template(setup.child(conf), tmpconf, context={
+            'subdomain': site_code.replace('_', '-'),
             'site_code': site_code,
             'repo_root': repo_root,
             'site_root': site_root,
         })
-        _run("cat %s >> /etc/apache2/httpd.conf", tmpconf)
+        #_run("cat %s >> /etc/apache2/httpd.conf", tmpconf)
         _refresh(repo_root, site_root, remote=True)
         print('# edit apache configuration')
         print('se /etc/apache2/httpd.conf')

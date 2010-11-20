@@ -3,7 +3,7 @@
 {% load oembed_tags %}
 {% load webdesign %}
 {% cache cache_period entry_html_1 entry.id hidden %}
-<div id="entry-{{ entry.id }}" class="entry" {% if hidden %}style="display:none"{% endif %}>
+<div id="entry-{{ entry.id }}" class="entry"{% if hidden %} style="display: none"{% endif %}>
     <h3>{{ entry.title }}</h3>
     <div>
             {% if entry.embeds_oembed %}
@@ -15,19 +15,15 @@
             {% endif %}
     </div>
     <div>{{ entry.description|striptags|urlize|linebreaks }}</div>
-    <table>
-        <th>
-            <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
-                <div id="entry-{{ entry.id }}-stars-wrapper">
-                <select name="score" style="width: 120px">
+        <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
+            <span id="entry-{{ entry.id }}-stars-wrapper">
+            <select name="score" style="width: 120px">
 {% endcache %}
-                    {% generate_options entry.rating request %}
+                {% generate_options entry.rating request %}
 {% cache cache_period entry_html_2 entry.id %}
-                </select>
-                </div>
-            </form>
-        </th>
-    </table>
+            </select>
+            </span>
+        </form>
     <div><small>Added by {{ entry.nickname }} on {{ entry.modified }}.</small></div>
 </div>
 {% endcache %}
