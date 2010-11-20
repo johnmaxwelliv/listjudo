@@ -5,39 +5,39 @@
 {% block title %}Create a List - {{ block.super }}{% endblock %}
 
 {% block extra_head %}
-    {% slimall %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_ROOT }}/versioned/lib/uni_form/uni-form.css" />
-    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
-    {% endslimall %}
+  {% slimall %}
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_ROOT }}/versioned/lib/uni_form/uni-form.css" />
+  <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
+  {% endslimall %}
 {% endblock %}
 
 {% block body %}
-    {% load uni_form_tags %}
-    <section>
+  {% load uni_form_tags %}
+  <section>
     <form action="/lists/create/" method="POST" class="uniForm" id="list-form">
-        {% csrf_token %}
-        <fieldset class="inlineLabels">
-            {{ form|as_uni_form }}
-            <div class="form_block">
-                <button type="submit" id="create-list">create</button>
-            </div>
-        </fieldset>
+      {% csrf_token %}
+      <fieldset class="inlineLabels">
+        {{ form|as_uni_form }}
+        <div class="form_block">
+          <button type="submit" id="create-list">create</button>
+        </div>
+      </fieldset>
     </form>
-    </section>
+  </section>
 
-    {% load jquery_validation %}
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    {% slimall %}
-    <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
-    {% endslimall %}
-    <script type="text/javascript">
-        $(function () {
-            $('#list-form').validate('{% url list_form_validate %}', {
-                callback: uniform_callback,
-                fields: ['title', 'description', 'nickname', 'email']
-            });
-        });
-    </script>
+  {% load jquery_validation %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  {% slimall %}
+  <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
+  {% endslimall %}
+  <script type="text/javascript">
+    $(function () {
+      $('#list-form').validate('{% url list_form_validate %}', {
+        callback: uniform_callback,
+        fields: ['title', 'description', 'nickname', 'email']
+      });
+    });
+  </script>
 {% endblock %}

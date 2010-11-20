@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block body %}
-	<ul>
-		{% for list in all_lists.object_list %}
-    		<li>
-    			<a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
-                {% if list.image %}
-                    <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
-                {% endif %}
-   			</li>
-   		{% empty %}
-   			<p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
-		{% endfor %}
-	</ul>
+  <ul>
+    {% for list in all_lists.object_list %}
+      <li>
+        <a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
+        {% if list.image %}
+          <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
+        {% endif %}
+      </li>
+    {% empty %}
+      <p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
+    {% endfor %}
+  </ul>
 {% endblock %}

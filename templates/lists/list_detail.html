@@ -9,117 +9,120 @@
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
 {% block extra_head %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="/versioned/lib/jquery.ui.stars.css" />
-    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/uni-form.css" />
-    <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="/versioned/lib/jquery.ui.stars.css" />
+  <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/uni-form.css" />
+  <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
 {% endblock %}
 
 {% block body %}
-    <article>
-        <h1>{{ list.title|striptags }}</h1>
-        <p>{{ list.description|striptags|urlize|linebreaks }}<p>
-        <p><small>Created on {{ list.created }}.</small></p>
+  <article>
+  <h1>{{ list.title|striptags }}</h1>
+  <p>{{ list.description|striptags|urlize|linebreaks }}<p>
+  <p><small>Created on {{ list.created }}.</small></p>
 
-        <div id="entries">
-        {% if entries %}
-            {% for entry in entries %}
-                {% entry_html entry %}
-            {% endfor %}
-        {% endif %}
-        </div>
-    </article>
+  <div id="entries">
+    {% if entries %}
+      {% for entry in entries %}
+      {% entry_html entry %}
+      {% endfor %}
+    {% endif %}
+  </div>
+  </article>
 
-    <button type="button" id="add-entry">add an item to this list</button>
-    <section>
+  <button type="button" id="add-entry">add an item to this list</button>
+  <section>
     <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
-        {% csrf_token %}
-        <fieldset class="inlineLabels">
+      {% csrf_token %}
+      <fieldset class="inlineLabels">
         {{ entry_form|as_uni_form }}
         <div class="form_block">
-            <button type="submit" id="submit-entry">ok!</button><button type="button" id="cancel-add-entry">cancel</button>
+          <button type="submit" id="submit-entry">ok!</button><button type="button" id="cancel-add-entry">cancel</button>
         </div>
-        </fieldset>
+      </fieldset>
     </form>
-    </section>
+  </section>
 
-    <h2>Comments</h2>
-    <div id="comments">
+  <h2>Comments</h2>
+  <div id="comments">
     {% for comment in comments %}
-        {% comment_html comment %}
+      {% comment_html comment %}
     {% endfor %}
-    </div>
-    <button type="button" id="add-comment">leave a comment</button>
-    <section>
+  </div>
+  <button type="button" id="add-comment">leave a comment</button>
+  <section>
     <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
-        {% csrf_token %}
-        <fieldset class="inlineLabels">
+      {% csrf_token %}
+      <fieldset class="inlineLabels">
         {{ comment_form|as_uni_form }}
         <div class="form_block">
-            <button type="submit" id="submit-comment">ok!</button><button type="button" id="cancel-add-comment">cancel</button>
+          <button type="submit" id="submit-comment">ok!</button><button type="button" id="cancel-add-comment">cancel</button>
         </div>
-        </fieldset>
+      </fieldset>
     </form>
-    </section>
+  </section>
 
-    {% if admin_access %}
-        {% if not list.published %}
-        <hr />
-        <div>
-        <p><b>Ready to share your list with the world?</b>
+  {% if admin_access %}
+    {% if not list.published %}
+    <hr />
+    <div>
+      <p>
+        <b>Ready to share your list with the world?</b>
         <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
-            {% csrf_token %}
-            <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
-            <fieldset class="inlineLabels">
-                <div class="form_block">
-                    <button type="submit">publish it!</button>
-                </div>
-            </fieldset>
+          {% csrf_token %}
+          <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
+          <fieldset class="inlineLabels">
+            <div class="form_block">
+              <button type="submit">publish it!</button>
+            </div>
+          </fieldset>
         </form>
-        </p>
-        <p><b>Just want to share your list with a few friends?</b>  Give them this URL:</p>
-        <p>
-            <form>
-                <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
-            </form>
-        </p>
-        </div>
-        {% endif %}
+      </p>
+      <p><b>Just want to share your list with a few friends?</b>  Give them this URL:</p>
+      <p>
+        <form>
+          <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
+        </form>
+      </p>
+    </div>
     {% endif %}
+  {% endif %}
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    {% load jquery_validation %}
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
-    {% slimall %}
-    <script type="text/javascript" src="/versioned/lib/jquery.ui.stars.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery.form.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery.scrollTo-1.4.2.js"></script>
-    <script type="text/javascript" src="/versioned/cs/list_detail.js"></script>
-    <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
-    <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
-    {% endslimall %}
-    <script type="text/javascript">
-        {% for entry in list.entry_set.all %}
-            $("#entry-{{ entry.id }}-stars-wrapper").stars({
-                inputType: "select",
-                cancelShow: false,
-                callback: function (ui, type, value) {
-                    $("#entry-{{ entry.id }}-stars-form").ajaxSubmit();
-                }
-            });
-        {% endfor %}
-        $(function () {
-            $('#entry-form').validate('{% url entry_form_validate %}', {
-                callback: uniform_callback,
-                fields: ['title', 'description', 'nickname', 'email', 'embed_url']
-            });
-        });
-        $(function () {
-            $('#comment-form').validate('{% url comment_form_validate %}', {
-                callback: uniform_callback,
-                fields: ['body', 'nickname', 'email']
-            });
-        });
-    </script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  {% load jquery_validation %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
+  {% slimall %}
+  <script type="text/javascript" src="/versioned/lib/jquery.ui.stars.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery.form.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery.scrollTo-1.4.2.js"></script>
+  <script type="text/javascript" src="/versioned/cs/list_detail.js"></script>
+  <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
+  <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
+  {% endslimall %}
+  <script type="text/javascript">
+    {% for entry in list.entry_set.all %}
+      $("#entry-{{ entry.id }}-stars-wrapper").stars({
+        inputType: "select",
+        cancelShow: false,
+        callback: function (ui, type, value) {
+          $("#entry-{{ entry.id }}-stars-form").ajaxSubmit();
+        }
+      });
+    {% endfor %}
+  </script>
+  <script type="text/javascript">
+    $(function () {
+      $('#entry-form').validate('{% url entry_form_validate %}', {
+        callback: uniform_callback,
+        fields: ['title', 'description', 'nickname', 'email', 'embed_url']
+      });
+    });
+    $(function () {
+      $('#comment-form').validate('{% url comment_form_validate %}', {
+        callback: uniform_callback,
+        fields: ['body', 'nickname', 'email']
+      });
+    });
+  </script>
 {% endblock %}
