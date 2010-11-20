@@ -10,11 +10,11 @@ make_show_hide_form: (name) ->
     form = $('#' + name + '-form')
     $('#add-' + name).click(->
         button.hide()
+        form.show()
         $.scrollTo(form)
-        form.show('slow')
     )
     $('#cancel-add-' + name).click(->
-        form.hide('slow')
+        form.hide()
         button.show()
     )
 
@@ -40,6 +40,7 @@ $(document).ready(->
             # Show the user the entry they added
             entry = $('#entry-' + data.id)
             $.scrollTo(entry)
+            entry.hide()
             entry.show('slow')
 
             # Reset the add entry link and the entry form to the way they were
@@ -68,6 +69,7 @@ $(document).ready(->
             # Show the user the comment they added
             comment = $('#comment-' + data.id)
             $.scrollTo(comment)
+            comment.hide()
             comment.show('slow')
 
             # Reset the comment form

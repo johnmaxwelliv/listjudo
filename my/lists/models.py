@@ -128,8 +128,8 @@ class Entry(UGC):
         return bool(self.embed_url)
     def embeds_image(self):
         return bool(self.image and not self.embed_url)
-    def html(self, request, hidden=False):
-        return EntryNode(self, hidden).render(RequestContext(request, {}))
+    def html(self, request):
+        return EntryNode(self).render(RequestContext(request, {}))
 
 class EntryImage(ImageModel):
     '''An uploaded image associated with an entry'''

@@ -146,7 +146,7 @@ def add_entry(request, object_id):
     entry.save()
     result = JsonResponse({
         'id': entry.id,
-        'html': entry.html(request, hidden=True),
+        'html': entry.html(request),
     })
     # POLISH
     # Calculate the "expires" argument programmatically, or we're screwed
