@@ -1,0 +1,8 @@
+cd media; wcompass
+
+a; run
+cd media/cs; wcoffee
+a; shell
+cd setup; fab --list
+ssh john@bill
+git status

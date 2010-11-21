@@ -1,6 +1,7 @@
-import site
-
 from unipath import Path
+import logging
+import logging.handlers
+import site
 
 REPO_ROOT = Path(__file__).parent
 with open(REPO_ROOT.child('setup').child('site.txt'), 'r') as f:
@@ -131,6 +132,44 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 CONSUMER_URLIZE_ALL = False
+
+LOG_LEVEL = logging.DEBUG
+LOG_DATE_FORMAT = '%d %b %Y %H:%M:%S'
+LOG_FORMATTER = logging.Formatter(
+    u'%(asctime)s | %(levelname)-7s | %(message)s',
+    datefmt=LOG_DATE_FORMAT,
+)
+
+CONSOLE_HANDLER = logging.StreamHandler() # defaults to stderr
+CONSOLE_HANDLER.setFormatter(LOG_FORMATTER)
+
+FILE_HANDLER = logging.handlers.RotatingFileHandler(
+    SITE_ROOT.child('application.log'),
+    maxBytes = 131072, # 1/8 of a megabyte or 128 kilobytes
+    backupCount = 5,
+)
+FILE_HANDLER.setFormatter(LOG_FORMATTER)
+
+def init_logging():
+    log = logging.getLogger('Main')
+    log.setLevel(LOG_LEVEL)
+    log.addHandler(CONSOLE_HANDLER)
+    log.addHandler(FILE_HANDLER)
+
+if not hasattr(logging, 'initialized') or not logging.initialized:
+    logging.initialized = True
+    init_logging()
+
+log = logging.getLogger('Main')
+
+def debug(f):
+    def new_f(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except:
+            import traceback
+            log.error(traceback.format_exc())
+    return new_f
 
 site_settings = REPO_ROOT.child('setup').child(SITE_CODE).child('settings.py')
 execfile(site_settings)
