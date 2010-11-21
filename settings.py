@@ -55,7 +55,7 @@ MEDIA_ROOT = SITE_ROOT.child('media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = 'http://localhost:8888/media'
 
 DJANGO_STATIC = False
 DJANGO_STATIC_MEDIA_URL = '/media'
@@ -83,7 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -104,7 +104,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django_extensions',
-    'debug_toolbar',
+    #'debug_toolbar',
     'south',
     'djangoratings',
     'lists',
@@ -128,13 +128,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 INTERNAL_IPS = ('127.0.0.1', '24.130.12.146', '24.130.13.211')
 
 DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': True,
+    'INTERCEPT_REDIRECTS': False,
 }
 
 CONSUMER_URLIZE_ALL = False
 
 LOG_LEVEL = logging.DEBUG
-LOG_DATE_FORMAT = '%d %b %Y %H:%M:%S'
+LOG_DATE_FORMAT = '%c %z'
 LOG_FORMATTER = logging.Formatter(
     u'%(asctime)s | %(levelname)-7s | %(message)s',
     datefmt=LOG_DATE_FORMAT,

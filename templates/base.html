@@ -10,16 +10,16 @@
     <![endif]-->
     {% slimall %}
     {% block extra_head %}
-    <link href="/versioned/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
-    <link href="/versioned/stylesheets/print.css" media="print" rel="stylesheet" type="text/css" />
+    <link href="{{ MEDIA_URL }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="{{ MEDIA_URL }}/stylesheets/print.css" media="print" rel="stylesheet" type="text/css" />
     <!--[if lt IE 8]>
-        <link href="/versioned/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+        <link href="{{ MEDIA_URL }}/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
     <![endif]-->
     {% endblock %}
     {% endslimall %}
 </head>
 
-<body>
+<body class="bp">
 {% block body %}
 The content of the document......
 {% endblock %}

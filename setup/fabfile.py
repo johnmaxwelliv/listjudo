@@ -84,15 +84,9 @@ def _init(site_code, repo_root, site_root, remote, database, conf=None):
 
 def _refresh(repo_root, site_root, remote):
     reqfile = repo_root.child('setup').child('pypi-requirements.txt')
-    statefile = _Path('/tmp').child('pypi-state.txt')
-    diffs = _Path('/tmp').child('pypi-diffs.txt')
-    _run("pip freeze -E %s > %s", site_root, statefile)
-    _run("echo `diff %s %s` > %s", statefile, reqfile, diffs)
-    if contains('<', diffs) or contains('>', diffs):
-        _run("pip install -E %s -r %s", site_root, reqfile)
-        _run("pip freeze -E %s > %s", site_root, reqfile)
-        _run("chown -R %s:%s %s", me, me, site_root)
-    _run("rm %s", statefile)
-    _run("rm %s", diffs)
+    _run("pip install -E %s -r %s", site_root, reqfile)
+    _run("pip freeze -E %s > %s", site_root, reqfile)
+    _run("chown -R %s:%s %s", me, me, site_root)
+    _run("chmod a+w %s", site_root.child('*.log'))
     if remote:
         _run("touch %s", repo_root.child('setup').child('django.wsgi'))
