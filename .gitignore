@@ -16,5 +16,5 @@
 # ignore sass cache
 /media/.sass-cache
 
-# ignore compiled css files
+# ignore compiled css files and font data
 /media/stylesheets
