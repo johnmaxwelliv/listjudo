@@ -2,13 +2,12 @@
 
 {% load django_static %}
 
-{% block title %}Create a List - {{ block.super }}{% endblock %}
+{% block title %}create a list&nbsp;::&nbsp;{{ block.super }}{% endblock %}
 
 {% block extra_head %}
-  {% slimall %}
+  {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_ROOT }}/versioned/lib/uni_form/uni-form.css" />
   <link rel="stylesheet" type="text/css" href="/versioned/lib/uni_form/default.uni-form.css" />
-  {% endslimall %}
 {% endblock %}
 
 {% block content %}
@@ -28,9 +27,9 @@
   {% load jquery_validation %}
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   {% slimall %}
-  <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
-  <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
-  <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
+    <script type="text/javascript" src="/versioned/lib/uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="/versioned/lib/jquery-uni-form.js"></script>
   {% endslimall %}
   <script type="text/javascript">
     $(function () {

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <p><a href="create">CREATE A LIST</a></p>
   <ul>
     {% for list in all_lists.object_list %}
       <li>
@@ -10,8 +9,6 @@
           <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
         {% endif %}
       </li>
-    {% empty %}
-      <p>Sorry, no lists have been posted yet. <a href="create">Be the first!</a></p>
     {% endfor %}
   </ul>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% load ratings %}
 {% load uni_form_tags %}
 
-{% block title %}{{ block.super }}&nbsp;::&nbsp;{{ list.title }}{% endblock %}
+{% block title %}{{ list.title }}&nbsp;::&nbsp;{{ block.super }}{% endblock %}
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
 {% block extra_head %}
@@ -17,20 +17,22 @@
 
 {% block content %}
   <article>
-  <h1>{{ list.title|striptags }}</h1>
-  <p>{{ list.description|striptags|urlize|linebreaks }}<p>
-  <p><small>Created on {{ list.created }}.</small></p>
-
-  <div id="entries">
-    {% if entries %}
+    <header id="list-header">
+      <h1>{{ list.title|striptags }}</h1>
+      {{ list.description|striptags|urlize|linebreaks }}
+      <section class="info">Created by <span class="nickname">{{ list.nickname }}</span> on {{ list.created }}</section>
+    </header>
+    <section id="entries">
       {% for entry in entries %}
-      {% entry_html entry %}
+        {% entry_html entry %}
       {% endfor %}
-    {% endif %}
-  </div>
+    </section>
   </article>
 
-  <button type="button" id="add-entry">add an item to this list</button>
+  <section>
+    <button type="button" id="add-entry">add an item to this list</button>
+  </section>
+
   <section>
     <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
       {% csrf_token %}
@@ -43,48 +45,58 @@
     </form>
   </section>
 
-  <h2>Comments</h2>
-  <div id="comments">
-    {% for comment in comments %}
-      {% comment_html comment %}
-    {% endfor %}
-  </div>
-  <button type="button" id="add-comment">leave a comment</button>
   <section>
-    <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
-      {% csrf_token %}
-      <fieldset class="inlineLabels">
-        {{ comment_form|as_uni_form }}
-        <div class="form_block">
-          <button type="submit" id="submit-comment">ok!</button><button type="button" id="cancel-add-comment">cancel</button>
-        </div>
-      </fieldset>
-    </form>
+    <header id="comments-header">
+      <h1>Comments</h1>
+    </header>
+    <section id="comments">
+      {% for comment in comments %}
+        {% comment_html comment %}
+      {% endfor %}
+    </section>
+    <section>
+      <button type="button" id="add-comment">leave a comment</button>
+    </section>
+    <section>
+      <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
+        {% csrf_token %}
+        <fieldset class="inlineLabels">
+          {{ comment_form|as_uni_form }}
+          <div class="form_block">
+            <button type="submit" id="submit-comment">ok!</button><button type="button" id="cancel-add-comment">cancel</button>
+          </div>
+        </fieldset>
+      </form>
+    </section>
   </section>
 
   {% if admin_access %}
     {% if not list.published %}
-    <hr />
-    <div>
-      <p>
-        <b>Ready to share your list with the world?</b>
-        <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
-          {% csrf_token %}
-          <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
-          <fieldset class="inlineLabels">
-            <div class="form_block">
-              <button type="submit">publish it!</button>
-            </div>
-          </fieldset>
-        </form>
-      </p>
-      <p><b>Just want to share your list with a few friends?</b>  Give them this URL:</p>
-      <p>
-        <form>
-          <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
-        </form>
-      </p>
-    </div>
+      <section>
+        <hgroup class="share">
+          <h1>Ready to share your list with the world?</h1>
+        </hgroup>
+        <section>
+          <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
+            {% csrf_token %}
+            <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
+            <fieldset class="inlineLabels">
+              <div class="form_block">
+                <button type="submit">publish it!</button>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+        <section>
+          <hgroup class="share">
+            <h1>Just want to share your list with a few friends?</h1>
+            <h2>Give them this URL:</h2>
+          </hgroup>
+          <form>
+            <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
+          </form>
+        </section>
+      </section>
     {% endif %}
   {% endif %}
 
@@ -92,13 +104,13 @@
   {% load jquery_validation %}
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
   {% slimall %}
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.ui.stars.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.form.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.scrollTo-1.4.2.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/cs/list_detail.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/uni_form/uni-form.jquery.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-ajax-validation.js"></script>
-  <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-uni-form.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.ui.stars.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.form.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery.scrollTo-1.4.2.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/cs/list_detail.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-uni-form.js"></script>
   {% endslimall %}
   <script type="text/javascript">
     {% for entry in list.entry_set.all %}

@@ -1,33 +1,38 @@
 {% load django_static %}
 <!DOCTYPE HTML>
 <html>
-<head>
-    <title>{% block title %}listkiwi.com{% endblock %}</title>
-    <meta name="description" content="{% block description %}{% endblock %}" />
+  <head>
+    <title>{% block title %}listjudo{% endblock %}</title>
+    <meta name="description" content="{% block description %}fun with lists!{% endblock %}" />
     <!--[if lt IE 9]>
-        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
     {% slimall %}
-    {% block extra_head %}
-    <link href="{{ MEDIA_URL }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
-    <link href="{{ MEDIA_URL }}/stylesheets/print.css" media="print" rel="stylesheet" type="text/css" />
-    <!--[if lt IE 8]>
-        <link href="{{ MEDIA_URL }}/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
-    <![endif]-->
-    {% endblock %}
+      {% block extra_head %}
+        <link href="{{ MEDIA_URL }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+        <link href="{{ MEDIA_URL }}/stylesheets/print.css" media="print" rel="stylesheet" type="text/css" />
+      {% endblock %}
     {% endslimall %}
-</head>
+    <!--[if lt IE 8]>
+      <link href="{{ MEDIA_URL }}/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+    <![endif]-->
+  </head>
 
-<body class="bp">
-{% block body %}
-{% block header %}
-<h1>listjudo.com</h1>
-{% endblock %}
-{% block content %}
-The content of the document......
-{% endblock %}
-{% endblock %}
-</body>
-
+  <body class="bp">
+    {% block body %}
+      <header id="site-header">
+        {% block header %}
+          <hgroup>
+            <h1>ListJudo.com</h1>
+            <h2>Fun with lists!</h2>
+          </hgroup>
+        {% endblock %}
+      </header>
+      <section id="content">
+        {% block content %}
+        {% endblock %}
+      </section>
+    {% endblock %}
+  </body>
 </html>

@@ -18,11 +18,29 @@
 @import compass/css3/border-radius
 @import fancy-buttons
 
+section
+  display: block
+
 button
   +fancy-button
 
-form
-  display: inline
+.info
+  color: #999999
+  text-transform: lowercase
 
-h1
-  font-family: 'AlphaEchoRegular'
+#comments-header
+  h1
+    text-transform: lowercase
+
+#site-header
+  h1
+    font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
+    text-transform: uppercase
+  h2
+    text-transform: lowercase
+
+hgroup .share
+  text-transform: lowercase
+
+.nickname
+  font-weight: bold
