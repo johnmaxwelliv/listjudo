@@ -1,0 +1,41 @@
+$page: $blueprint-grid-columns
+#page
+  +container
+  +showgrid
+  $sidebar: 5
+  $left-sidebar: $sidebar
+  $right-sidebar: $sidebar
+  $not-right-sidebar: $page - $right-sidebar
+  $content: $not-right-sidebar - $left-sidebar
+  #not-right-sidebar
+    +column($not-right-sidebar)
+    #site-header
+      $border: 1
+      $header-content: $not-right-sidebar - 2 * $border
+      +prepend($border)
+      +column($header-content)
+      +append($border)
+      +last
+      $image: 6
+      hgroup
+        +column($header-content - $image)
+      #header-image
+        +column($image)
+        +last
+    #left-sidebar
+      +column($left-sidebar)
+    #content
+      +column($content)
+      +last
+      .entry
+        +column($content)
+        +last
+        $stars-form: 4
+        .stars-form
+          +column($stars-form)
+        .entry-info
+          +column($content - $stars-form)
+          +last
+  #right-sidebar
+    +column($right-sidebar)
+    +last

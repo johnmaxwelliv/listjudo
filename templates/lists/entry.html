@@ -19,10 +19,7 @@
     {{ entry.description|striptags|urlize|linebreaks }}
   </section>
   <section class="entry-meta">
-    <section class="entry-info info">
-      Added by <span class="nickname">{{ entry.nickname }}</span> on {{ entry.modified }}
-    </section>
-    <section class="stars-form">
+    <div class="stars-form">
       <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
         <span id="entry-{{ entry.id }}-stars-wrapper">
           <select name="score" style="width: 120px">
@@ -32,7 +29,10 @@
           </select>
         </span>
       </form>
-    </section>
+    </div>
+    <div class="entry-info info">
+      Added by <span class="nickname">{{ entry.nickname }}</span> on {{ entry.modified }}
+    </div>
   </section>
 </article>
 {% endcache %}

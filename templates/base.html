@@ -20,19 +20,34 @@
   </head>
 
   <body class="bp">
-    {% block body %}
-      <header id="site-header">
-        {% block header %}
-          <hgroup>
-            <h1>ListJudo.com</h1>
-            <h2>Fun with lists!</h2>
-          </hgroup>
-        {% endblock %}
-      </header>
-      <section id="content">
-        {% block content %}
-        {% endblock %}
-      </section>
-    {% endblock %}
+    <div id="page">
+      {% block body %}
+        <div id="not-right-sidebar">
+          <header id="site-header">
+            {% block header %}
+              <hgroup>
+                <h1>ListJudo.com</h1>
+                <h2>Fun with lists!</h2>
+              </hgroup>
+              <div id="header-image">
+                <img src="{{ MEDIA_URL }}/images/judo.jpg" width="200" height="200" />
+              </div>
+            {% endblock %}
+          </header>
+
+          <section id="left-sidebar">
+            <p>left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar</p>
+          </section>
+          <section id="content">
+            <p>content</p>
+            {% block content %}
+            {% endblock %}
+          </section>
+        </div>
+        <section id="right-sidebar">
+          <p>right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar</p>
+        </section>
+      {% endblock %}
+    </div>
   </body>
 </html>

@@ -9,38 +9,8 @@
 
 // Combine the partials into a single screen stylesheet.
 @import partials/page
-@import partials/form
-@import partials/two_col
 @import partials/fonts
-
-// More imports
-@import blueprint/grid
-@import compass/css3/border-radius
-@import fancy-buttons
-
-section
-  display: block
-
-button
-  +fancy-button
-
-.info
-  color: #999999
-  text-transform: lowercase
-
-#comments-header
-  h1
-    text-transform: lowercase
-
-#site-header
-  h1
-    font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
-    text-transform: uppercase
-  h2
-    text-transform: lowercase
-
-hgroup .share
-  text-transform: lowercase
-
-.nickname
-  font-weight: bold
+@import partials/layout
+@import partials/reusable
+@import partials/reset
+@import partials/style

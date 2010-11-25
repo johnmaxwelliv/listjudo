@@ -56,6 +56,7 @@ MEDIA_ROOT = SITE_ROOT.child('media')
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = 'http://127.0.0.1:8888/media'
+# MEDIA_URL = '/media'
 
 DJANGO_STATIC = False
 DJANGO_STATIC_MEDIA_URL = '/media'
