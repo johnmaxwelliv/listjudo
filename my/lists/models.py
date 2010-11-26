@@ -23,8 +23,8 @@ class UserAction(models.Model):
     # POLISH
     # As of 2010-7-22, ratings are not subclassed from UserAction, but they
     # probably should be.
-    created = models.DateField(auto_now_add=True, editable=False)
-    modified = models.DateField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    modified = models.DateTimeField(auto_now=True, editable=False)
     referer = models.URLField(blank=True, null=True, editable=False)
     user_agent = models.CharField(max_length=200, blank=True, null=True, editable=False)
     ip = models.IPAddressField(blank=True, null=True, editable=False)
@@ -70,8 +70,12 @@ class List(UGC):
 
     def __unicode__(self):
         return self.title
-    def teaser_entries(self):
-        return self.entry_set.all()[:4]
+    def html(self):
+        t = loader.get_template('lists/list_teaser.html')
+        c = Context({
+            'list': self,
+        })
+        return t.render(c)
 
 class Entry(UGC):
     title = models.CharField(max_length=200)

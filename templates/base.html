@@ -35,17 +35,26 @@
             {% endblock %}
           </header>
 
-          <section id="left-sidebar">
-            <p>left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar left sidebar</p>
+          <section id="left-sidebar" class="sidebar">
+            <h1>{{ left_header }}</h1>
+            {% for list in left_showcase %}
+              <div class="left-list">
+                {{ list.html }}
+              </div>
+            {% endfor %}
           </section>
           <section id="content">
-            <p>content</p>
             {% block content %}
             {% endblock %}
           </section>
         </div>
-        <section id="right-sidebar">
-          <p>right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar right sidebar</p>
+        <section id="right-sidebar" class="sidebar">
+          <h1>{{ right_header }}</h1>
+          {% for list in right_showcase %}
+            <div class="right-list">
+              {{ list.html }}
+            </div>
+          {% endfor %}
         </section>
       {% endblock %}
     </div>

@@ -8,27 +8,46 @@ from django.core.paginator import Paginator
 from lists.models import *
 from lists.forms import *
 
-def all_lists():
-    return List.objects.filter(
-            published=True,
-        ).filter(
-            censored=False,
-        )
+import random
 
-def featured_lists():
+def viewable_lists():
     return List.objects.filter(
-            published=True,
-        ).filter(
-            censored=False,
-        ).filter(
-            featured=True,
-        )
+        published=True,
+    ).filter(
+        censored=False,
+    )
+
+def recent():
+    return viewable_lists().order_by('-modified')
+def most_views():
+    return viewable_lists().order_by('-views')
+def most_entries():
+    q = viewable_lists().annotate(number_of_entries=Count('entry'))
+    return q.order_by('-number_of_entries')
+def most_comments():
+    q = viewable_lists().annotate(number_of_comments=Count('listcomment'))
+    return q.order_by('-number_of_comments')
+def random_lists():
+    return viewable_lists().order_by('?')
+
+def with_showcases(context):
+    options = (
+        ('Most viewed', most_views),
+        ('Most commented', most_comments),
+        ('Most items', most_entries),
+    )
+    left = random.choice(options)
+    context['left_header'] = left[0]
+    context['left_showcase'] = left[1]()[:8]
+    context['right_header'] = 'Random lists'
+    context['right_showcase'] = random_lists()[:9]
+    return context
 
 def index(request):
-    return template(request, 'lists/list_home.html', {
-        'all_lists': Paginator(all_lists(), 4).page(1),
-        'featured_lists': Paginator(featured_lists(), 4).page(1),
-     })
+    return template(request, 'lists/list_home.html', with_showcases({
+        'main_header': 'Recently changed lists',
+        'main_showcase': recent()[:6],
+    }))
 
 def create(request):
     '''Create a list'''
@@ -52,9 +71,9 @@ def create(request):
 
     empty_list(request=request)
 
-    return template(request, "lists/list_create.html", {
+    return template(request, "lists/list_create.html", with_showcases({
         'form': ListForm(instance=(form or empty_list(request=request))),
-    })
+    }))
 
 def detail(request, object_id, access_code=None):
     '''View a (possibly unpublished) list'''
@@ -78,11 +97,11 @@ def detail(request, object_id, access_code=None):
         '((100/%s*rating_score/(rating_votes+%s))+100)/2' % \
         (Entry.rating.range, Entry.rating.weight),
     })
-    entries = entries.order_by('-sophisticated_rating')
+    entries = entries.order_by('-sophisticated_rating')[:15]
 
     comments = list.listcomment_set.filter(
         censored=False,
-    )
+    )[:15]
 
     # Determine if the user is the list's adminstrator
     # As of 2010-8-6, the only adminstrator privilege is publishing the list
@@ -95,17 +114,14 @@ def detail(request, object_id, access_code=None):
     else:
         admin_access = False
 
-    return template(request, 'lists/list_detail.html', {
+    return template(request, 'lists/list_detail.html', with_showcases({
         'list': list,
         'entries': entries,
         'comments': comments,
         'entry_form': EntryForm(instance=empty_entry(list, request=request)),
         'comment_form': CommentForm(instance=empty_comment(list, request=request)),
         'admin_access': admin_access,
-        'show_comment_form': comments or not admin_access
-        # we don't show the comment form to the admin if there are no comments
-        # because then they might confuse it with the form for adding entries
-    })
+    }))
 
 def empty_list(request):
     '''Generate a list object preinitialized with user data'''

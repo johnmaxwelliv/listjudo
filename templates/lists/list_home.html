@@ -1,14 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <ul>
-    {% for list in all_lists.object_list %}
-      <li>
-        <a href="/lists/{{ list.id }}/"><b>{{ list.title }}</b> by {{ list.nickname }}</a>
-        {% if list.image %}
-          <img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" />
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+  <h1>{{ main_header }}</h1>
+  {% for list in main_showcase %}
+    <div class="main-list">
+      {{ list.html }}
+    </div>
+  {% endfor %}
 {% endblock %}
