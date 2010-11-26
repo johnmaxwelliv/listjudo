@@ -1,26 +1,45 @@
 @import compass/css3/border-radius
+@import compass/css3/box-shadow
 
-$red: lighten(#ff3333, 20%)
+$red: lighten(#ff3333, 25%)
+
+=box($color-degrees, $corner-radius)
+  +border-radius($corner-radius)
+  +box-shadow
+  border: 2px solid $loud-color
+  background-color: adjust-hue($red, $color-degrees)
+
+body
+  //background-color: $blueprint-background-color
 
 #site-header
-  background-color: lighten(adjust-hue($red, -90deg), 5%)
-  +border-radius(20px)
+  +box(-90deg, 30px)
   hgroup
     h1
       // "Deep Cove"
       color: #051040
-      font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
-      font-size: 4em
+      font:
+        family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
+        size: 4em
       text-transform: uppercase
     h2
       text-transform: lowercase
 
+.entry
+  +box(90deg, 10px)
+
 .entry-info
+  text-align: right
+
+.comment
+  +box(180deg, 10px)
+
+.comment-info
   text-align: right
 
 #comments-header
   h1
     text-transform: lowercase
 
-hgroup .share
+hgroup.share
   text-transform: lowercase

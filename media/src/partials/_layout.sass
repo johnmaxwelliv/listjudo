@@ -1,7 +1,13 @@
 $page: $blueprint-grid-columns
+
+=padded-column($main, $pad)
+  +prepend($pad)
+  +column($main)
+  +append($pad)
+
 #page
   +container
-  +showgrid
+  //+showgrid
   $sidebar: 5
   $left-sidebar: $sidebar
   $right-sidebar: $sidebar
@@ -10,11 +16,9 @@ $page: $blueprint-grid-columns
   #not-right-sidebar
     +column($not-right-sidebar)
     #site-header
-      $border: 1
-      $header-content: $not-right-sidebar - 2 * $border
-      +prepend($border)
-      +column($header-content)
-      +append($border)
+      $pad: 1
+      $header-content: $not-right-sidebar - 2 * $pad
+      +padded-column($header-content, $pad)
       +last
       $image: 6
       hgroup
@@ -27,15 +31,23 @@ $page: $blueprint-grid-columns
     #content
       +column($content)
       +last
+      +append-bottom(1000px)
       .entry
-        +column($content)
+        $pad: 1
+        $entry-content: $content - 2 * $pad
+        +padded-column($entry-content, $pad)
         +last
         $stars-form: 4
         .stars-form
           +column($stars-form)
         .entry-info
-          +column($content - $stars-form)
+          +column($entry-content - $stars-form)
           +last
+      .comment
+        $pad: 1
+        $comment-content: $content - 2 * $pad
+        +padded-column($comment-content, $pad)
+        +last
   #right-sidebar
     +column($right-sidebar)
     +last

@@ -9,6 +9,7 @@
   <section class="entry-embed">
     {% if entry.embeds_oembed %}
       {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #}
+      {# Native youtube videos appear to have dimensions of 640x360 #}
       {{ entry.embed_url|oembed:"600x600" }}
     {% endif %}
     {% if entry.embeds_image %}
@@ -35,4 +36,5 @@
     </div>
   </section>
 </article>
+<hr />
 {% endcache %}

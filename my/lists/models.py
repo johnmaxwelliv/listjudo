@@ -79,7 +79,7 @@ class Entry(UGC):
     list = models.ForeignKey(List)
     rating = RatingField(range=5, weight=5, can_change_vote=True, allow_anonymous=True)
     embed_url = models.URLField('Image/Video URL', verify_exists=True, blank=True, null=True,
-        help_text="Video URLs from Youtube and almost all other major video sites are supported.<br />Image URLs should be direct, as in http://www.example.com/photo.jpg<br />If you'd like to use an image that's on your computer, you can upload it to <a href=\"http://imgur.com/\">imgur.com</a> and paste in its \"direct link\".",
+        help_text="Video URLs from all major video sites are supported.<br />To use an image on your computer, upload it to <a href=\"http://imgur.com/\" target=\"_blank\">imgur.com</a><br />Then paste in its url, e.g. http://i.imgur.com/U0Gns.jpg",
     )
     image = models.ForeignKey('EntryImage', blank=True, null=True)
 
@@ -97,13 +97,13 @@ class Entry(UGC):
                 self.attach_image(self.embed_url)
                 self.embed_url = None  # used as a signal that there is no oembed
     def attach_image(self, url):
+        # The attached image might be an image associated with the entry or a thumbnail for a video associated with the entry.
         def pre_extension(name):
             '''Extract the juicy part of an image's filename for use in its alt attribute'''
             if '.' in name:
                 return '.'.join(name.split('.')[:-1])
             else:
                 return name
-        '''The attached image might be an image associated with the entry or a thumbnail for a video associated with the entry.'''
         name = os.path.basename(url)
         image = EntryImage(source_url=url)
         image_req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.8) Gecko/20100723 Ubuntu/10.04 (lucid) Firefox/3.6.8', 'Referer': os.path.dirname(url)})
