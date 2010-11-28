@@ -1,9 +1,12 @@
 $page: $blueprint-grid-columns
 
-=padded-column($main, $pad)
-  +prepend($pad)
-  +column($main)
-  +append($pad)
+=nesting-box($total-cols, $nested-cols: $total-cols - 1, $border-width: 2px)
+  +column-base
+  $total-width: $blueprint-grid-width * $total-cols + $blueprint-grid-margin * ($total-cols - 1)
+  $nested-width: $blueprint-grid-width * $nested-cols + $blueprint-grid-margin * ($nested-cols - 1)
+  border-width: $border-width
+  padding: ($total-width - $nested-width - (2 * $border-width)) / 2
+  width: $nested-width
 
 #page
   +container
@@ -16,38 +19,35 @@ $page: $blueprint-grid-columns
   #not-right-sidebar
     +column($not-right-sidebar)
     #site-header
-      $pad: 1
-      $header-content: $not-right-sidebar - 2 * $pad
-      +padded-column($header-content, $pad)
+      $inside = $not-right-sidebar - 1
+      +nesting-box($not-right-sidebar, $inside)
       +last
       $image: 6
       hgroup
-        +column($header-content - $image)
+        +column($inside - $image)
       #header-image
         +column($image)
         +last
+      +append-bottom(10px)
     #left-sidebar
-      +column($left-sidebar)
+      +nesting-box($left-sidebar)
     #content
       +column($content)
       +last
       +append-bottom(1000px)
       .entry
-        $pad: 1
-        $entry-content: $content - 2 * $pad
-        +padded-column($entry-content, $pad)
+        $inside = $content - 1
+        +nesting-box($content, $inside)
         +last
         $stars-form: 4
         .stars-form
           +column($stars-form)
         .entry-info
-          +column($entry-content - $stars-form)
+          +column($inside - $stars-form)
           +last
       .comment
-        $pad: 1
-        $comment-content: $content - 2 * $pad
-        +padded-column($comment-content, $pad)
+        +nesting-box($content)
         +last
   #right-sidebar
-    +column($right-sidebar)
+    +nesting-box($right-sidebar)
     +last

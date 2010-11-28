@@ -1,45 +1,72 @@
 @import compass/css3/border-radius
 @import compass/css3/box-shadow
+@import bp-typography-extracts
 
 $red: lighten(#ff3333, 25%)
+$boundary: #111111
 
-=box($color-degrees, $corner-radius)
+=box-candy($color-degrees, $corner-radius)
   +border-radius($corner-radius)
   +box-shadow
-  border: 2px solid $loud-color
   background-color: adjust-hue($red, $color-degrees)
-
-body
-  //background-color: $blueprint-background-color
+  border:
+    style: solid
+    color: $boundary
 
 #site-header
-  +box(-90deg, 30px)
+  +box-candy(-90deg, 30px)
   hgroup
     h1
+      font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
+      font-size: 4.5em
+
       // "Deep Cove"
       color: #051040
-      font:
-        family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
-        size: 4em
       text-transform: uppercase
     h2
+      font-family: 'Lucida Console', Monaco, monospace
+      font-size: 3em
+
       text-transform: lowercase
 
-.entry
-  +box(90deg, 10px)
+#left-sidebar, #right-sidebar
+  +box-candy(30deg, 10px)
+  h1
+    +bp-h4
+    text:
+      align: center
+      decoration: underline
+      transform: lowercase
+  hr
+    +colruler($boundary)
+    height: 1px
 
-.entry-info
-  text-align: right
-
-.comment
-  +box(180deg, 10px)
-
-.comment-info
-  text-align: right
+.right-list, .left-list
+  &:last-child
+    hr
+      display: none
 
 #comments-header
   h1
+    +bp-h3
     text-transform: lowercase
+
+#entries, #comments
+  hr
+    +colspacer
+
+.entry
+  +box-candy(90deg, 10px)
+  .entry-header
+    h1
+      text-transform: none
+  .entry-info
+    text-align: right
+
+.comment
+  +box-candy(180deg, 10px)
+  .comment-info
+    text-align: right
 
 hgroup.share
   text-transform: lowercase

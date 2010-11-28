@@ -34,7 +34,7 @@ def with_showcases(context):
     options = (
         ('Most viewed', most_views),
         ('Most commented', most_comments),
-        ('Most items', most_entries),
+        ('Longest lists', most_entries),
     )
     left = random.choice(options)
     context['left_header'] = left[0]
@@ -97,11 +97,11 @@ def detail(request, object_id, access_code=None):
         '((100/%s*rating_score/(rating_votes+%s))+100)/2' % \
         (Entry.rating.range, Entry.rating.weight),
     })
-    entries = entries.order_by('-sophisticated_rating')[:15]
+    entries = entries.order_by('-sophisticated_rating')[:50]
 
     comments = list.listcomment_set.filter(
         censored=False,
-    )[:15]
+    )[:50]
 
     # Determine if the user is the list's adminstrator
     # As of 2010-8-6, the only adminstrator privilege is publishing the list
