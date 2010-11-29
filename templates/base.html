@@ -44,7 +44,9 @@
           </header>
 
           <section id="left-sidebar" class="sidebar">
-            <h1>{{ left_header }}</h1>
+            <header id="left-header">
+              <h1>{{ left_header }}</h1>
+            </header>
             {% for list in left_showcase %}
               <div class="left-list">
                 {{ list.html }}
@@ -57,7 +59,9 @@
           </section>
         </div>
         <section id="right-sidebar" class="sidebar">
-          <h1>{{ right_header }}</h1>
+          <header id="right-header">
+            <h1>{{ right_header }}</h1>
+          </header>
           {% for list in right_showcase %}
             <div class="right-list">
               {{ list.html }}
