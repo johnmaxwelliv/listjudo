@@ -19,12 +19,23 @@ $page: $blueprint-grid-columns
   #not-right-sidebar
     +column($not-right-sidebar)
     #site-header
-      $inside = $not-right-sidebar - 1
+      $inside: $not-right-sidebar - 1
       +nesting-box($not-right-sidebar, $inside)
       +last
       $image: 6
-      hgroup
-        +column($inside - $image)
+      $main: $inside - $image
+      #header-main
+        +column($main)
+        $pad: 1
+        $left: 3
+        $right: 5
+        #header-left-button
+          +prepend($pad)
+          +column($left)
+        #header-right-button
+          +column($right)
+          +append($main - $pad - $left - $right)
+          +last
       #header-image
         +column($image)
         +last

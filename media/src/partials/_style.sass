@@ -1,6 +1,7 @@
 @import compass/css3/border-radius
 @import compass/css3/box-shadow
 @import bp-typography-extracts
+@import blueprint/fancy-type
 
 $red: lighten(#ff3333, 25%)
 $boundary: #111111
@@ -24,9 +25,11 @@ $boundary: #111111
       color: #051040
       text-transform: uppercase
     h2
-      font-family: 'Lucida Console', Monaco, monospace
+      +alt
       font-size: 3em
 
+      &:before
+        content: "..."
       text-transform: lowercase
 
 #left-sidebar, #right-sidebar
