@@ -30,12 +30,6 @@
                   <h1>ListJudo.com</h1>
                   <h2>Fun with lists!</h2>
                 </hgroup>
-                <div id="header-left-button">
-                  <button type="button">home</button>
-                </div>
-                <div id="header-right-button">
-                  <button type="button">create a list</button>
-                </div>
               </div>
               <div id="header-image">
                 <img src="{{ MEDIA_URL }}/images/judo.png" width="200" height="200" />
@@ -54,6 +48,18 @@
             {% endfor %}
           </section>
           <section id="content">
+            <nav>
+              <div id="left-nav">
+                <div id="go-home-w" style="width: 101px">
+                  <a href="/lists/"><button type="button" id="go-home">home</button></a>
+                </div>
+              </div>
+              <div id="right-nav">
+                <div id="create-a-list-w" style="width: 162px">
+                  <a href="/lists/create/"><button type="button" id="create-a-list">create a list</button></a>
+                </div>
+              </div>
+            </nav>
             {% block content %}
             {% endblock %}
           </section>

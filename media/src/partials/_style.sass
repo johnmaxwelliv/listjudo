@@ -14,6 +14,22 @@ $boundary: #111111
     style: solid
     color: $boundary
 
+=center
+  // Requires that the element's width be specified in the html document, as in
+  // <div id="add-entry-w" style="width: 270px">
+  // The rationale for this is that if the desired width of the element is
+  // going to depend on standard text it contains, as in the case of a button,
+  // it'll be nice for the developer to only have to modify one file in order
+  // to modify said standard text.
+  // Additionally if width of an element is dynamic and its html is being
+  // generated, it will be easy for the generator to generate the width
+  // declaration along with the other stuff.
+  // Google "xray bookmarklet" for an easy way to find an element's width.
+  // BTW, I think one can only center elements whose display property is block.
+  margin:
+    left: auto
+    right: auto
+
 #site-header
   +box-candy(-90deg, 30px)
   hgroup
@@ -31,6 +47,12 @@ $boundary: #111111
       &:before
         content: "..."
       text-transform: lowercase
+
+nav
+  #go-home-w
+    +center
+  #create-a-list-w
+    +center
 
 =standard-header
   text:
@@ -76,10 +98,25 @@ $boundary: #111111
   .entry-info
     text-align: right
 
+#add-entry-w
+  +center
+
 .comment
   +box-candy(180deg, 10px)
   .comment-info
     text-align: right
 
+#add-comment-w
+  +center
+
+#admin
+  hr
+    +colruler
+    +prepend-top(10px)
+
 hgroup.share
   text-transform: lowercase
+  h1
+    +bp-h3
+  h2
+    +bp-h4

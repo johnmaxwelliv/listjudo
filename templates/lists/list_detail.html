@@ -29,11 +29,11 @@
     </section>
   </article>
 
-  <section>
+  <div id="add-entry-w" style="width: 270px">
     <button type="button" id="add-entry">add an item to this list</button>
-  </section>
+  </div>
 
-  <section>
+  <section id="entry-form-w">
     <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
       {% csrf_token %}
       <fieldset class="inlineLabels">
@@ -54,9 +54,9 @@
         {% comment_html comment %}
       {% endfor %}
     </section>
-    <section>
+    <div id="add-comment-w" style="width: 217px">
       <button type="button" id="add-comment">leave a comment</button>
-    </section>
+    </div>
     <section>
       <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
         {% csrf_token %}
@@ -72,10 +72,12 @@
 
   {% if admin_access %}
     {% if not list.published %}
-      <section>
+      <section id="admin">
+        <hr />
         <hgroup class="share">
           <h1>Ready to share your list with the world?</h1>
         </hgroup>
+        <hr />
         <section>
           <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
             {% csrf_token %}
