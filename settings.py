@@ -3,10 +3,11 @@ import logging
 import logging.handlers
 import site
 
-REPO_ROOT = Path(__file__).parent
-with open(REPO_ROOT.child('setup').child('site.txt'), 'r') as f:
+with open(Path(__file__).parent.child('setup').child('site.txt'), 'r') as f:
     SITE_CODE = f.read().rstrip('\n')
-SITE_ROOT = Path('/srv').child(SITE_CODE)
+
+site_settings = Path(__file__).parent.child('setup').child(SITE_CODE).child('settings.py')
+execfile(site_settings)
 
 site.addsitedir(REPO_ROOT)
 site.addsitedir(REPO_ROOT.child('my'))
@@ -159,7 +160,6 @@ def init_logging():
 
 if not hasattr(logging, 'initialized') or not logging.initialized:
     logging.initialized = True
-    init_logging()
 
 log = logging.getLogger('Main')
 
@@ -171,6 +171,3 @@ def debug(f):
             import traceback
             log.error(traceback.format_exc())
     return new_f
-
-site_settings = REPO_ROOT.child('setup').child(SITE_CODE).child('settings.py')
-execfile(site_settings)

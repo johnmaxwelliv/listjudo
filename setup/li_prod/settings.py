@@ -1,13 +1,11 @@
 from unipath import Path
 
-me = 'john'
-
-SITE_CODE = 'li_dev'
-UPSTREAM_SITE = None
+SITE_CODE = 'li_prod'
+UPSTREAM_SITE = 'li_dev'
 SITE_ROOT = Path('/srv').child(SITE_CODE)
-REPO_ROOT = Path('/home').child(me).child('li')
+REPO_ROOT = SITE_ROOT.child('repo')
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
@@ -22,5 +20,3 @@ DATABASES = {
 }
 
 CACHE_BACKEND = 'dummy://'
-
-UPSTREAM_SITE = None

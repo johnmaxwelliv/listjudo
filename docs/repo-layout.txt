@@ -31,4 +31,5 @@
             comment.html
             entry_form.html
             entry.html
+            list_teaser.html
     urls.py

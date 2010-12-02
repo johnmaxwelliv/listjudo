@@ -1,0 +1,12 @@
+/srv/[SITE_CODE]/ [site root]
+    application.log [errors from your application]
+    bin/ [part of virtualenv]
+    db/ [optional; writeable by all]
+        db.sqlite3 [sqlite3 database]
+    error.log [errors from Apache]
+    include/ [part of virtualenv]
+    lib/ [part of virtualenv]
+    media/
+    repo/ [symlink to vcs repository root]
+    request.log [log of requests made to the web server]
+    share/ [part of virtualenv]
