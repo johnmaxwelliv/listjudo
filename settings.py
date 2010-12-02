@@ -160,6 +160,7 @@ def init_logging():
 
 if not hasattr(logging, 'initialized') or not logging.initialized:
     logging.initialized = True
+    init_logging()
 
 log = logging.getLogger('Main')
 
