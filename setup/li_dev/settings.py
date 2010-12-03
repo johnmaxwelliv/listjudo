@@ -2,10 +2,10 @@ from unipath import Path
 
 me = 'john'
 
-SITE_CODE = 'li_dev'
+_SITE_CODE = 'li_dev'
 UPSTREAM_SITE = None
-SITE_ROOT = Path('/srv').child(SITE_CODE)
-REPO_ROOT = Path('/home').child(me).child('li')
+SITE_ROOT = Path('/srv').child(_SITE_CODE)
+REPO_ROOT = Path('/home').child('john').child('li')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -22,5 +22,3 @@ DATABASES = {
 }
 
 CACHE_BACKEND = 'dummy://'
-
-UPSTREAM_SITE = None

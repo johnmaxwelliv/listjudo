@@ -6,8 +6,8 @@ import site
 with open(Path(__file__).parent.child('setup').child('site.txt'), 'r') as f:
     SITE_CODE = f.read().rstrip('\n')
 
-site_settings = Path(__file__).parent.child('setup').child(SITE_CODE).child('settings.py')
-execfile(site_settings)
+site_settings_file = Path(__file__).parent.child('setup').child(SITE_CODE).child('settings.py')
+execfile(site_settings_file)
 
 site.addsitedir(REPO_ROOT)
 site.addsitedir(REPO_ROOT.child('my'))

@@ -1,8 +1,8 @@
 from unipath import Path
 
-SITE_CODE = 'li_prod'
+_SITE_CODE = 'li_prod'
 UPSTREAM_SITE = 'li_dev'
-SITE_ROOT = Path('/srv').child(SITE_CODE)
+SITE_ROOT = Path('/srv').child(_SITE_CODE)
 REPO_ROOT = SITE_ROOT.child('repo')
 
 DEBUG = False

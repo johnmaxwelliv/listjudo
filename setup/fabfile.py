@@ -10,12 +10,12 @@ _Path = unipath.Path
 with open(_Path(__file__).parent.child('site.txt'), 'r') as f:
     SITE_CODE = f.read().rstrip('\n')
 
-local_settings_file = _Path(__file__).parent.child(SITE_CODE).child('settings.py')
-local_settings = {}
-execfile(local_settings_file, local_settings)
+site_settings_file = _Path(__file__).parent.child(SITE_CODE).child('settings.py')
+site_settings = {}
+execfile(site_settings_file, site_settings)
 g = globals()
 for attribute in ['REPO_ROOT', 'SITE_ROOT', 'UPSTREAM_SITE']:
-    g[attribute] = local_settings[attribute]
+    g[attribute] = site_settings[attribute]
 
 me = 'john'
 setup = _Path(__file__).parent
