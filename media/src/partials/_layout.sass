@@ -22,24 +22,14 @@ $page: $blueprint-grid-columns
       $inside: $not-right-sidebar - 1
       +nesting-box($not-right-sidebar, $inside)
       +last
+      +append-bottom(10px)
       $image: 6
       $main: $inside - $image
       #header-main
         +column($main)
-        $pad: 1
-        $left: 3
-        $right: 5
-        #header-left-button
-          +prepend($pad)
-          +column($left)
-        #header-right-button
-          +column($right)
-          +append($main - $pad - $left - $right)
-          +last
       #header-image
         +column($image)
         +last
-      +append-bottom(10px)
     #left-sidebar
       +nesting-box($left-sidebar)
     #center
@@ -49,14 +39,14 @@ $page: $blueprint-grid-columns
       nav
         +column($center)
         +last
+        +append-bottom(10px)
         $left: 3
         $right: 4
         #left-nav
           +column($left)
-          +colborder
         #right-nav
           +column($right)
-          +append($center - $left - 1 - $right)
+          +append($center - $left - $right)
           +last
       #content
         +column($center)

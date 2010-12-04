@@ -12,6 +12,10 @@
 
 {% block content %}
   {% load uni_form_tags %}
+  <hr />
+  <header id="create-header">
+    <h1>Create a list</h1>
+  </header>
   <section>
     <form action="/lists/create/" method="POST" class="uniForm" id="list-form">
       {% csrf_token %}
