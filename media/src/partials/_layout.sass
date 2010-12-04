@@ -15,7 +15,7 @@ $page: $blueprint-grid-columns
   $left-sidebar: $sidebar
   $right-sidebar: $sidebar
   $not-right-sidebar: $page - $right-sidebar
-  $content: $not-right-sidebar - $left-sidebar
+  $center: $not-right-sidebar - $left-sidebar
   #not-right-sidebar
     +column($not-right-sidebar)
     #site-header
@@ -42,12 +42,12 @@ $page: $blueprint-grid-columns
       +append-bottom(10px)
     #left-sidebar
       +nesting-box($left-sidebar)
-    #content
-      +column($content)
+    #center
+      +column($center)
       +last
       +append-bottom(1000px)
       nav
-        +column($content)
+        +column($center)
         +last
         $left: 3
         $right: 4
@@ -56,11 +56,14 @@ $page: $blueprint-grid-columns
           +colborder
         #right-nav
           +column($right)
-          +append($content - $left - 1 - $right)
+          +append($center - $left - 1 - $right)
           +last
+      #content
+        +column($center)
+        +last
       .entry
-        $inside = $content - 1
-        +nesting-box($content, $inside)
+        $inside = $center - 1
+        +nesting-box($center, $inside)
         +last
         $stars-form: 4
         .stars-form
@@ -69,7 +72,7 @@ $page: $blueprint-grid-columns
           +column($inside - $stars-form)
           +last
       .comment
-        +nesting-box($content)
+        +nesting-box($center)
         +last
   #right-sidebar
     +nesting-box($right-sidebar)

@@ -47,7 +47,7 @@
               </div>
             {% endfor %}
           </section>
-          <section id="content">
+          <section id="center">
             <nav>
               <div id="left-nav">
                 <div id="go-home-w" style="width: 101px">
@@ -60,8 +60,10 @@
                 </div>
               </div>
             </nav>
-            {% block content %}
-            {% endblock %}
+            <section id="content">
+              {% block content %}
+              {% endblock %}
+            </section>
           </section>
         </div>
         <section id="right-sidebar" class="sidebar">
