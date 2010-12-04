@@ -20,56 +20,51 @@ for attribute in ['REPO_ROOT', 'SITE_ROOT', 'UPSTREAM_SITE']:
 me = 'john'
 setup = _Path(__file__).parent
 
-repo_symlink = SITE_ROOT.child('repo')
-
 local_host_string = 'root@localhost'
 remote_host_string = 'root@173.230.145.81'
 
 def _run(*args, **kwargs):
     return fabric.api.run(args[0] % args[1:], pty=True, **kwargs)
 
-def confirm_site():
+def _confirm_site():
     if not confirm(SITE_CODE):
         exit()
 
 def imain():
-    confirm_site()
     '''Initialize a site that's downstream from another site'''
+    _confirm_site()
     with settings(host_string=remote_host_string):
         _run("mkdir -p %s", REPO_ROOT)
         # FIXME
         # We shouldn't be assuming the upstream site follows the srv site root convention
         _run('rsync -ahvEP --del %s %s', _Path('/srv').child(UPSTREAM_SITE).child('repo').child('*'), REPO_ROOT)
         _init(SITE_CODE, SITE_ROOT.child('repo'), SITE_ROOT, remote=True, database='sqlite3')
+        _refresh(REPO_ROOT, SITE_ROOT, True, UPSTREAM_SITE)
 
 def push():
+    '''Push changes downstream'''
+    _confirm_site()
     with settings(host_string=remote_host_string):
-        _run('rsync -ahvEP --del %s %s', _Path('/srv').child(UPSTREAM_SITE).child('repo').child('*'), REPO_ROOT)
-        _refresh(REPO_ROOT, SITE_ROOT, True)
+        _refresh(REPO_ROOT, SITE_ROOT, True, UPSTREAM_SITE)
 
 def isub(configure_apache=False):
-    confirm_site()
     '''Initialize a site that's synced to a subdomain of jm9.us'''
+    _confirm_site()
     with settings(host_string=local_host_string):
         _init(SITE_CODE, REPO_ROOT, SITE_ROOT, remote=False, database='sqlite3')
     with settings(host_string=remote_host_string):
         _run("mkdir -p %s", SITE_ROOT)
         if configure_apache:
-            _init(SITE_CODE, repo_symlink, SITE_ROOT, remote=True, database='sqlite3', conf='synced.conf')
+            _init(SITE_CODE, REPO_ROOT, SITE_ROOT, remote=True, database='sqlite3', conf='synced.conf')
         else:
-            _init(SITE_CODE, repo_symlink, SITE_ROOT, remote=True, database='sqlite3')
+            _init(SITE_CODE, REPO_ROOT, SITE_ROOT, remote=True, database='sqlite3')
 
-def prf():
+def rf():
     '''Refresh pypi dependencies everywhere and touch remote wsgi file'''
     with settings(host_string=local_host_string):
         _refresh(REPO_ROOT, SITE_ROOT, remote=False)
     with settings(host_string=remote_host_string):
-        _refresh(repo_symlink, SITE_ROOT, remote=True)
-
-def rf():
-    '''Touch remote wsgi file'''
-    with settings(host_string=remote_host_string):
-        _run("touch %s", repo_symlink.child('setup').child('django.wsgi'))
+        _refresh(REPO_ROOT, SITE_ROOT, remote=True)
 
 def _init(site_code, repo_root, site_root, remote, database, conf=None):
     msgs = []
@@ -102,16 +97,27 @@ def _init(site_code, repo_root, site_root, remote, database, conf=None):
                 '# restart apache',
                 'sudo /etc/init.d/apache2 graceful',
             ])
-    _refresh(repo_root, site_root, remote=False)
     for msg in msgs:
         print(msg)
 
-def _refresh(repo_root, site_root, remote):
+def _refresh(repo_root, site_root, remote, upstream_site, ikflush=False):
+    # FIXME
+    # We shouldn't be assuming the site uses sqlite3 as its database
+    _run('cp %s "%s"', site_root.child('db').child('db.sqlite3'), site_root.child('db').child('db-`date`.sqlite3'))
+    if upstream_site:
+        # FIXME
+        # We shouldn't be assuming the upstream site follows the srv site root convention
+        _run('rsync -ahvEP --del %s %s', _Path('/srv').child(upstream_site).child('repo').child('*'), repo_root)
+    manage = site_root.child('bin').child('python') + ' ' + repo_root.child('manage.py')
+    _run('%s syncdb', manage)
+    for app in ['djangoratings', 'lists', 'oembed']:
+        _run('%s migrate %s', manage, app)
+    if ikflush:
+        _run('%s ikflush lists', manage)
     reqfile = repo_root.child('setup').child('pypi-requirements.txt')
     pip = site_root.child('bin').child('pip')
     _run("%s install -E %s -r %s", pip, site_root, reqfile)
     _run("%s freeze -E %s > %s", pip, site_root, reqfile)
     _run("chown -R %s:%s %s", me, me, site_root)
-    _run("chmod a+w %s", site_root.child('*.log'))
     if remote:
         _run("touch %s", repo_root.child('setup').child('django.wsgi'))
