@@ -26,30 +26,36 @@ remote_host_string = 'root@173.230.145.81'
 def _run(*args, **kwargs):
     return fabric.api.run(args[0] % args[1:], pty=True, **kwargs)
 
-def _confirm_site():
-    if not confirm(SITE_CODE):
+def _confirm_site(suffix):
+    if not SITE_CODE.endswith(suffix) and not confirm(SITE_CODE + " doesn't look quite right"):
         exit()
 
 def imain():
     '''Initialize a site that's downstream from another site'''
-    _confirm_site()
+    _confirm_site('prod')
     with settings(host_string=remote_host_string):
         _run("mkdir -p %s", REPO_ROOT)
         # FIXME
         # We shouldn't be assuming the upstream site follows the srv site root convention
         _run('rsync -ahvEP --del %s %s', _Path('/srv').child(UPSTREAM_SITE).child('repo').child('*'), REPO_ROOT)
         _init(SITE_CODE, SITE_ROOT.child('repo'), SITE_ROOT, remote=True, database='sqlite3')
-        _refresh(REPO_ROOT, SITE_ROOT, True, UPSTREAM_SITE)
+        _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, True)
 
 def push():
     '''Push changes downstream'''
-    _confirm_site()
+    _confirm_site('prod')
     with settings(host_string=remote_host_string):
-        _refresh(REPO_ROOT, SITE_ROOT, True, UPSTREAM_SITE)
+        _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, True)
+
+def fpush():
+    '''Push changes downstream and flush the image cache'''
+    _confirm_site('prod')
+    with settings(host_string=remote_host_string):
+        _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, True, ikflush=True)
 
 def isub(configure_apache=False):
     '''Initialize a site that's synced to a subdomain of jm9.us'''
-    _confirm_site()
+    _confirm_site('dev')
     with settings(host_string=local_host_string):
         _init(SITE_CODE, REPO_ROOT, SITE_ROOT, remote=False, database='sqlite3')
     with settings(host_string=remote_host_string):
@@ -61,18 +67,20 @@ def isub(configure_apache=False):
 
 def rf():
     '''Refresh pypi dependencies everywhere and touch remote wsgi file'''
+    _confirm_site('dev')
     with settings(host_string=local_host_string):
-        _refresh(REPO_ROOT, SITE_ROOT, remote=False)
+        _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, remote=False, ikflush=True)
     with settings(host_string=remote_host_string):
-        _refresh(REPO_ROOT, SITE_ROOT, remote=True)
+        _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, remote=True, ikflush=True)
 
 def _init(site_code, repo_root, site_root, remote, database, conf=None):
     msgs = []
     _run("virtualenv --no-site-packages %s", site_root)
+    _run("mkdir -p %s", site_root.child('media'))
     with settings(warn_only=True):
-        _run("ln -s %s %s", repo_root, site_root.child('repo'))
+        _run("ln -s %s %s", '../lib/python2.6/site-packages/django/contrib/admin/media', site_root.child('media').child('admin'))
+        _run("ln -s %s %s", repo_root.child('media'), site_root.child('media').child('repo'))
     _run("chmod +x %s", repo_root.child('manage.py'))
-    _run("mkdir -p %s", site_root.child('media').child('public'))
     if database == 'sqlite3':
         _run("mkdir -p %s", site_root.child('db'))
         _run("touch %s", site_root.child('db').child('db.sqlite3'))
@@ -100,7 +108,7 @@ def _init(site_code, repo_root, site_root, remote, database, conf=None):
     for msg in msgs:
         print(msg)
 
-def _refresh(repo_root, site_root, remote, upstream_site, ikflush=False):
+def _refresh(repo_root, site_root, upstream_site, remote, ikflush=False):
     # FIXME
     # We shouldn't be assuming the site uses sqlite3 as its database
     _run('cp %s "%s"', site_root.child('db').child('db.sqlite3'), site_root.child('db').child('db-`date`.sqlite3'))

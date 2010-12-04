@@ -1,4 +1,5 @@
 from unipath import Path
+import os
 
 me = 'john'
 
@@ -22,3 +23,8 @@ DATABASES = {
 }
 
 CACHE_BACKEND = 'dummy://'
+
+if os.path.exists('/home/john/.cli-only'):
+    MEDIA_URL = '/media/repo'
+else:
+    MEDIA_URL = 'http://127.0.0.1:8888/media/repo'

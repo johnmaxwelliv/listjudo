@@ -56,18 +56,14 @@ MEDIA_ROOT = SITE_ROOT.child('media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://127.0.0.1:8888/media'
 # MEDIA_URL = '/media'
 
 DJANGO_STATIC = False
-DJANGO_STATIC_MEDIA_URL = '/media'
-DJANGO_STATIC_SAVE_PREFIX = MEDIA_ROOT.child('public').child('build')
-DJANGO_STATIC_NAME_PREFIX = '/public/build'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/public/admin/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '*n+f1*pji*)2qh@%&1k))&7mp14qx&*l&$onr$&_za!)(mx6-b'
