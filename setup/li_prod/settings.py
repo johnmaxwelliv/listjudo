@@ -1,5 +1,6 @@
 from unipath import Path
 
+SITE_ID = 2
 _SITE_CODE = 'li_prod'
 UPSTREAM_SITE = 'li_dev'
 SITE_ROOT = Path('/srv').child(_SITE_CODE)

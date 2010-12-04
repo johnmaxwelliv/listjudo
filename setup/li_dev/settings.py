@@ -3,6 +3,7 @@ import os
 
 me = 'john'
 
+SITE_ID = 1
 _SITE_CODE = 'li_dev'
 UPSTREAM_SITE = None
 SITE_ROOT = Path('/srv').child(_SITE_CODE)

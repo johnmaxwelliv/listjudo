@@ -127,5 +127,7 @@ def _refresh(repo_root, site_root, upstream_site, remote, ikflush=False):
     _run("%s install -E %s -r %s", pip, site_root, reqfile)
     _run("%s freeze -E %s > %s", pip, site_root, reqfile)
     _run("chown -R %s:%s %s", me, me, site_root)
+    _run("chmod -R a+w %s", site_root.child('uploads'))
+    _run("chmod -R a+w %s", site_root.child('entryimage-v1'))
     if remote:
         _run("touch %s", repo_root.child('setup').child('django.wsgi'))
