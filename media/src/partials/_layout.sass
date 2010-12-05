@@ -46,13 +46,18 @@ $page: $blueprint-grid-columns
     #center
       +column($center)
       +last
-      +append-bottom(1000px)
+      +append-bottom(500px)
       +split('nav', $center, '#left-nav', 3, '#right-nav', 4)
       nav
         +append-bottom(10px)
       #content
         +column($center)
         +last
+      .main-list
+        +nesting-box($center, $center - 1, 2px)
+        padding:
+          top: 0px
+          bottom: 0px
       .entry
         $inside = $center - 1
         +nesting-box($center, $inside)

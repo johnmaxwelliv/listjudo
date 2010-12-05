@@ -1,5 +1,5 @@
 {% if list.image %}
-  <p>
+  <div class="teaser-image" style="width: {% if main %}{{ list.image.mainthumbnail.width }}{% endif %}{% if sidebar %}{{ list.image.sidebarthumbnail.width }}{% endif %}px">
     <a href="/lists/{{ list.id }}/">
       {% if main %}
         <img src="{{ list.image.mainthumbnail.url }}" width="{{ list.image.mainthumbnail.width }}" height="{{ list.image.mainthumbnail.height }}" alt="{{ list.image.name }}" />
@@ -8,7 +8,9 @@
         <img src="{{ list.image.sidebarthumbnail.url }}" width="{{ list.image.sidebarthumbnail.width }}" height="{{ list.image.sidebarthumbnail.height }}" alt="{{ list.image.name }}" />
       {% endif %}
     </a>
-  </p>
+  </div>
 {% endif %}
-<p><a href="/lists/{{ list.id }}/">{{ list.title }}</a></p>
+<p>
+  <a href="/lists/{{ list.id }}/">{{ list.title }}</a>
+</p>
 <hr />

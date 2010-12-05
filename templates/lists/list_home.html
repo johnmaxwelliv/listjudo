@@ -4,9 +4,11 @@
   <header id="main-header">
     <h1>{{ main_header }}</h1>
   </header>
-  {% for list in main_showcase %}
-    <div class="main-list">
-      {{ list.main_teaser }}
-    </div>
-  {% endfor %}
+  <div id="main-showcase">
+    {% for list in main_showcase %}
+      <div class="main-list">
+        {{ list.main_teaser }}
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
