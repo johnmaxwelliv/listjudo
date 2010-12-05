@@ -38,10 +38,19 @@
       {% csrf_token %}
       <fieldset class="inlineLabels">
         {{ entry_form|as_uni_form }}
-        <div class="form_block">
-          <button type="submit" id="submit-entry">ok!</button><button type="button" id="cancel-add-entry">cancel</button>
-        </div>
       </fieldset>
+      <section class="controls">
+        <div id="entry-form-left-control-w">
+          <div id="submit-entry-w" style="width: 76px">
+            <button type="submit" id="submit-entry">ok!</button>
+          </div>
+        </div>
+        <div id="entry-form-right-control-w">
+          <div id="cancel-add-entry-w" style="width: 111px">
+            <button type="button" id="cancel-add-entry">cancel</button>
+          </div>
+        </div>
+      </section>
     </form>
   </section>
 

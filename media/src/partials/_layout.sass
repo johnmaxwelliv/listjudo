@@ -8,6 +8,17 @@ $page: $blueprint-grid-columns
   padding: ($total-width - $nested-width - (2 * $border-width)) / 2
   width: $nested-width
 
+=split($main, $main-size, $left, $left-size, $right, $right-size)
+  #{$main}
+    +column($main-size)
+    +last
+    #{$left}
+      +column($left-size)
+    #{$right}
+      +column($right-size)
+      +append($main-size - $left-size - $right-size)
+      +last
+
 #page
   +container
   //+showgrid
@@ -36,18 +47,9 @@ $page: $blueprint-grid-columns
       +column($center)
       +last
       +append-bottom(1000px)
+      +split('nav', $center, '#left-nav', 3, '#right-nav', 4)
       nav
-        +column($center)
-        +last
         +append-bottom(10px)
-        $left: 3
-        $right: 4
-        #left-nav
-          +column($left)
-        #right-nav
-          +column($right)
-          +append($center - $left - $right)
-          +last
       #content
         +column($center)
         +last
@@ -61,6 +63,7 @@ $page: $blueprint-grid-columns
         .entry-info
           +column($inside - $stars-form)
           +last
+      +split('#entry-form-w', $center, '#entry-form-left-control-w', $center / 2, '#entry-form-right-control-w', $center / 2)
       .comment
         +nesting-box($center)
         +last
