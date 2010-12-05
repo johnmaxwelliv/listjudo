@@ -67,6 +67,7 @@ $page: $blueprint-grid-columns
       .comment
         +nesting-box($center)
         +last
+      +split('#comment-form-w', $center, '#comment-form-left-control-w', $center / 2, '#comment-form-right-control-w', $center / 2)
   #right-sidebar
     +nesting-box($right-sidebar)
     +last

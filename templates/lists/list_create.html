@@ -21,10 +21,12 @@
       {% csrf_token %}
       <fieldset class="inlineLabels">
         {{ form|as_uni_form }}
-        <div class="form_block">
-          <button type="submit" id="create-list">create it!</button>
-        </div>
       </fieldset>
+      <section class="controls">
+        <div class="button-w" style="width: 133px">
+          <button type="button" id="create-list">create it!</button>
+        </div>
+      </section>
     </form>
   </section>
 

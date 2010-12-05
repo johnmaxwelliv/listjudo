@@ -29,7 +29,7 @@
     </section>
   </article>
 
-  <div id="add-entry-w" style="width: 270px">
+  <div id="add-entry-w" class="button-w" style="width: 270px">
     <button type="button" id="add-entry">add an item to this list</button>
   </div>
 
@@ -41,12 +41,12 @@
       </fieldset>
       <section class="controls">
         <div id="entry-form-left-control-w">
-          <div id="submit-entry-w" style="width: 76px">
+          <div class="button-w" style="width: 76px">
             <button type="submit" id="submit-entry">ok!</button>
           </div>
         </div>
         <div id="entry-form-right-control-w">
-          <div id="cancel-add-entry-w" style="width: 111px">
+          <div class="button-w" style="width: 111px">
             <button type="button" id="cancel-add-entry">cancel</button>
           </div>
         </div>
@@ -63,18 +63,27 @@
         {% comment_html comment %}
       {% endfor %}
     </section>
-    <div id="add-comment-w" style="width: 217px">
+    <div id="add-comment-w" class="button-w" style="width: 217px">
       <button type="button" id="add-comment">leave a comment</button>
     </div>
-    <section>
+    <section id="comment-form-w">
       <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
         {% csrf_token %}
         <fieldset class="inlineLabels">
           {{ comment_form|as_uni_form }}
-          <div class="form_block">
-            <button type="submit" id="submit-comment">ok!</button><button type="button" id="cancel-add-comment">cancel</button>
-          </div>
         </fieldset>
+        <section class="controls">
+          <div id="comment-form-left-control-w">
+            <div class="button-w" style="width: 76px">
+              <button type="submit" id="submit-comment">ok!</button>
+            </div>
+          </div>
+          <div id="comment-form-right-control-w">
+            <div class="button-w" style="width: 111px">
+              <button type="button" id="cancel-add-comment">cancel</button>
+            </div>
+          </div>
+        </section>
       </form>
     </section>
   </section>
