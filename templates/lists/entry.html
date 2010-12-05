@@ -10,7 +10,7 @@
     {% if entry.embeds_oembed %}
       {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #}
       {# Native youtube videos appear to have dimensions of 640x360 #}
-      {{ entry.embed_url|oembed:"600x600" }}
+      {{ entry.embed_url|oembed:"510x765" }}
     {% endif %}
     {% if entry.embeds_image %}
       <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />

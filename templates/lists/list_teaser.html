@@ -1,3 +1,14 @@
-<p><a href="/lists/{{ list.id }}/"><img src="{{ list.image.thumbnail.url }}" width="{{ list.image.thumbnail.width }}" height="{{ list.image.thumbnail.height }}" alt="{{ list.image.name }}" /></a></p>
+{% if list.image %}
+  <p>
+    <a href="/lists/{{ list.id }}/">
+      {% if main %}
+        <img src="{{ list.image.mainthumbnail.url }}" width="{{ list.image.mainthumbnail.width }}" height="{{ list.image.mainthumbnail.height }}" alt="{{ list.image.name }}" />
+      {% endif %}
+      {% if sidebar %}
+        <img src="{{ list.image.sidebarthumbnail.url }}" width="{{ list.image.sidebarthumbnail.width }}" height="{{ list.image.sidebarthumbnail.height }}" alt="{{ list.image.name }}" />
+      {% endif %}
+    </a>
+  </p>
+{% endif %}
 <p><a href="/lists/{{ list.id }}/">{{ list.title }}</a></p>
 <hr />

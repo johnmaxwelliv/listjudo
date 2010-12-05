@@ -70,12 +70,17 @@ class List(UGC):
 
     def __unicode__(self):
         return self.title
-    def html(self):
+    def _teaser(self, teaser_type):
         t = loader.get_template('lists/list_teaser.html')
         c = Context({
             'list': self,
+            teaser_type: True,
         })
         return t.render(c)
+    def main_teaser(self):
+        return self._teaser('main')
+    def sidebar_teaser(self):
+        return self._teaser('sidebar')
 
 class Entry(UGC):
     title = models.CharField(max_length=200)
