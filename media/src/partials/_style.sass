@@ -89,6 +89,13 @@ nav
   hr
     height: 2px
 
+#add-entry-w, #entry-form-w
+  +append-bottom(10px)
+
+#entry-comment-barrier
+  hr
+    height: 2px
+
 #main-header
   h1
     +bp-h2
@@ -99,22 +106,35 @@ nav
     +bp-h2
     +standard-header
 
+#list-header
+  +append-bottom(10px)
+  h1
+    +bp-h1
+    text-align: center
+  .info
+    text-align: right
+
+article
+  #entries, #comments
+    hr
+      +colspacer
+
 #comments-header
   h1
-    +bp-h3
+    +bp-h2
     +standard-header
-
-#entries, #comments
-  hr
-    +colspacer
 
 .entry
   +box-candy(90deg, 10px)
   .entry-header
     h1
-      text-transform: none
+      +bp-h2
+      text-align: center
+  .embed-w
+    +center
   .entry-info
     text-align: right
+    line-height: 1.15
 
 .comment
   +box-candy(180deg, 10px)

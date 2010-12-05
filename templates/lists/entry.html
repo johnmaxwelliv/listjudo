@@ -8,12 +8,16 @@
   </header>
   <section class="entry-embed">
     {% if entry.embeds_oembed %}
-      {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #}
-      {# Native youtube videos appear to have dimensions of 640x360 #}
-      {{ entry.embed_url|oembed:"510x765" }}
+      <div class="embed-w" style="width: 510px">
+        {# Modify the following line to change embedded video dimensions to WIDTHxHEIGHT #}
+        {# Native youtube videos appear to have dimensions of 640x360 #}
+        {{ entry.embed_url|oembed:"510x765" }}
+      </div>
     {% endif %}
     {% if entry.embeds_image %}
-      <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />
+      <div class="embed-w" style="width: {{ entry.image.display.width }}px">
+        <img src="{{ entry.image.display.url }}" width="{{ entry.image.display.width }}" height="{{ entry.image.display.height }}" alt="{{ entry.image.name }}" />
+      </div>
     {% endif %}
   </section>
   <section class="entry-description">

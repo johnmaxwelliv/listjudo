@@ -22,6 +22,7 @@
       {{ list.description|striptags|urlize|linebreaks }}
       <section class="info">Created by <span class="nickname">{{ list.nickname }}</span> on {{ list.created }}</section>
     </header>
+
     <section id="entries">
       {% for entry in entries %}
         {% entry_html entry %}
@@ -53,6 +54,10 @@
       </section>
     </form>
   </section>
+
+  <div id="entry-comment-barrier">
+    <hr />
+  </div>
 
   <section>
     <header id="comments-header">

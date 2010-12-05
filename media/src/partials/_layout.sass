@@ -54,7 +54,12 @@ $page: $blueprint-grid-columns
         +column($center)
         +last
       .main-list
-        +nesting-box($center, $center - 1, 2px)
+        +nesting-box($center, $center - 1, 0px)
+        padding:
+          top: 0px
+          bottom: 0px
+      #list-header
+        +nesting-box($center, $center - 1, 0px)
         padding:
           top: 0px
           bottom: 0px
