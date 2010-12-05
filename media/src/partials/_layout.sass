@@ -74,10 +74,20 @@ $page: $blueprint-grid-columns
           +column($inside - $stars-form)
           +last
       +split('#entry-form-w', $center, '#entry-form-left-control-w', $center / 2, '#entry-form-right-control-w', $center / 2)
+      #entry-comment-barrier
+        +nesting-box($center, $center - 1, 0px)
+        padding:
+          top: 0
+          bottom: 0
       .comment
         +nesting-box($center)
         +last
       +split('#comment-form-w', $center, '#comment-form-left-control-w', $center / 2, '#comment-form-right-control-w', $center / 2)
+      #admin
+        +nesting-box($center, $center - 1, 0px)
+        padding:
+          top: 0
+          bottom: 0
   #right-sidebar
     +nesting-box($right-sidebar)
     +last

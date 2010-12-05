@@ -87,13 +87,15 @@ nav
 
 #main-showcase
   hr
+    +colruler
     height: 2px
 
-#add-entry-w, #entry-form-w
+#add-entry-w, #entry-form-w, #add-comment-w, #comment-form-w
   +append-bottom(10px)
 
 #entry-comment-barrier
   hr
+    +colruler
     height: 2px
 
 #main-header
@@ -144,10 +146,16 @@ article
 #admin
   hr
     +colruler
-    +prepend-top(10px)
+    height: 2px
+  #textarea-w
+    +center
+
+#publish
+  +append-bottom(10px)
 
 hgroup.share
   text-transform: lowercase
+  text-align: center
   h1
     +bp-h3
   h2

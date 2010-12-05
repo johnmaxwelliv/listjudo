@@ -100,25 +100,25 @@
         <hgroup class="share">
           <h1>Ready to share your list with the world?</h1>
         </hgroup>
-        <hr />
-        <section>
-          <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" class="uniForm" id="publish-form">
+        <section id="publish">
+          <form action="/lists/{{ list.id }}/{{ list.access_code }}/publish/" method="POST" id="publish-form">
             {% csrf_token %}
             <input type="hidden" name="admin_code" value="{{ list.admin_code }}" />
-            <fieldset class="inlineLabels">
-              <div class="form_block">
+              <div class="button-w" style="width: 146px">
                 <button type="submit">publish it!</button>
               </div>
-            </fieldset>
           </form>
         </section>
+        <hr />
         <section>
           <hgroup class="share">
             <h1>Just want to share your list with a few friends?</h1>
             <h2>Give them this URL:</h2>
           </hgroup>
           <form>
-            <textarea>{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
+            <div id="textarea-w" style="width: 374px">
+              <textarea cols="50" rows="2">{{ request.META.HTTP_HOST }}{% url unpublished_access list.id list.access_code %}</textarea>
+            </div>
           </form>
         </section>
       </section>
