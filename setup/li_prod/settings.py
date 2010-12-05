@@ -22,4 +22,4 @@ DATABASES = {
 
 CACHE_BACKEND = 'dummy://'
 
-MEDIA_URL = '/media/repo'
+MEDIA_URL = '/media/'

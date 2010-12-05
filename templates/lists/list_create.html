@@ -6,8 +6,8 @@
 
 {% block extra_head %}
   {{ block.super }}
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/lib/uni_form/uni-form.css" />
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/lib/uni_form/default.uni-form.css" />
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}repo/lib/uni_form/uni-form.css" />
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}repo/lib/uni_form/default.uni-form.css" />
 {% endblock %}
 
 {% block content %}
@@ -33,9 +33,9 @@
   {% load jquery_validation %}
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   {% slimall %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/uni_form/uni-form.jquery.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-ajax-validation.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/lib/jquery-uni-form.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}repo/lib/uni_form/uni-form.jquery.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}repo/lib/jquery-ajax-validation.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}repo/lib/jquery-uni-form.js"></script>
   {% endslimall %}
   <script type="text/javascript">
     $(function () {

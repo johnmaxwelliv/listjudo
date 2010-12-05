@@ -26,6 +26,6 @@ DATABASES = {
 CACHE_BACKEND = 'dummy://'
 
 if os.path.exists('/home/john/.cli-only'):
-    MEDIA_URL = '/media/repo'
+    MEDIA_URL = '/media/'
 else:
-    MEDIA_URL = 'http://127.0.0.1:8888/media/repo'
+    MEDIA_URL = 'http://127.0.0.1:8888/media/'
