@@ -23,18 +23,24 @@ class ResizeDisplay(processors.Resize):
     upscale = False
 
 # now lets create an adjustment processor to enhance the image at small sizes
-class EnhanceThumb(processors.Adjustment):
+class EnhanceSidebarThumb(processors.Adjustment):
     contrast = 1.2
     sharpness = 1.1
+
+class BlurMainThumb(processors.Adjustment):
+    brightness = 1.2 # 4.0
+    color = 1.5 # 4.0
+    contrast = 1.0 # 0.5
+    sharpness = 0.5 # 0.5
 
 # now we can define our thumbnail spec
 class SidebarThumbnail(ImageSpec):
     pre_cache = True
-    processors = [ResizeSidebarThumb, EnhanceThumb]
+    processors = [ResizeSidebarThumb, EnhanceSidebarThumb]
 
 class MainThumbnail(ImageSpec):
     pre_cache = True
-    processors = [ResizeMainThumb, EnhanceThumb]
+    processors = [ResizeMainThumb, BlurMainThumb]
 
 # and our display spec
 class Display(ImageSpec):
