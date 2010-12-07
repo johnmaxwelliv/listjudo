@@ -20,7 +20,7 @@
     <header id="list-header">
       <h1>{{ list.title|striptags }}</h1>
       {{ list.description|striptags|urlize|linebreaks }}
-      <section class="info">Created by <span class="nickname">{{ list.nickname }}</span> on {{ list.created }}</section>
+      <section class="info">Created by <span class="nickname">{{ list.nickname }}</span>{# on {{ list.created }} #}</section>
     </header>
 
     <section id="entries">
