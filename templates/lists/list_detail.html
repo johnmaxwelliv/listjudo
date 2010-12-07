@@ -5,7 +5,7 @@
 {% load ratings %}
 {% load uni_form_tags %}
 
-{% block title %}{{ list.title }}&nbsp;::&nbsp;{{ block.super }}{% endblock %}
+{% block title %}{{ block.super }}&nbsp;::&nbsp;{{ list.title }}{% endblock %}
 {% block description %}{{ list.description|striptags }}{% endblock %}
 
 {% block extra_head %}
