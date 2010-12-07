@@ -7,10 +7,12 @@ $red = lighten(#ff3333, 25%)
 //favorites: 75deg, 60deg, 90deg, 180deg
 $entry-c = adjust-hue($red, 60deg)
 //$entry-c is #ffffb3
-$header-c = adjust-hue($entry-c, 90deg)
-$sidebar-c = adjust-hue($entry-c, 30deg)
-$comment-c = adjust-hue($entry-c, -45deg)
-$button-c = adjust-hue($entry-c, -45deg)
+//old $header-c = #9ECCCC
+$header-c = #C6E0C6
+//old $sidebar-c = #BEE39F
+$sidebar-c = #D6EEA7
+$comment-c = $entry-c
+$button-c = #E4A0B5
 $boundary: #111111
 
 =box-candy($color, $corner-radius)
