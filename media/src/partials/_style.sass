@@ -3,13 +3,20 @@
 @import bp-typography-extracts
 @import blueprint/fancy-type
 
-$red: lighten(#ff3333, 25%)
+$red = lighten(#ff3333, 25%)
+//favorites: 75deg, 60deg, 90deg, 180deg
+$entry-c = adjust-hue($red, 60deg)
+//$entry-c is #ffffb3
+$header-c = adjust-hue($entry-c, 90deg)
+$sidebar-c = adjust-hue($entry-c, 30deg)
+$comment-c = adjust-hue($entry-c, -45deg)
+$button-c = adjust-hue($entry-c, -45deg)
 $boundary: #111111
 
-=box-candy($color-degrees, $corner-radius)
+=box-candy($color, $corner-radius)
   +border-radius($corner-radius)
   +box-shadow
-  background-color: adjust-hue($red, $color-degrees)
+  background-color: $color
   border:
     style: solid
     color: $boundary
@@ -31,7 +38,7 @@ $boundary: #111111
     right: auto
 
 #site-header
-  +box-candy(-90deg, 30px)
+  +box-candy($header-c, 30px)
   hgroup
     h1
       font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
@@ -72,7 +79,7 @@ nav
     +standard-header
 
 #left-sidebar, #right-sidebar
-  +box-candy(30deg, 10px)
+  +box-candy($sidebar-c, 10px)
   hr
     +colruler($boundary)
     height: 1px
@@ -127,7 +134,7 @@ article
     +standard-header
 
 .entry
-  +box-candy(90deg, 10px)
+  +box-candy($entry-c, 10px)
   .entry-header
     h1
       +bp-h2
@@ -139,7 +146,7 @@ article
     line-height: 1.15
 
 .comment
-  +box-candy(180deg, 10px)
+  +box-candy($comment-c, 10px)
   .comment-info
     text-align: right
 
