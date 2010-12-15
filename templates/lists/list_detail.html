@@ -21,6 +21,9 @@
       <h1>{{ list.title|striptags }}</h1>
       {{ list.description|striptags|urlize|linebreaks }}
       <section class="info">Created by <span class="nickname">{{ list.nickname }}</span>{# on {{ list.created }} #}</section>
+      <div class="sharethis">
+        <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
+      </div>
     </header>
 
     <section id="entries">
@@ -28,6 +31,9 @@
         {% entry_html entry %}
       {% endfor %}
     </section>
+    <div class="sharethis">
+      <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
+    </div>
   </article>
 
   <div id="add-entry-w" class="button-w" style="width: 270px">
@@ -162,4 +168,5 @@
       });
     });
   </script>
+  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'69b2a41e-8e2e-444e-9d3c-2fa3073c5c36'});</script>
 {% endblock %}
