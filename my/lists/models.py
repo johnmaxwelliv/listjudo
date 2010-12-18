@@ -50,8 +50,7 @@ class UserAction(models.Model):
 
 class UGC(UserAction):
     '''UGC is an acronym for "User-Generated Content"'''
-    nickname = models.CharField('your nickname', max_length=20)
-    email = models.EmailField("your email (won't be shared)")
+    nickname = models.CharField('your nickname', max_length=20, default='Anonymous')
     censored = models.BooleanField(default=False)
 
 alphanumbers = '1234567890qwertyuiopasdfghjklzxcvbnm'
@@ -59,8 +58,8 @@ def generate_secret_id(n):
     return ''.join([random.choice(alphanumbers) for i in range(n)])
 
 class List(UGC):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    title = models.CharField('List title', max_length=200)
+    description = models.TextField('List description', blank=True)
     published = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
     access_code = models.CharField(default=generate_secret_id(8), max_length=8, editable=False)
@@ -83,8 +82,8 @@ class List(UGC):
         return self._teaser('sidebar')
 
 class Entry(UGC):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    title = models.CharField('Item name', max_length=200)
+    description = models.TextField('Description', blank=True)
     list = models.ForeignKey(List)
     rating = RatingField(range=5, weight=5, can_change_vote=True, allow_anonymous=True)
     embed_url = models.URLField('Image/Video URL', verify_exists=True, blank=True, null=True,
@@ -156,7 +155,7 @@ class EntryImage(ImageModel):
         save_count_as = 'num_views'
 
 class ListComment(UGC):
-    body = models.TextField()
+    body = models.TextField('Your comment')
     list = models.ForeignKey(List)
 
     def __unicode__(self):
