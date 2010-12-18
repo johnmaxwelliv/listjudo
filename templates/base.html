@@ -14,6 +14,16 @@
       {% endblock %}
     {% endslimall %}
     <meta name="google-site-verification" content="" />
+    <script>
+      var _gaq = [['_setAccount', 'UA-15654273-2'], ['_trackPageview']];
+      (function(d, t) {
+      var g = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+      g.async = true;
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+      })(document, 'script');
+    </script>
     <!--[if IE]>
       <link rel="stylesheet" href="{{ MEDIA_URL }}repo/lib/html5reset/_/css/_patches/win-ie-all.css" />
     <![endif]-->
@@ -29,18 +39,6 @@
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!-- this is a variation of the official analytics snippet: http://mathiasbynens.be/notes/async-analytics-snippet
-       replace XXXXXX-XX with your site's ID and uncomment to put this into effect
-    <script>
-    var _gaq = [['_setAccount', 'UA-XXXXXX-XX'], ['_trackPageview']];
-    (function(d, t) {
-    var g = d.createElement(t),
-    s = d.getElementsByTagName(t)[0];
-    g.async = true;
-    g.src = '//www.google-analytics.com/ga.js';
-    s.parentNode.insertBefore(g, s);
-    })(document, 'script');
-    </script> -->
   </head>
 
   <body class="bp">
