@@ -21,9 +21,11 @@
       <h1>{{ list.title|striptags }}</h1>
       {{ list.description|striptags|urlize|linebreaks }}
       <section class="info">Created by <span class="nickname">{{ list.nickname }}</span> on {{ list.created }}</section>
-      <div class="sharethis">
-        <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
-      </div>
+      {% if entries %}
+        <div class="sharethis">
+          <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
+        </div>
+      {% endif %}
     </header>
 
     <section id="entries">
@@ -31,9 +33,6 @@
         {% entry_html entry %}
       {% endfor %}
     </section>
-    <div class="sharethis">
-      <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
-    </div>
   </article>
 
   <div id="add-entry-w" class="button-w" style="width: 270px">
@@ -59,6 +58,13 @@
         </div>
       </section>
     </form>
+  </section>
+
+  <section id="promote">
+    <h1>{% if entries %}Share this list{% else %}Share your new list{% endif %}</h1>
+    <div class="sharethis">
+      <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
+    </div>
   </section>
 
   <div id="entry-comment-barrier">

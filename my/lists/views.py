@@ -18,7 +18,7 @@ def viewable_lists():
     )
 
 def recent():
-    return viewable_lists().order_by('-modified')
+    return viewable_lists().order_by('-created')
 def most_views():
     return viewable_lists().order_by('-views')
 def most_entries():
@@ -45,7 +45,7 @@ def with_showcases(context):
 
 def index(request):
     return template(request, 'lists/list_home.html', with_showcases({
-        'main_header': 'Recently changed lists',
+        'main_header': 'Recently created lists',
         'main_showcase': recent()[:6],
     }))
 
@@ -57,9 +57,9 @@ def create(request):
             # POLISH: Optimize 'path' and 'domain' kwargs of set_cookie for minimum HTTP load
             list = form.save(commit=False)
             list.record_request(request)
+            list.published = True
             list.save()
-            result = HttpResponseRedirect('/lists/%d/%s/?admin_code=%s' % \
-                (list.id, list.access_code, list.admin_code))
+            result = HttpResponseRedirect('/lists/%d/' % list.id)
             # The following cookies weren't being set properly.
 #            result.set_cookie('nickname', value=list.nickname, max_age=157680000,
 #                expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
