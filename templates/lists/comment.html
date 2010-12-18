@@ -3,7 +3,7 @@
     {{ comment.body|striptags|urlize|linebreaks }}
   </section>
   <section class="comment-info info">
-    Left by <span class="nickname">{{ comment.nickname }}</span>{# on {{ comment.modified }} #}
+    Left by <span class="nickname">{{ comment.nickname }}</span> on {{ comment.created }}
   </section>
 </article>
 <hr />
