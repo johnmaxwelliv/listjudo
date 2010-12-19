@@ -1,7 +1,5 @@
 {% load ratings %}
-{% load cache %}
 {% load oembed_tags %}
-{% cache cache_period entry_html_1 entry.id %}
 <article id="entry-{{ entry.id }}" class="entry">
   <header class="entry-header">
     <h1>{{ entry.title }}</h1>
@@ -28,9 +26,7 @@
       <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
         <span id="entry-{{ entry.id }}-stars-wrapper">
           <select name="score" style="width: 120px">
-{% endcache %}
             {% generate_options entry.rating request %}
-{% cache cache_period entry_html_2 entry.id %}
           </select>
         </span>
       </form>
@@ -41,4 +37,3 @@
   </section>
 </article>
 <hr />
-{% endcache %}

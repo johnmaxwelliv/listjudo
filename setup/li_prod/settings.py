@@ -20,6 +20,6 @@ DATABASES = {
     }
 }
 
-CACHE_BACKEND = 'dummy://'
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 MEDIA_URL = '/media/'

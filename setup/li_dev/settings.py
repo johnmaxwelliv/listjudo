@@ -7,7 +7,7 @@ SITE_ID = 1
 _SITE_CODE = 'li_dev'
 UPSTREAM_SITE = None
 SITE_ROOT = Path('/srv').child(_SITE_CODE)
-REPO_ROOT = Path('/home').child('john').child('li')
+REPO_ROOT = Path('/home').child(me).child('li')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -25,7 +25,7 @@ DATABASES = {
 
 CACHE_BACKEND = 'dummy://'
 
-if os.path.exists('/home/john/.cli-only'):
+if os.path.exists(Path('/home').child(me).child('.cli-only')):
     MEDIA_URL = '/media/'
 else:
     MEDIA_URL = 'http://127.0.0.1:8888/media/'

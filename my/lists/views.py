@@ -192,8 +192,9 @@ def add_comment(request, object_id):
     # when 2068 rolls around.
     result.set_cookie('nickname', value=comment.nickname, max_age=157680000,
         expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
-    result.set_cookie('email', value=comment.email, max_age=157680000,
-        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
+    # We're no longer requiring the user to provide an email address
+#    result.set_cookie('email', value=comment.email, max_age=157680000,
+#        expires='Mon, 31-Dec-68 10:00:00 GMT', path='/')
     return result
 
 def publish(request, object_id, access_code):
