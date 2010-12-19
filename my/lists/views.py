@@ -38,7 +38,7 @@ def with_showcases(context):
     )
     left = random.choice(options)
     context['left_header'] = left[0]
-    context['left_showcase'] = left[1]()[:8]
+    context['left_showcase'] = left[1]()[:5]
     context['right_header'] = 'Random lists'
     context['right_showcase'] = random_lists()[:9]
     return context
