@@ -80,11 +80,15 @@ nav
     +bp-h3
     +standard-header
 
-#left-sidebar, #right-sidebar
+#left-showcase, #right-showcase
   +box-candy($sidebar-c, 10px)
   hr
     +colruler($boundary)
     height: 1px
+
+#promobox
+  +prepend-top(10px)
+  +box-candy($header-c, 10px)
 
 .main-list, .right-list, .left-list
   .teaser-image

@@ -61,16 +61,21 @@
             {% endblock %}
           </header>
 
-          <section id="left-sidebar" class="sidebar">
-            <header id="left-header">
-              <h1>{{ left_header }}</h1>
-            </header>
-            {% for list in left_showcase %}
-              <div class="left-list">
-                {{ list.sidebar_teaser }}
-              </div>
-            {% endfor %}
-          </section>
+          <div id="left-sidebar">
+            <section id="left-showcase">
+              <header id="left-header">
+                <h1>{{ left_header }}</h1>
+              </header>
+              {% for list in left_showcase %}
+                <div class="left-list">
+                  {{ list.sidebar_teaser }}
+                </div>
+              {% endfor %}
+            </section>
+            <section id="promobox">
+              <p>placeholder text</p>
+            </section>
+          </div>
           <section id="center">
             <nav>
               <div id="left-nav">
@@ -90,16 +95,18 @@
             </section>
           </section>
         </div>
-        <section id="right-sidebar" class="sidebar">
-          <header id="right-header">
-            <h1>{{ right_header }}</h1>
-          </header>
-          {% for list in right_showcase %}
-            <div class="right-list">
-              {{ list.sidebar_teaser }}
-            </div>
-          {% endfor %}
-        </section>
+        <div id="right-sidebar">
+          <section id="right-showcase">
+            <header id="right-header">
+              <h1>{{ right_header }}</h1>
+            </header>
+            {% for list in right_showcase %}
+              <div class="right-list">
+                {{ list.sidebar_teaser }}
+              </div>
+            {% endfor %}
+          </section>
+        </div>
       {% endblock %}
     </div>
     {% block scripts %}

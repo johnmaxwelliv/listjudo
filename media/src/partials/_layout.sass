@@ -42,7 +42,11 @@ $page: $blueprint-grid-columns
         +column($image)
         +last
     #left-sidebar
-      +nesting-box($left-sidebar)
+      +column($left-sidebar)
+      #left-showcase
+        +nesting-box($left-sidebar)
+      #promobox
+        +nesting-box($left-sidebar)
     #center
       +column($center)
       +last
@@ -89,5 +93,8 @@ $page: $blueprint-grid-columns
           top: 0
           bottom: 0
   #right-sidebar
-    +nesting-box($right-sidebar)
+    +column($right-sidebar)
     +last
+    #right-showcase
+      +nesting-box($right-sidebar)
+      +last
