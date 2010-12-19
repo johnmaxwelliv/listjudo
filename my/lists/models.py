@@ -50,7 +50,7 @@ class UserAction(models.Model):
 
 class UGC(UserAction):
     '''UGC is an acronym for "User-Generated Content"'''
-    nickname = models.CharField('your nickname', max_length=20, default='Anonymous')
+    nickname = models.CharField('your nickname', max_length=20, default='someone')
     censored = models.BooleanField(default=False)
 
 alphanumbers = '1234567890qwertyuiopasdfghjklzxcvbnm'
