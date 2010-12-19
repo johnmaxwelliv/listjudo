@@ -28,10 +28,7 @@ class EnhanceSidebarThumb(processors.Adjustment):
     sharpness = 1.1
 
 class BlurMainThumb(processors.Adjustment):
-    brightness = 1.2 # 4.0
-    color = 1.5 # 4.0
-    contrast = 1.0 # 0.5
-    sharpness = 0.5 # 0.5
+    sharpness = 0.5
 
 # now we can define our thumbnail spec
 class SidebarThumbnail(ImageSpec):
