@@ -3,16 +3,16 @@
 @import bp-typography-extracts
 @import blueprint/fancy-type
 
-$red = lighten(#ff3333, 25%)
+$red: lighten(#ff3333, 25%)
 //favorites: 75deg, 60deg, 90deg, 180deg
-$entry-c = adjust-hue($red, 60deg)
+$entry-c: adjust-hue($red, 60deg)
 //$entry-c is #ffffb3
 //old $header-c = #9ECCCC
-$header-c = #C9B4D5
+$header-c: #C9B4D5
 //old $sidebar-c = #BEE39F
-$sidebar-c = #E4F7BF
-$comment-c = $entry-c
-$button-c = #E6B2CF
+$sidebar-c: #E4F7BF
+$comment-c: $entry-c
+$button-c: #E6B2CF
 $boundary: #111111
 
 =box-candy($color, $corner-radius)
@@ -178,6 +178,10 @@ hgroup.share
   h1
     +bp-h3
     +standard-header
+
+#twitter
+  +loud
+  font-size: 1.1em
 
 .sharethis
   +prepend-top(10px)
