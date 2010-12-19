@@ -136,7 +136,10 @@
       </section>
     {% endif %}
   {% endif %}
+{% endblock %}
 
+{% block scripts %}
+  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'69b2a41e-8e2e-444e-9d3c-2fa3073c5c36'});</script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   {% load jquery_validation %}
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
@@ -174,5 +177,4 @@
       });
     });
   </script>
-  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'69b2a41e-8e2e-444e-9d3c-2fa3073c5c36'});</script>
 {% endblock %}
