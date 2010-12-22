@@ -1,6 +1,6 @@
 $page: $blueprint-grid-columns
 
-=nesting-box($total-cols, $nested-cols: $total-cols - 1, $border-width: 2px)
+=nesting-box($total-cols, $nested-cols: $total-cols - 1, $border-width: 1px)
   +column-base
   $total-width: $blueprint-grid-width * $total-cols + $blueprint-grid-margin * ($total-cols - 1)
   $nested-width: $blueprint-grid-width * $nested-cols + $blueprint-grid-margin * ($nested-cols - 1)
@@ -68,7 +68,7 @@ $page: $blueprint-grid-columns
           top: 0px
           bottom: 0px
       .entry
-        $inside = $center - 1
+        $inside: $center - 1
         +nesting-box($center, $inside)
         +last
         $stars-form: 4

@@ -3,25 +3,15 @@
 @import bp-typography-extracts
 @import blueprint/fancy-type
 
-$red: lighten(#ff3333, 25%)
-//favorites: 75deg, 60deg, 90deg, 180deg
-$entry-c: adjust-hue($red, 60deg)
-//$entry-c is #ffffb3
-//old $header-c = #9ECCCC
-$header-c: #C9B4D5
-//old $sidebar-c = #BEE39F
-$sidebar-c: #E4F7BF
-$comment-c: $entry-c
-$button-c: #E6B2CF
+$button-c: #FF9640
 $boundary: #111111
 
-=box-candy($color, $corner-radius)
-  +border-radius($corner-radius)
-  +box-shadow
-  background-color: $color
+=box-candy
+  +border-radius(15px)
+  background-color: #f0ffff
   border:
     style: solid
-    color: $boundary
+    color: #006363
 
 =center
   // Requires that the element's width be specified in the html document, as in
@@ -40,13 +30,13 @@ $boundary: #111111
     right: auto
 
 #site-header
-  +box-candy($header-c, 30px)
+  +box-candy
   hgroup
     h1
       font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
       font-size: 5.0em
       line-height: 1
-      margin-bottom: 0.7em
+      margin-bottom: 0.1em
 
       // "Deep Cove"
       color: #051040
@@ -55,7 +45,7 @@ $boundary: #111111
       +alt
       font-size: 2.0em
       line-height: 1
-      margin-bottom: 0em
+      margin-bottom: 0.1em
 
       //&:before
         content: "..."
@@ -81,14 +71,14 @@ nav
     +standard-header
 
 #left-showcase, #right-showcase
-  +box-candy($sidebar-c, 10px)
+  +box-candy
   hr
     +colruler($boundary)
     height: 1px
 
 #promobox
   +prepend-top(10px)
-  +box-candy($header-c, 10px)
+  +box-candy
 
 .main-list, .right-list, .left-list
   .teaser-image
@@ -140,7 +130,7 @@ article
     +standard-header
 
 .entry
-  +box-candy($entry-c, 10px)
+  +box-candy
   .entry-header
     h1
       +bp-h2
@@ -152,7 +142,7 @@ article
     line-height: 1.15
 
 .comment
-  +box-candy($comment-c, 10px)
+  +box-candy
   .comment-info
     text-align: right
 
