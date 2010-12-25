@@ -71,11 +71,14 @@ $page: $blueprint-grid-columns
         $inside: $center - 1
         +nesting-box($center, $inside)
         +last
+        $stars-label: 2
         $stars-form: 4
+        .stars-label
+          +column($stars-label)
         .stars-form
           +column($stars-form)
         .entry-info
-          +column($inside - $stars-form)
+          +column($inside - $stars-form - $stars-label)
           +last
       +split('#entry-form-w', $center, '#entry-form-left-control-w', $center / 2, '#entry-form-right-control-w', $center / 2)
       #entry-comment-barrier

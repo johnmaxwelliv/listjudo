@@ -22,6 +22,9 @@
     {{ entry.description|striptags|urlize|linebreaks }}
   </section>
   <section class="entry-meta">
+    <div class="stars-label">
+      <b>rate this:</b>
+    </div>
     <div class="stars-form">
       <form action="/rate/lists/entry/{{ entry.id }}/" id="entry-{{ entry.id }}-stars-form" method="post">
         <span id="entry-{{ entry.id }}-stars-wrapper">
