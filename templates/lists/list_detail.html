@@ -20,7 +20,7 @@
     <header id="list-header">
       <h1>{{ list.title|striptags }}</h1>
       {{ list.description|striptags|urlize|linebreaks }}
-      <section class="info">Created by <span class="nickname">{{ list.nickname }}</span> on {{ list.created.date }}</section>
+      <section class="info">Created by <span class="nickname">{{ list.nickname }}</span></section>
       {% if entries %}
         <div id="add-entry-w" class="button-w spaceme" style="width: 270px">
           <button type="button" id="add-entry">add an item to this list</button>
