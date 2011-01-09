@@ -38,10 +38,6 @@
     </section>
   </article>
 
-  <div id="add-entry-w" class="button-w" style="width: 270px">
-    <button type="button" id="add-entry">add an item to this list</button>
-  </div>
-
   <section id="entry-form-w">
     <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
       {% csrf_token %}
