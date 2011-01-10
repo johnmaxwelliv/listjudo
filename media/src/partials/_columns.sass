@@ -1,11 +1,18 @@
 $page: $blueprint-grid-columns
 
-=nesting-box($total-cols, $nested-cols: $total-cols - 1, $border-width: 1px)
+=nest-cols($total-cols, $nested-cols: $total-cols - 1, $border-width: 1px, $pad-top-bottom: true)
   +column-base
   $total-width: $blueprint-grid-width * $total-cols + $blueprint-grid-margin * ($total-cols - 1)
   $nested-width: $blueprint-grid-width * $nested-cols + $blueprint-grid-margin * ($nested-cols - 1)
   border-width: $border-width
-  padding: ($total-width - $nested-width - (2 * $border-width)) / 2
+  $padding-size: ($total-width - $nested-width - (2 * $border-width)) / 2
+  @if $pad-top-bottom
+    padding: $padding-size
+  @else
+    padding:
+      left: $padding-size
+      right: $padding-size
+  // Remember, the CSS box model considers margins and padding external to an element's width
   width: $nested-width
 
 =split($main, $main-size, $left, $left-size, $right, $right-size)
@@ -31,45 +38,49 @@ $page: $blueprint-grid-columns
     +column($not-right-sidebar)
     #site-header
       $inside: $not-right-sidebar - 1
-      +nesting-box($not-right-sidebar, $inside)
+      +nest-cols($not-right-sidebar, $inside)
       +last
-      +append-bottom(10px)
-      $image: 6
-      $main: $inside - $image
-      #header-main
-        +column($main)
-      #header-image
-        +column($image)
-        +last
     #left-sidebar
       +column($left-sidebar)
       #left-showcase
-        +nesting-box($left-sidebar)
+        +nest-cols($left-sidebar)
+        +last
       #promobox
-        +nesting-box($left-sidebar)
+        +nest-cols($left-sidebar)
+        +last
+        #mc_embed_signup
+          +column($left-sidebar - 1)
+          +last
     #center
       +column($center)
       +last
-      +append-bottom(500px)
-      +split('nav', $center, '#left-nav', 3, '#right-nav', 4)
-      nav
-        +append-bottom(10px)
+      +split('#nav', $center - 1, '#left-nav', 3, '#right-nav', 4)
+      #nav
+        +nest-cols($center, $center - 1, 0px, false)
+        +last
       #content
         +column($center)
         +last
       .main-list
-        +nesting-box($center, $center - 1, 0px)
-        padding:
-          top: 0px
-          bottom: 0px
+        +nest-cols($center, $center - 1, 0px, false)
+        +last
       #list-header
-        +nesting-box($center, $center - 1, 0px)
-        padding:
-          top: 0px
-          bottom: 0px
+        $inside: $center - 1
+        +nest-cols($center, $inside)
+        +last
+        $sharethis: 7
+        .sharethis
+          +column($sharethis)
+        .info
+          +column($inside - $sharethis)
+          +last
+      +split('#entry-form-w', $center, '#entry-form-left-control-w', $center / 2, '#entry-form-right-control-w', $center / 2)
+      .controls
+        +column($center)
+        +last
       .entry
         $inside: $center - 1
-        +nesting-box($center, $inside)
+        +nest-cols($center, $inside)
         +last
         $stars-label: 2
         $stars-form: 4
@@ -80,24 +91,16 @@ $page: $blueprint-grid-columns
         .entry-info
           +column($inside - $stars-form - $stars-label)
           +last
-      +split('#entry-form-w', $center, '#entry-form-left-control-w', $center / 2, '#entry-form-right-control-w', $center / 2)
-      #entry-comment-barrier
-        +nesting-box($center, $center - 1, 0px)
-        padding:
-          top: 0
-          bottom: 0
+      #comments-header
+        +column($center)
+        +last
       .comment
-        +nesting-box($center)
+        +nest-cols($center)
         +last
       +split('#comment-form-w', $center, '#comment-form-left-control-w', $center / 2, '#comment-form-right-control-w', $center / 2)
-      #admin
-        +nesting-box($center, $center - 1, 0px)
-        padding:
-          top: 0
-          bottom: 0
   #right-sidebar
     +column($right-sidebar)
     +last
     #right-showcase
-      +nesting-box($right-sidebar)
+      +nest-cols($right-sidebar)
       +last

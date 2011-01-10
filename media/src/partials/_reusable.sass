@@ -4,14 +4,9 @@
 button
   +fancy-button($button-c, 1.5em, 50px, 1px)
 
+// For divs that wrap buttons
 .button-w
   +center
-
-h1, h2
-  font-family: 'Trebuchet MS', sans-serif
-
-.controls
-  +prepend-top(10px)
 
 .info
   +quiet
@@ -25,7 +20,6 @@ h1, h2
 .inline
   display: inline
 
-/*- fluid images and objects ----------
-
+// Fluid images and objects
 img, object, embed
   max-width: 100%

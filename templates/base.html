@@ -47,14 +47,10 @@
         <div id="not-right-sidebar">
           <header id="site-header">
             {% block header %}
-              <div id="header-main">
-                <hgroup>
-                  <h1>ListJudo.com</h1>
-                  <h2>Interesting info of all sorts!</h2>
-                </hgroup>
-              </div>
-              <div id="header-image">
-              </div>
+              <hgroup>
+                <h1>ListJudo.com</h1>
+                <h2>Interesting info of all sorts!</h2>
+              </hgroup>
             {% endblock %}
           </header>
 
@@ -218,7 +214,7 @@
             </section>
           </div>
           <section id="center">
-            <nav>
+            <nav id="nav">
               <div id="left-nav">
                 <div id="go-home-w" class="button-w" style="width: 101px">
                   <form action="/lists/" method="get" class="inline"><button type="submit" id="go-home">home</button></form>

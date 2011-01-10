@@ -11,7 +11,7 @@ make_show_hide_form: (name) ->
     $('#add-' + name).click(->
         button.hide()
         form.show()
-        $.scrollTo(form)
+        $.scrollTo(form.offset().top - 80, 400)
     )
     $('#cancel-add-' + name).click(->
         form.hide()
@@ -29,7 +29,7 @@ $(document).ready(->
         dataType: 'json'
         success: (data) ->
             # Add the new entry to the DOM
-            $("#entries").append(data.html)
+            $("#entries").prepend(data.html)
             $('#entry-' + data.id + '-stars-wrapper').stars({
                 inputType: "select",
                 cancelShow: false,
@@ -37,18 +37,17 @@ $(document).ready(->
                     $('#entry-' + data.id + '-stars-form').ajaxSubmit()
             });
 
-            # Show the user the entry they added
-            entry = $('#entry-' + data.id)
-            $.scrollTo(entry)
-            entry.hide()
-            entry.show('slow')
-
             # Reset the add entry link and the entry form to the way they were
             $('#entry-form').hide()
             $('#id_description').val('')
             $('#id_title').val('')
             $('#id_embed_url').val('')
             $('#add-entry').show()
+
+            # Show the user the entry they added
+            entry = $('#entry-' + data.id)
+            entry.hide()
+            entry.show('slow')
     }
     $("#entry-form").ajaxForm(options)
 
@@ -68,7 +67,6 @@ $(document).ready(->
 
             # Show the user the comment they added
             comment = $('#comment-' + data.id)
-            $.scrollTo(comment)
             comment.hide()
             comment.show('slow')
 

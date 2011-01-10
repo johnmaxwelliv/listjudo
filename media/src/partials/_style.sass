@@ -1,12 +1,18 @@
 @import compass/css3/border-radius
 @import compass/css3/box-shadow
-@import bp-typography-extracts
 @import blueprint/fancy-type
+
+// Variables
 
 $button-c: #FF9640
 $boundary: #111111
+$whitespace: $blueprint-grid-margin
+
+
+// Mixins
 
 =box-candy
+  +prepend-top($whitespace)
   +border-radius(15px)
   background-color: #f0ffff
   border:
@@ -29,46 +35,52 @@ $boundary: #111111
     left: auto
     right: auto
 
-#site-header
-  +box-candy
-  hgroup
-    h1
-      font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
-      font-size: 5.0em
-      line-height: 1
-      margin-bottom: 0.1em
-
-      // "Deep Cove"
-      color: #051040
-      text-transform: uppercase
-    h2
-      +alt
-      font-size: 2.0em
-      line-height: 1
-      margin-bottom: 0.1em
-
-      //&:before
-        content: "..."
-      text-transform: lowercase
-  #header-logo-w
-    +center
-
-nav
-  #go-home-w
-    +center
-  #create-a-list-w
-    +center
-
 =standard-header
   text:
     align: center
     decoration: underline
     transform: lowercase
 
-#left-header, #right-header
-  h1
-    +bp-h3
-    +standard-header
+
+// Main site header (appears on every page)
+#site-header
+  +box-candy
+  hgroup
+    h1
+      font-family: 'AlphaEchoRegular', 'MS Serif', 'New York', sans-serif
+      font-size: 5.0em
+      line-height: .8
+      margin-bottom: 0.2em
+      // "Deep Cove"
+      color: #051040
+    h2
+      font-size: 1.5em
+      line-height: 1
+      margin-bottom: 0.05em
+      &:before
+        content: "..."
+      text-transform: lowercase
+
+// Center content (appears on every page)
+#center
+  #nav
+    +prepend-top($whitespace)
+    #go-home-w
+      +center
+    #create-a-list-w
+      +center
+  // Whitespace at the bottom to prevent comment form glitches
+  +append-bottom(500px)
+  .controls
+    +prepend-top($whitespace)
+
+
+// Showcases
+
+#main-showcase
+  hr
+    +colruler
+    height: 2px
 
 #left-showcase, #right-showcase
   +box-candy
@@ -76,9 +88,19 @@ nav
     +colruler($boundary)
     height: 1px
 
-#promobox
-  +prepend-top(10px)
-  +box-candy
+#main-header
+  +prepend-top($whitespace)
+  h1
+    font-size: 2em
+    margin-bottom: 0.75em
+    +standard-header
+
+#left-header, #right-header
+  h1
+    +standard-header
+    font-size: 1.5em
+    line-height: 1
+    margin-bottom: 1em
 
 .main-list, .right-list, .left-list
   .teaser-image
@@ -88,52 +110,46 @@ nav
       display: none
   font-size: 1.1em
 
-#main-showcase
-  hr
-    +colruler
-    height: 2px
 
-#add-entry-w, #entry-form-w, #add-comment-w, #comment-form-w
-  +append-bottom(10px)
+// Promotion box
+#promobox
+  +box-candy
+  #twitter
+    +loud
+    font-size: 1.1em
+  #mc_embed_signup
+    +append-bottom($whitespace)
 
-#entry-comment-barrier
-  hr
-    +colruler
-    height: 2px
 
-#main-header
-  h1
-    +bp-h2
-    +standard-header
+// List creation page
 
 #create-header
+  +prepend-top($whitespace)
   h1
-    +bp-h2
     +standard-header
+    font-size: 2em
+    margin-bottom: 0.75em
+
+
+// List detail page
 
 #list-header
-  +append-bottom(10px)
+  +box-candy
   h1
-    +bp-h1
+    font-size: 3em
+    line-height: 1
+    margin-bottom: 0.50em
     text-align: center
   .info
     text-align: right
-
-article
-  #entries, #comments
-    hr
-      +colspacer
-
-#comments-header
-  h1
-    +bp-h2
-    +standard-header
+    line-height: 2
 
 .entry
   +box-candy
   .entry-header
     h1
-      +bp-h2
+      font-size: 2em
+      margin-bottom: 0.75em
       text-align: center
   .embed-w
     +center
@@ -143,45 +159,14 @@ article
     text-align: right
     line-height: 1.4
 
+#comments-header
+  +prepend-top($whitespace)
+  h1
+    font-size: 2em
+    margin-bottom: 0.50em
+    +standard-header
+
 .comment
   +box-candy
   .comment-info
     text-align: right
-
-#admin
-  hr
-    +colruler
-    height: 2px
-  #textarea-w
-    +center
-
-#publish
-  +append-bottom(10px)
-
-hgroup.share
-  text-transform: lowercase
-  text-align: center
-  h1
-    +bp-h3
-  h2
-    +bp-h4
-
-#promote
-  h1
-    +bp-h3
-    +standard-header
-
-#twitter
-  +loud
-  font-size: 1.1em
-
-#mc_embed_signup
-  +append-bottom(30px)
-
-.sharethis
-  +prepend-top(10px)
-  +append-bottom(10px)
-  text-align: center
-
-.spaceme
-  +prepend-top(4px)

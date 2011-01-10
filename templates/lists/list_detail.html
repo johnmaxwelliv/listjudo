@@ -16,20 +16,43 @@
 {% endblock %}
 
 {% block content %}
-  <article>
+  <article id="article">
     <header id="list-header">
       <h1>{{ list.title|striptags }}</h1>
-      {{ list.description|striptags|urlize|linebreaks }}
+      <div id="description">{{ list.description|striptags|urlize|linebreaks }}</div>
+      <div class="sharethis">
+        <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
+        &nbsp;
+      </div>
       <section class="info">Created by <span class="nickname">{{ list.nickname }}</span></section>
-      {% if entries %}
-        <div id="add-entry-w" class="button-w spaceme" style="width: 270px">
-          <button type="button" id="add-entry">add an item to this list</button>
-        </div>
-        <div class="sharethis">
-          <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
-        </div>
-      {% endif %}
     </header>
+
+    <section class="controls">
+      <div id="add-entry-w" class="button-w" style="width: 270px">
+        <button type="button" id="add-entry">add an item to this list</button>
+      </div>
+    </section>
+
+    <section id="entry-form-w">
+      <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
+        {% csrf_token %}
+        <fieldset class="inlineLabels">
+          {{ entry_form|as_uni_form }}
+        </fieldset>
+        <section class="controls">
+          <div id="entry-form-left-control-w">
+            <div class="button-w" style="width: 76px">
+              <button type="submit" id="submit-entry">ok!</button>
+            </div>
+          </div>
+          <div id="entry-form-right-control-w">
+            <div class="button-w" style="width: 111px">
+              <button type="button" id="cancel-add-entry">cancel</button>
+            </div>
+          </div>
+        </section>
+      </form>
+    </section>
 
     <section id="entries">
       {% for entry in entries %}
@@ -37,38 +60,6 @@
       {% endfor %}
     </section>
   </article>
-
-  <section id="entry-form-w">
-    <form action="/lists/{{ list.id }}/add/" method="POST" class="uniForm" style="display: none" id="entry-form">
-      {% csrf_token %}
-      <fieldset class="inlineLabels">
-        {{ entry_form|as_uni_form }}
-      </fieldset>
-      <section class="controls">
-        <div id="entry-form-left-control-w">
-          <div class="button-w" style="width: 76px">
-            <button type="submit" id="submit-entry">ok!</button>
-          </div>
-        </div>
-        <div id="entry-form-right-control-w">
-          <div class="button-w" style="width: 111px">
-            <button type="button" id="cancel-add-entry">cancel</button>
-          </div>
-        </div>
-      </section>
-    </form>
-  </section>
-
-  <section id="promote">
-    <h1>{% if entries %}Share this list{% else %}Get readers for your list{% endif %}</h1>
-    <div class="sharethis">
-      <span class="st_twitter_large" displayText="Tweet"></span><span class="st_facebook_large" displayText="Facebook"></span><span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span><span class="st_gbuzz_large" displayText="Google Buzz"></span><span class="st_email_large" displayText="Email"></span><span class="st_sharethis_large" displayText="ShareThis"></span>
-    </div>
-  </section>
-
-  <div id="entry-comment-barrier">
-    <hr />
-  </div>
 
   <section>
     <header id="comments-header">
@@ -79,9 +70,11 @@
         {% comment_html comment %}
       {% endfor %}
     </section>
-    <div id="add-comment-w" class="button-w" style="width: 217px">
-      <button type="button" id="add-comment">leave a comment</button>
-    </div>
+    <section class="controls">
+      <div id="add-comment-w" class="button-w" style="width: 217px">
+        <button type="button" id="add-comment">leave a comment</button>
+      </div>
+    </section>
     <section id="comment-form-w">
       <form action="/lists/{{ list.id }}/comment/" method="POST" class="uniForm" style="display: none" id="comment-form">
         {% csrf_token %}
