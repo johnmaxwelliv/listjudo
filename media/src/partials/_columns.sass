@@ -48,16 +48,10 @@ $page: $blueprint-grid-columns
       #promobox
         +nest-cols($left-sidebar)
         +last
-        #mc_embed_signup
-          +column($left-sidebar - 1)
-          +last
     #center
       +column($center)
       +last
-      +split('#nav', $center - 1, '#left-nav', 3, '#right-nav', 4)
-      #nav
-        +nest-cols($center, $center - 1, 0px, false)
-        +last
+      +split('#nav', $center, '#left-nav', 3, '#right-nav', 4)
       #content
         +column($center)
         +last
