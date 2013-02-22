@@ -96,6 +96,7 @@ class Entry(UGC):
 
     def prepare_embeds(self):
         if self.embed_url:
+            self.embed_url = self.embed_url.replace('https://', 'http://')
             resources = oembed_client.extract(self.embed_url)
             if resources:
                 r = resources[0]
