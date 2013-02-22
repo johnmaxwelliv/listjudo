@@ -1,5 +1,7 @@
 # should work with coffeescript 0.7.2
 
+adjust = '-=10px'
+
 l: (output) ->
     console.log(output)
 
@@ -11,7 +13,8 @@ make_show_hide_form: (name) ->
     $('#add-' + name).click(->
         button.hide()
         form.show()
-        $.scrollTo(form.offset().top - 80, 400)
+        $.scrollTo(form)
+        $.scrollTo(adjust)
     )
     $('#cancel-add-' + name).click(->
         form.hide()
@@ -45,6 +48,8 @@ $(document).ready(->
             $('#add-entry').show()
 
             # Show the user the entry they added
+            $.scrollTo($('#add-entry'))
+            $.scrollTo(adjust)
             entry = $('#entry-' + data.id)
             entry.hide()
             entry.show('slow')
@@ -67,6 +72,7 @@ $(document).ready(->
 
             # Show the user the comment they added
             comment = $('#comment-' + data.id)
+            $.scrollTo(comment)
             comment.hide()
             comment.show('slow')
 
