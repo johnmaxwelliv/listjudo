@@ -1,6 +1,4 @@
 import site
-# enables importing unipath
-site.addsitedir('/srv/py_base/lib/python2.6/site-packages')
 
 from unipath import Path
 
