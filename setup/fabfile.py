@@ -36,8 +36,8 @@ def imain():
     with settings(host_string=remote_host_string):
         _run("mkdir -p %s", REPO_ROOT)
         # FIXME
-        # We shouldn't be assuming the upstream site follows the srv site root convention
-        _run('rsync -ahvEP --del %s %s', _Path('/srv').child(UPSTREAM_SITE).child('repo').child('*'), REPO_ROOT)
+        # We shouldn't be assuming the upstream site follows this site root convention
+        _run('rsync -ahvEP --del %s %s', _Path('/home/john').child(UPSTREAM_SITE).child('repo').child('*'), REPO_ROOT)
         _init(SITE_CODE, SITE_ROOT.child('repo'), SITE_ROOT, remote=True, database='sqlite3')
         _refresh(REPO_ROOT, SITE_ROOT, UPSTREAM_SITE, True)
 
@@ -114,8 +114,8 @@ def _refresh(repo_root, site_root, upstream_site, remote, ikflush=False):
     _run('cp %s "%s"', site_root.child('db').child('db.sqlite3'), site_root.child('db').child('db-`date`.sqlite3'))
     if upstream_site:
         # FIXME
-        # We shouldn't be assuming the upstream site follows the srv site root convention
-        _run('rsync -ahvEP --del %s %s', _Path('/srv').child(upstream_site).child('repo').child('*'), repo_root)
+        # We shouldn't be assuming the upstream site follows this site root convention
+        _run('rsync -ahvEP --del %s %s', _Path('/home/john').child(upstream_site).child('repo').child('*'), repo_root)
     manage = site_root.child('bin').child('python') + ' ' + repo_root.child('manage.py')
     _run('%s syncdb', manage)
     for app in ['djangoratings', 'lists', 'oembed']:
